@@ -51,42 +51,24 @@ void Player::Tick(float deltaTime)
 
 	// 1. 방향 입력 받기 (입력 로직만)
 
-	// 해당 방향으로 이동 시키기 
-	if (Input::Get().GetKey(VK_UP) || Input::Get().GetKey('W')) { moveInput.y = -1; };
-	if (Input::Get().GetKey(VK_DOWN) || Input::Get().GetKey('S')) { moveInput.y = 1; };
-	if (Input::Get().GetKey(VK_LEFT) || Input::Get().GetKey('A')) { moveInput.x = -1; };
-	if (Input::Get().GetKey(VK_RIGHT) || Input::Get().GetKey('D')) { moveInput.x = 1; };
+	Vector2 moveInput = Vector2::Zero;
 
-	if (!(Input::Get().GetKey(VK_UP) || Input::Get().GetKey('W') || Input::Get().GetKey(VK_DOWN) || Input::Get().GetKey('S')))
-	{
-		moveInput.y = 0;
-	}
-	if (!(Input::Get().GetKey(VK_LEFT) || Input::Get().GetKey('A')|| Input::Get().GetKey(VK_RIGHT) || Input::Get().GetKey('D')))
-	{
-		moveInput.x = 0;
-	}
+	if (Input::Get().GetKey(VK_UP) || Input::Get().GetKey('W')) { moveInput.y += -1.f; };
+	if (Input::Get().GetKey(VK_DOWN) || Input::Get().GetKey('S')) { moveInput.y += 1.f; };
+	if (Input::Get().GetKey(VK_LEFT) || Input::Get().GetKey('A')) { moveInput.x += -1.f; };
+	if (Input::Get().GetKey(VK_RIGHT) || Input::Get().GetKey('D')) { moveInput.x += 1.f; };
 
 	// 2. 입력이 있을 때만 이동 처리 (물리적 이동)
 	if (!(moveInput == Vector2::Zero))
 	{
-		// int 값을 float 값으로 변경
-		float dx = static_cast<float>(moveInput.x);
-		float dy = static_cast<float>(moveInput.y);
+		// 이동 방향
+		Vector2 moveDirection = moveInput.Normalize();
 
-		float magnitude = moveInput.Magnitude();
-		dx /= magnitude;
-		dy /= magnitude;
+		// 현재 위치 업데이트
+		static Vector2 currentPos = Position();
+		currentPos = currentPos + moveDirection * stats.speed * deltaTime;
 
-		float moveX = dx * stats.speed * deltaTime;
-		float moveY = dy * stats.speed * deltaTime;
-
-		// TODO : 지금 이 스태틱 변수 어떻게든 처리할 것
-		static float currentPosX = (float)Position().x;
-		static float currentPosY = (float)Position().y;
-		currentPosX += moveX;
-		currentPosY += moveY;
-
-		SetPosition({ (int)currentPosX, (int)currentPosY });
+		SetPosition(currentPos );
 
 		direction = moveInput;
 	}
@@ -94,6 +76,6 @@ void Player::Tick(float deltaTime)
 
 void Player::Render()
 {
-
+	super::Render();
 }
 

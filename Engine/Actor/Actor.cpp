@@ -49,12 +49,12 @@ bool Actor::TestIntersect(const Actor* const other)
 	// Note: 현재 엑터 구조상 세로는 크기가 없음.
 	//		따라서 가로 위치만 고려
 
-	int xMin = Position().x;
-	int xMax = Position().x + width - 1;
+	int xMin = (int)Position().x;
+	int xMax = (int)Position().x + (int)width - 1;
 
 	// 충돌 비교할 다른 액터의 x 좌표 정보
-	int otherXMin = other->Position().x;
-	int otherXMax = other->Position().x + other->width - 1;
+	int otherXMin = (int)other->Position().x;
+	int otherXMax = (int)other->Position().x + (int)(other->width) - 1;
 
 	// 안 겹치는 조건
 	if (otherXMin > xMax) // 다른 액터의 왼쪽 경계가 내 오른쪽 경계보다 더 오른쪽

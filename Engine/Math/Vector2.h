@@ -6,18 +6,25 @@
 class Engine_API Vector2
 {
 public:
-	Vector2(int x = 0, int y = 0);
+	Vector2(float x = 0.f, float y = 0.f);
+	Vector2(int x, int y);
 	~Vector2();
 
 	Vector2 operator+(const Vector2& other) const;
 	Vector2 operator-(const Vector2& other) const;
+	Vector2 operator*(const float& scalar) const;
+
+	/// <summary>
+	/// 이 연산은 부동 소수점(float) 오차를 고려하여
+	/// 두 벡터가 허용 오차(tolerance) 범위 내에 있는지 확인합니다.
+	/// 허용 오차는 0.0001f 로 설정되어 있습니다.
+	/// </summary>
 	bool operator==(const Vector2& other) const;
 
 	/// <summary>
 	/// 벡터 정규화 취소.
-	/// 생각해보니 벡터의 원소들이 int라서 여기서 정규화 하긴 좀 그러타
 	/// </summary>
-	//Vector2 Normalize() const;
+	Vector2 Normalize() const;
 
 	/// <summary>
 	/// 벡터 크기 구하기
@@ -41,8 +48,8 @@ public:
 	static Vector2 Right;
 
 public:
-	int x = 0;
-	int y = 0;
+	float x = 0.f;
+	float y = 0.f;
 
 private:
 	char* value = nullptr;

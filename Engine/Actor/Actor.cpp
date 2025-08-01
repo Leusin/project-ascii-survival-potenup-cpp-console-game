@@ -30,17 +30,17 @@ void Actor::Tick(float deltaTime)
 
 void Actor::Render()
 {
-	// Win32 API.
+	/// 더블 버퍼를 사용하지 않았을 때의 방법
 	// 커서위치 이동.
 	//static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE); // 콘솔 출력 제어 핸들 얻어오기
-
 	// 커서 이동.
-	Utils::SetConsolePosition(position);
-
+	//Utils::SetConsolePosition(position);
 	// 색상 설정
-	Utils::SetConsoleTextColor(color);
+	//Utils::SetConsoleTextColor(color);
+	// printf("%s", image); // 그리기
 
-	printf("%s", image); // 그리기
+	// 엔진이 관리하는 이미지 버퍼에 액터의 문자열/색상 기록.
+	Engine::Get().WriteToBuffer(position, image, color);
 }
 
 bool Actor::TestIntersect(const Actor* const other)
@@ -80,7 +80,7 @@ void Actor::Destroy()
 	}
 
 	isExpired = true; // 삭제 요청 설정
-	owner->DestroyActor(this);
+	owner->DestroyActor(this); // 레벨에게 삭제 요청
 }
 
 void Actor::QuitGame()
@@ -116,13 +116,11 @@ void Actor::SetPosition(const Vector2& newPosition)
 		return;
 	}
 
-	Vector2 direction = newPosition - position; // 지울 위치 확인
-
-	position.x = (direction.x >= 0) ? position.x : position.x + width - 1;
-	
-	Utils::SetConsolePosition(position); // 커서 이동.
-
-	printf(" "); // 지우기
+	/// 더블 버퍼를 사용하지 않았을 때의 방법
+	//Vector2 direction = newPosition - position; // 지울 위치 확인
+	//position.x = (direction.x >= 0) ? position.x : position.x + width - 1;
+	//Utils::SetConsolePosition(position); // 커서 이동.
+	//printf(" "); // 지우기
 
 	position = newPosition;
 }

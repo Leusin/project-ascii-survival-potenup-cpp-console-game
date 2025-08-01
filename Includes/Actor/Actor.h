@@ -28,6 +28,10 @@ public:
 	void Destroy(); // 삭제 요청
 	void QuitGame();
 
+/// <summary>
+/// Getter와 Setter 함수
+/// </summary>
+public:
 	Vector2 Position() const;
 	void SetPosition(const Vector2& newPosition);
 

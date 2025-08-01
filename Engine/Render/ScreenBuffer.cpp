@@ -1,6 +1,7 @@
-#include "DoubleBuffer.h"
+#include "ScreenBuffer.h"
 
 #include <iostream>
+#include "Engine.h"
 
 ScreenBuffer::ScreenBuffer(const Vector2& screenSize)
 	: screenSize(screenSize)
@@ -67,6 +68,8 @@ void ScreenBuffer::Clear()
 	FillConsoleOutputCharacter(buffer, ' ', ((int)screenSize.x + 1) * (int)screenSize.y + 1, position, &writtenCount);
 
 }
+
+
 
 void ScreenBuffer::Render(CHAR_INFO* charInfo)
 {

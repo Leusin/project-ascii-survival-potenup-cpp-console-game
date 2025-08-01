@@ -1,6 +1,7 @@
 #include "Vector2.h"
 
-#include <iostream> // <stdio.h>가 필요한 것 같다
+#include <iostream>
+#include <cmath>
 
 // 전역 변수 초기화.
 Vector2 Vector2::Zero = Vector2(0, 0);
@@ -37,6 +38,18 @@ Vector2 Vector2::operator-(const Vector2& other) const
 bool Vector2::operator==(const Vector2& other) const
 {
 	return (x == other.x) && (y == other.y);
+}
+
+float Vector2::Magnitude() const
+{
+	// 각 원소를 제곱 값을 모두 더한 뒤 제곱근 해줌
+
+	return sqrt(SqrMagnitude());
+}
+
+float Vector2::SqrMagnitude() const
+{
+	return static_cast<float>(x * x + y * y);
 }
 
 Vector2::operator COORD()

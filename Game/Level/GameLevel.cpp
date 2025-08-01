@@ -39,10 +39,11 @@ void GameLevel::Tick(float deltaTime)
 
 void GameLevel::Render()
 {
+	super::Render();
+
 	//
 	// 배경 그리기(TEMP)
 	// 
-
 
 	/// 타일 맵의 크기 [10][10]
 	for (int screenY = 0; screenY < Engine::Get().Height(); ++screenY)
@@ -60,8 +61,6 @@ void GameLevel::Render()
 			Engine::Get().WriteToBuffer({ screenX, screenY }, tileChar, Color::Intensity);
 		}
 	}
-
-	super::Render();
 
 	// 카메라 위치 계산
 	int cameraPosX = (int)player->worldPosition.x - Engine::Get().Width() / 2;

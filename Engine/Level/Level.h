@@ -29,8 +29,6 @@ protected:
 	std::vector<Actor*> actors; // 레벨에 배치된 모든 액터 관리
 
 private:
-	void SortActorsBySortingOrder();
-
 	std::vector<Actor*> addRequestedActors; // 추가 요청된 액터를 관리하는 배열
 	std::vector<Actor*> destroyRequstedActors; // 삭제 요청된 배치된 모든 액터 관리
 };

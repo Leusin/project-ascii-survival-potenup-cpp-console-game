@@ -16,6 +16,11 @@ public:
 	virtual void Render() override;
 
 public:
+	/// <summary>
+	/// 영향받는 것.
+	/// - 배경
+	/// - 아이템
+	/// </summary>
 	Vector2 worldPosition;
 
 private:

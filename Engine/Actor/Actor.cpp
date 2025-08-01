@@ -51,7 +51,7 @@ void Actor::Render()
 	// printf("%s", image); // 그리기
 
 	// 엔진이 관리하는 이미지 버퍼에 액터의 문자열/색상 기록.
-	Engine::Get().WriteToBuffer(position, image, color);
+	Engine::Get().WriteToBuffer(position, image, color, sortingOrder);
 }
 
 void Actor::OnDestroy()

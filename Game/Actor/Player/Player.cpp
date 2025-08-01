@@ -8,7 +8,8 @@ Player::Player()
 	: Actor("@", Color::Red)
 	, worldPosition(Position())
 {
-	stats.speed = 10.f;
+	stats.speed = 5.f;
+	SetSortingOrder(5);
 }
 
 void Player::Tick(float deltaTime)
@@ -79,6 +80,10 @@ void Player::Tick(float deltaTime)
 /// </summary>
 void Player::Render()
 {
-	super::Render();
+	// TEST용
+	// 플레이어의 위치는 무조건 화면 가운데에서 그려져야하기 때문에 안 쓴다.
+	// 부모 클래스의 Render는 순전히 디버깅용
+	//super::Render();
+	Engine::Get().WriteToBuffer({ Engine::Get().Width() / 2, Engine::Get().Height() / 2 }, GetImage(), Color::White, GetSortingOrder());
 }
 

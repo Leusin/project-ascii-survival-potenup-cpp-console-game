@@ -16,10 +16,17 @@ public:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
+
+private:
+	void ReadTileMapFile(const char* filename);
+	void RenderBackground();
+
 private:
 	// Note: Level에서 알아서 지워 줄 것이다. 메모리 관리하면 안됨
 	class Player* player; 
 
 	//TEST
-	char map[8][10];
+	char* tileMap = nullptr;
+	int tileSizeY = 0;
+	int tileSizeX = 0;
 };

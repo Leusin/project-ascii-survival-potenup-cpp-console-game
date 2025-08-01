@@ -29,12 +29,12 @@ Engine::Engine()
 	consoleCursorInfo.bVisible = false;
 	consoleCursorInfo.dwSize = 1;
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &consoleCursorInfo); // 커서가 보이지 않도록 
-	
+
 	// 엔진 설정 로드
-	LoadEngineSettings(); 
+	LoadEngineSettings();
 
 	// 랜덤 종자값(Seed) 생성
-	srand(static_cast<unsigned int>(time(nullptr))); 
+	srand(static_cast<unsigned int>(time(nullptr)));
 
 	//
 	// 랜더 관련 초기화
@@ -42,8 +42,8 @@ Engine::Engine()
 
 	// 이미지 버퍼 생성.
 	Vector2 screenSize(settings.width, settings.height);
-	imageBuffer = new CHAR_INFO[((int)screenSize.x + 1) * (int)screenSize.y + 1]; // 1차원 배열로
-	
+	imageBuffer = new ImageBuffer(((int)screenSize.x + 1) * (int)screenSize.y + 1);
+
 	ClearImageBuffer(); // 버퍼 초기화 (문자 버퍼).
 
 	// 두 개의 버퍼 생성.
@@ -56,7 +56,10 @@ Engine::Engine()
 	// 콘솔창 이벤트 등록
 	//
 
-	SetConsoleCtrlHandler(ConsoleMessageProcedure, TRUE); 
+	SetConsoleCtrlHandler(ConsoleMessageProcedure, TRUE);
+
+	// cls 호출.
+	system("cls");
 }
 
 Engine::~Engine()
@@ -102,13 +105,13 @@ void Engine::Run()
 
 			// 제목에 FPS 출력
 			char title[50] = {};
-			sprintf_s(title, 50, "(h: %d, w: %d)FPS: %f",settings.height, settings.width, (1.f / deltaTime));
+			sprintf_s(title, 50, "(h: %d, w: %d)FPS: %f", settings.height, settings.width, (1.f / deltaTime));
 			SetConsoleTitleA(title);
 
 			previousTime = currentTime;
 
 			input.SavePreviousKeyStates();
-			
+
 			if (mainLevel) // 이전 프레임에 추가 및 삭제 요청 처리
 			{
 				mainLevel->ProcessAddAndDestroyActors();
@@ -120,25 +123,35 @@ void Engine::Run()
 	Utils::SetConsoleTextColor(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
 }
 
-void Engine::WriteToBuffer(const Vector2& position, const char* image, Color color)
+void Engine::WriteToBuffer(const Vector2& position, const char* image, Color color, int sortingOrder)
 {
-	int length = static_cast<int>(strlen(image)); // 문자열 길이.
+	// 문자열 길이.
+	int length = static_cast<int>(strlen(image));
 
 	// 문자열 기록.
 	for (int ix = 0; ix < length; ++ix)
 	{
+		// @Todo: 화면 버퍼 크기 안 넘어가게 예외처리 필요함.
+
 		// 기록할 문자 위치.
 		int index = ((int)position.y * (settings.width)) + (int)position.x + ix;
 
+		if (imageBuffer->sortingOrderArray[index] > sortingOrder)
+		{
+			continue;
+		}
+
 		// 버퍼에 문자/색상 기록.
-		imageBuffer[index].Char.AsciiChar = image[ix];
-		imageBuffer[index].Attributes = (WORD)color;
+		imageBuffer->charInfoArray[index].Char.AsciiChar = image[ix];
+		imageBuffer->charInfoArray[index].Attributes = (WORD)color;
+
+		imageBuffer->sortingOrderArray[index] = sortingOrder;
 	}
 }
 
 void Engine::PresentImmediately() // 언제 사용할지 잘 모르겠다
 {
-	GetRenderer()->Render(imageBuffer); // 그리기
+	GetRenderer()->Render(imageBuffer->charInfoArray); // 백 버퍼에 그리기
 	Present(); // 버퍼 교환
 }
 
@@ -148,7 +161,7 @@ void Engine::CleanUp()
 	SafeDelete(mainLevel);
 
 	// 문자 버퍼 삭제.
-	SafeDeleteArray(imageBuffer);
+	SafeDelete(imageBuffer);
 
 	// 렌더 타겟 삭제.
 	SafeDelete(renderTargets[0]);
@@ -226,7 +239,7 @@ void Engine::Render()
 		mainLevel->Render();
 	}
 
-	GetRenderer()->Render(imageBuffer); // 백버퍼에 데이터 쓰기
+	GetRenderer()->Render(imageBuffer->charInfoArray); // 백버퍼에 데이터 쓰기
 
 	Present(); // 버퍼 교환
 }
@@ -315,19 +328,25 @@ void Engine::ClearImageBuffer()
 	{
 		for (int x = 0; x < settings.width; ++x)
 		{
-			CHAR_INFO& buffer = imageBuffer[(y * (settings.width)) + x];
+			int index = (y * (settings.width)) + x;
+			CHAR_INFO& buffer = imageBuffer->charInfoArray[index];
 			buffer.Char.AsciiChar = ' ';
 			buffer.Attributes = 0;
+			imageBuffer->sortingOrderArray[index] = -1;
 		}
 
 		// 각 줄 끝에 개행 문자 추가.
-		CHAR_INFO& buffer = imageBuffer[(y * (settings.width)) + settings.width];
+		int index = (y * (settings.width)) + settings.width;
+		CHAR_INFO& buffer = imageBuffer->charInfoArray[index];
 		buffer.Char.AsciiChar = '\n';
 		buffer.Attributes = 0;
+		imageBuffer->sortingOrderArray[index] = -1;
 	}
 
 	// 마지막에 널 문자 추가.
-	CHAR_INFO& buffer = imageBuffer[(settings.width) * settings.height + 1];
+	int index = (settings.width) * settings.height + 1;
+	CHAR_INFO& buffer = imageBuffer->charInfoArray[index];
 	buffer.Char.AsciiChar = '\0';
 	buffer.Attributes = 0;
+	imageBuffer->sortingOrderArray[index] = -1;
 }

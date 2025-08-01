@@ -5,7 +5,7 @@
 #include "Math/Color.h"
 
 Player::Player()
-	: Actor("@", Color::Intensity)
+	: Actor("@", Color::Red)
 	, worldPosition(Position())
 {
 	stats.speed = 10.f;

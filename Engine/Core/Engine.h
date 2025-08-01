@@ -10,7 +10,6 @@
  * TODO: 언젠가 Engine의 싱글턴 지우고 싶다.
  */
 
-
  /// <summary>
  /// 엔진 설정 구조체
  /// </summary>
@@ -19,6 +18,30 @@ struct EngineSettings
 	int width = 0; // 콘솔 화면 가로 너비
 	int height = 0; // 콘솔 화면 세로 너비
 	float framerate = 0.0f; // 타겟 프레임 속도
+};
+
+struct ImageBuffer
+{
+	ImageBuffer(int bufferCount)
+	{
+		charInfoArray = new CHAR_INFO[bufferCount];
+		memset(charInfoArray, 0, sizeof(CHAR_INFO) * bufferCount);
+
+		sortingOrderArray = new int[bufferCount];
+		memset(charInfoArray, 0, sizeof(int) * bufferCount);
+	}
+
+	~ImageBuffer()
+	{
+		SafeDeleteArray(charInfoArray);
+		SafeDeleteArray(sortingOrderArray);
+	}
+
+	// 콘솔에 그릴 때 사용할 구조체 (문자,색상 값 저장).
+	CHAR_INFO* charInfoArray = nullptr;
+
+	// 해당 위치에 그릴지를 판단할 때 사용할 뎁스 값(sortingOrder).
+	int* sortingOrderArray = nullptr;
 };
 
 
@@ -38,12 +61,12 @@ public:
 	/// <param name="position">기록할 문자 위치</param>
 	/// <param name="image">기록할 문자</param>
 	/// <param name="color">문자의 색상</param>
-	void WriteToBuffer(const Vector2& position, const char* image, Color color = Color::White);
-
+	/// <param name="sortingOrder">이미지 순서</param>
+	void WriteToBuffer(const Vector2& position, const char* image, Color color = Color::White, int sortingOrder = 0);
 	// 버퍼를 곧바로 교환 요청할 때 사용하는 함수.
 	void PresentImmediately();
 
-	virtual void CleanUp(); // 메모라 해제
+	virtual void CleanUp(); // 메모리 해제
 
 	void Quit(); // 종료
 
@@ -101,7 +124,9 @@ private:
 	// Render 관련
 	//
 
-	CHAR_INFO* imageBuffer = nullptr; // 백버퍼(프레임).
+	//CHAR_INFO* imageBuffer = nullptr;
+	// 문자, 색상, 뎁스(sortingOrder)까지 저장하는 버퍼.
+	ImageBuffer* imageBuffer = nullptr;
 
 	class ScreenBuffer* renderTargets[2] = { }; // 이중 버퍼.
 	

@@ -49,7 +49,9 @@ public:
 
 	static Engine& Get();
 
+	// 화면의 너비
 	int Width() const;
+	// 화면의 높이
 	int Height() const;
 
 	class ScreenBuffer* GetRenderer() const;

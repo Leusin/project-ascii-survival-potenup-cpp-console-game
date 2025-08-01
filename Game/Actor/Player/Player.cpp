@@ -1,12 +1,13 @@
 #include "Player.h"
 
+#include "Engine.h"
 #include "Input.h"
+#include "Math/Color.h"
 
 Player::Player()
-	: Actor("@")
+	: Actor("@", Color::Intensity)
+	, worldPosition(Position())
 {
-	// TEST
-	SetPosition({ 10 ,10 });
 	stats.speed = 10.f;
 }
 
@@ -65,15 +66,17 @@ void Player::Tick(float deltaTime)
 		Vector2 moveDirection = moveInput.Normalize();
 
 		// 현재 위치 업데이트
-		static Vector2 currentPos = Position();
-		currentPos = currentPos + moveDirection * stats.speed * deltaTime;
+		worldPosition = worldPosition + moveDirection * stats.speed * deltaTime;
 
-		SetPosition(currentPos );
+		SetPosition(worldPosition);
 
 		direction = moveInput;
 	}
 }
 
+/// <summary>
+/// 현재 플레이어의 랜더러는 화면 좌표계에 움직이기 때문에 디버깅용임
+/// </summary>
 void Player::Render()
 {
 	super::Render();

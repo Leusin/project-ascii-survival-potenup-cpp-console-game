@@ -15,6 +15,9 @@ public:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
+public:
+	Vector2 worldPosition;
+
 private:
 	CharacterStats stats;
 	Vector2 moveInput = { 0, 0 };

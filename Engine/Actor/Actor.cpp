@@ -26,6 +26,17 @@ void Actor::BeginPlay()
 
 void Actor::Tick(float deltaTime)
 {
+	// autoDestroy가 활성화된 경우에만 lifetime을 감소시킵니다.
+	if (autoDestroy)
+	{
+		lifetime -= deltaTime;
+	}
+
+	// lifetime이 0 이하로 떨어졌고, 아직 파괴되지 않았다면 파괴합니다.
+	if (lifetime <= 0.f && isExpired == false)
+	{
+		Destroy();
+	}
 }
 
 void Actor::Render()
@@ -41,6 +52,10 @@ void Actor::Render()
 
 	// 엔진이 관리하는 이미지 버퍼에 액터의 문자열/색상 기록.
 	Engine::Get().WriteToBuffer(position, image, color);
+}
+
+void Actor::OnDestroy()
+{
 }
 
 bool Actor::TestIntersect(const Actor* const other)
@@ -81,6 +96,7 @@ void Actor::Destroy()
 
 	isExpired = true; // 삭제 요청 설정
 	owner->DestroyActor(this); // 레벨에게 삭제 요청
+	OnDestroy();
 }
 
 void Actor::QuitGame()
@@ -145,4 +161,18 @@ void Actor::SetOwner(Level* owner)
 	this->owner = owner;
 }
 
+void Actor::SetLifetime(float newLifetime)
+{
+	// 입력값 확인.
+	if (newLifetime <= 0.0f)
+	{
+		return;
+	}
+
+	// 수명 주기 설정.
+	lifetime = newLifetime;
+
+	// 자동 제거 옵션 활성화.
+	autoDestroy = true;
+}
 

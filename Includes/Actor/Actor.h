@@ -19,10 +19,12 @@ public:
 	Actor(const char* image = "", Color color = Color::White, const Vector2& position = Vector2::Zero);
 	virtual ~Actor();
 
-	virtual void BeginPlay(); // 단 한번만 호출. (초기화가 필요한 작업)
+	virtual void BeginPlay(); // 단 한번만 호출.
 	virtual void Tick(float deltaTime); // 매 프레임 호출. (반복성 작업/지속성이 필요한 작업)
 	virtual void Render(); // 그리기
-
+	
+	virtual void OnDestroy(); // 객체가 삭제되기 직전에 호출되는 함수.
+	
 	bool TestIntersect(const Actor* const other);
 
 	void Destroy(); // 삭제 요청
@@ -41,10 +43,17 @@ public:
 	class Level* GetOwner() const;
 	void SetOwner(class Level* owner);
 
+	/// <summary>
+	/// 수명 주기 설정 함수.
+	/// 0.0f 이상 값으로 한 번이라도 호출되지 않으면 자동 삭제되지 않는다.
+	/// </summary>
+	void SetLifetime(float newLifetime);
+
 	inline int Width() const { return width; };
 	inline bool HasBegonPlay() const { return hasBegonPlay; }
 	inline bool IsActive() const { return isActive; };
 	inline bool IsExpired() const { return isExpired; };
+	inline bool AutoDestory() const { return autoDestroy; };
 
 private:
 	Vector2 position; // 개체의 위치
@@ -62,6 +71,10 @@ private:
 	bool isActive = true;// 액터가 활성 상태인지
 
 	bool isExpired = false;	// 삭제 요청됐는지 
+
+	bool autoDestroy = false; // 이 플래그를 true로 설정하면 수명 주기를 사용해 자동 제거.
+
+	float lifetime = 0.0f; // 수명 주기 (단위: 초).
 
 	class Level* owner = nullptr; // 소유 레벨
 };

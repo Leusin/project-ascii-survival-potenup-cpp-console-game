@@ -164,6 +164,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor\Player\Player.cpp" />
+    <ClCompile Include="Actor\Weapons\Weapon.cpp" />
+    <ClCompile Include="Actor\Weapons\Weapon.h" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Level\GameLevel.cpp" />
     <ClCompile Include="Main.cpp" />

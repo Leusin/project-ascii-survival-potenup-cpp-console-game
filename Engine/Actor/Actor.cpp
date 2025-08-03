@@ -30,12 +30,12 @@ void Actor::Tick(float deltaTime)
 	if (autoDestroy)
 	{
 		lifetime -= deltaTime;
-	}
 
-	// lifetime이 0 이하로 떨어졌고, 아직 파괴되지 않았다면 파괴합니다.
-	if (lifetime <= 0.f && isExpired == false)
-	{
-		Destroy();
+		// lifetime이 0 이하로 떨어졌고, 아직 파괴되지 않았다면 파괴합니다.
+		if (lifetime <= 0.f && isExpired == false)
+		{
+			Destroy();
+		}
 	}
 }
 

@@ -74,10 +74,22 @@ public:
 
 	// 화면의 너비
 	int Width() const;
+	int halfWidth() const;
 	// 화면의 높이
 	int Height() const;
+	int halfHeight() const;
 
 	class ScreenBuffer* GetRenderer() const;
+
+	/// <summary>
+	///  직교 좌표계 → 화면 좌표계 변환 함수
+	/// </summary>
+	Vector2 OrthogonalToScreenCoords(const Vector2& worldPos, const Vector2& cameraPos = Vector2::Zero);
+
+	/// <summary>
+	/// 화면 좌표계 → 직교 좌표계 변환 함수 
+	/// </summary>
+	Vector2 ScreenToOrthogonalCoords(const Vector2& screenPos, const Vector2& cameraPos = Vector2::Zero);
 
 protected:
 	class Level* mainLevel = nullptr; // 메인 레벨

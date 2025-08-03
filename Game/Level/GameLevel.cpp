@@ -4,6 +4,8 @@
 #include "Actor/Actor.h"
 #include "Actor/Player/Player.h"
 
+
+
 GameLevel::GameLevel()
 {
 	player = new Player();
@@ -40,7 +42,7 @@ void GameLevel::Render()
 
 	// 디버깅을 위해 캐릭터의 위치 출력
 	char buffer1[40] = { };
-	sprintf_s(buffer1, 40, "Player Pos: (%.2f, %.2f)", player->worldPosition.x, player->worldPosition.y);
+	sprintf_s(buffer1, 40, "Player Pos: (%.2f, %.2f)", player->GetWorldPosition().x, player->GetWorldPosition().y);
 	Engine::Get().WriteToBuffer(Vector2(0, 0), buffer1); // 출력.
 
 	//
@@ -50,6 +52,11 @@ void GameLevel::Render()
 	// 플레이어는 무조건 정중앙에서 랜더
 	//char playerImg[2] = { '@' };
 	//Engine::Get().WriteToBuffer( { Engine::Get().Width() / 2, Engine::Get().Height() / 2 }, playerImg);
+}
+
+Vector2 GameLevel::GetPlayerPosition() const
+{
+	return player->GetWorldPosition();
 }
 
 void GameLevel::ReadTileMapFile(const char* filename)
@@ -157,8 +164,9 @@ void GameLevel::RenderBackground()
 	{
 		for (int screenX = 0; screenX < Engine::Get().Width(); ++screenX)
 		{
-			int worldY = screenY + (int)player->worldPosition.y;
-			int worldX = screenX + (int)player->worldPosition.x;
+			// 화면 좌표에 카메라 월드 좌표를 더하여, 그려야 할 타일의 월드 좌표를 구함
+			int worldY = (int)player->GetWorldPosition().y - screenY;
+			int worldX = (int)player->GetWorldPosition().x + screenX; // Y축은 아래로 갈수록 값이 줄어들어야 함
 
 			// 타일링
 			int tileX = (worldX % tileSizeX + tileSizeX) % tileSizeX;

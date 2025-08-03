@@ -42,10 +42,17 @@ public:
 
 	const char* ToString();
 
+	// 직교 좌표계에서의 방향 벡터
 	static Vector2 Zero;
 	static Vector2 One;
 	static Vector2 Up;
+	static Vector2 Down;
 	static Vector2 Right;
+	static Vector2 Left;
+	static Vector2 UpRight;
+	static Vector2 UpLeft;
+	static Vector2 DownRight;
+	static Vector2 DownLeft;
 
 public:
 	float x = 0.f;

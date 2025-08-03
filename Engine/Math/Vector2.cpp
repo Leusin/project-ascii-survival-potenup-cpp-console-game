@@ -2,12 +2,22 @@
 
 #include <iostream>
 #include <cmath>
+#include "Engine.h"
 
 // 전역 변수 초기화.
 Vector2 Vector2::Zero = Vector2(0.f, 0.f);
 Vector2 Vector2::One = Vector2(1.f, 1.f);
 Vector2 Vector2::Up = Vector2(0.f, 1.f);
 Vector2 Vector2::Right = Vector2(1.f, 0.f);
+Vector2 Vector2::Down = Vector2(0.f, -1.f);
+Vector2 Vector2::Left = Vector2(-1.f, 0.f);
+
+// 대각선 벡터는 길이가 1이 되도록 정규화된 값을 사용합니다.
+const float invSqrt2 = 0.707106781f;
+Vector2 Vector2::UpRight = Vector2(invSqrt2, invSqrt2);
+Vector2 Vector2::UpLeft = Vector2(-invSqrt2, invSqrt2);
+Vector2 Vector2::DownRight = Vector2(invSqrt2, -invSqrt2);
+Vector2 Vector2::DownLeft = Vector2(-invSqrt2, -invSqrt2);
 
 Vector2::Vector2(int x, int y)
 	:x(static_cast<float>(x)), y(static_cast<float>(y))
@@ -48,13 +58,21 @@ Vector2 Vector2::operator*(const float& scalar) const
 
 bool Vector2::operator==(const Vector2& other) const
 {
-	return (x == other.x) && (y == other.y);
+	const float epsilon = 0.0001f; // 허용 가능한 오차
+	return (std::abs(x - other.x) < epsilon) && (std::abs(y - other.y) < epsilon);
 }
 
 Vector2 Vector2::Normalize() const
 {
 	float magnitude = Magnitude();
-	return {x / magnitude, y / magnitude };
+
+	if (magnitude > 0) // 0보다 클 때만 나누기 연산을 수행
+	{
+		return { x / magnitude, y / magnitude };
+	}
+
+	__debugbreak();
+	return { 0.f, 0.f };
 }
 
 float Vector2::Magnitude() const

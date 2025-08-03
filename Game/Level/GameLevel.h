@@ -16,6 +16,7 @@ public:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
+	Vector2 GetPlayerPosition() const;
 
 private:
 	void ReadTileMapFile(const char* filename);

@@ -97,7 +97,7 @@ void Level::ProcessAddAndDestroyActors()
 	// 새로운 액터 추가 처리
 	for (auto* const actor : addRequestedActors)
 	{
-		actors.emplace_back(actor);
+ 		actors.emplace_back(actor);
 		actor->SetOwner(this); // 오너 설정.
 	}
 

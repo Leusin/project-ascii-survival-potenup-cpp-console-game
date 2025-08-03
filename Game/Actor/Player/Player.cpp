@@ -3,13 +3,15 @@
 #include "Engine.h"
 #include "Input.h"
 #include "Math/Color.h"
+#include "Actor/Weapons/Weapon.h"
+#include "Level/Level.h"
 
 Player::Player()
 	: Actor("@", Color::Red)
 	, worldPosition(Position())
 {
 	stats.speed = 5.f;
-	SetSortingOrder(5);
+	SetSortingOrder(10);
 }
 
 void Player::Tick(float deltaTime)
@@ -52,11 +54,11 @@ void Player::Tick(float deltaTime)
 	*/
 
 	// 1. 방향 입력 받기 (입력 로직만)
-
 	Vector2 moveInput = Vector2::Zero;
 
-	if (Input::Get().GetKey(VK_UP) || Input::Get().GetKey('W')) { moveInput.y += -1.f; };
-	if (Input::Get().GetKey(VK_DOWN) || Input::Get().GetKey('S')) { moveInput.y += 1.f; };
+	// 직교 좌표계로 입력 받기
+	if (Input::Get().GetKey(VK_UP) || Input::Get().GetKey('W')) { moveInput.y += 1.f; }; // 위로 이동하면 Y +
+	if (Input::Get().GetKey(VK_DOWN) || Input::Get().GetKey('S')) { moveInput.y += -1.f; }; // 아래로 이동하면 Y-
 	if (Input::Get().GetKey(VK_LEFT) || Input::Get().GetKey('A')) { moveInput.x += -1.f; };
 	if (Input::Get().GetKey(VK_RIGHT) || Input::Get().GetKey('D')) { moveInput.x += 1.f; };
 
@@ -69,9 +71,17 @@ void Player::Tick(float deltaTime)
 		// 현재 위치 업데이트
 		worldPosition = worldPosition + moveDirection * stats.speed * deltaTime;
 
-		SetPosition(worldPosition);
+		// 플레이어는 항상 화면 중앙에 그려지므로, 이 코드는 불필요
+		//SetPosition(worldPosition);
 
 		direction = moveInput;
+	}
+
+	if(Input::Get().GetKeyDown(VK_SPACE))
+	{
+		Weapon* weapon = new Weapon(worldPosition);
+		weapon->SetDirection(direction); // 무기의 방향 설정
+		GetOwner()->AddActor(weapon);
 	}
 }
 
@@ -85,5 +95,10 @@ void Player::Render()
 	// 부모 클래스의 Render는 순전히 디버깅용
 	//super::Render();
 	Engine::Get().WriteToBuffer({ Engine::Get().Width() / 2, Engine::Get().Height() / 2 }, GetImage(), Color::White, GetSortingOrder());
+}
+
+Vector2 Player::GetWorldPosition() const
+{
+	return worldPosition;
 }
 

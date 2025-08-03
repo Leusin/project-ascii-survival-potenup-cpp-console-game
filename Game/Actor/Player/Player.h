@@ -5,6 +5,7 @@
 #include "Math/Vector2.h"
 #include "Actor/Component/CharacterStats.h"
 
+
 class Player : public Actor
 {
 	RTTI_DECLARATIONS(Player, Actor)
@@ -16,14 +17,17 @@ public:
 	virtual void Render() override;
 
 public:
+	Vector2 GetWorldPosition() const;
+
+private:
 	/// <summary>
-	/// 영향받는 것.
-	/// - 배경
-	/// - 아이템
+	/// 플레이어의 위치이자 카메라의 위치이기도 하다.
+	///   영향받는 것.
+	///   - 배경
+	///   - 아이템
 	/// </summary>
 	Vector2 worldPosition;
 
-private:
 	CharacterStats stats;
 	Vector2 moveInput = { 0, 0 };
 

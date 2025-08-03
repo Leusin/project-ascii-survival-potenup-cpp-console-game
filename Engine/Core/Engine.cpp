@@ -188,15 +188,61 @@ int Engine::Width() const
 	return settings.width;
 }
 
+int Engine::halfWidth() const
+{
+	return settings.width / 2;
+}
+
 int Engine::Height() const
 {
 	return settings.height;
+}
+
+int Engine::halfHeight() const
+{
+	return settings.height / 2;
 }
 
 ScreenBuffer* Engine::GetRenderer() const
 {
 	return renderTargets[currentRenderTargetIndex];
 }
+
+Vector2 Engine::OrthogonalToScreenCoords(const Vector2& worldPos, const Vector2& cameraPos)
+{
+	Vector2 screenPos;
+
+	// 1. 카메라 위치를 기준으로 상대적 위치를 계산합니다.
+	screenPos.x = (worldPos.x - cameraPos.x);
+	screenPos.y = (worldPos.y - cameraPos.y);
+
+	// 2. Y축을 뒤집습니다. (y-up -> y-down)
+	screenPos.y *= -1;
+
+	// 3. 화면 중앙을 기준으로 옮깁니다.
+	screenPos.x += (float)halfWidth();
+	screenPos.y += (float)halfHeight();
+
+	return screenPos;
+}
+
+Vector2 Engine::ScreenToOrthogonalCoords(const Vector2& screenPos, const Vector2& cameraPos)
+{
+	Vector2 worldPos;
+
+	// 1. 화면 중앙을 기준으로 상대적 위치를 계산합니다.
+	worldPos.x = screenPos.x - halfWidth();
+	worldPos.y = screenPos.y - halfHeight();
+
+	// 2. Y축을 뒤집습니다. (y-down -> y-up)
+	worldPos.y *= -1;
+
+	// 3. 카메라 위치를 더해 최종 월드 좌표를 얻습니다.
+	worldPos.x += cameraPos.x;
+	worldPos.y += cameraPos.y;
+
+	return worldPos;
+};
 
 Engine& Engine::Get()
 {

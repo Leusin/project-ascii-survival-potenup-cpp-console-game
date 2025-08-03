@@ -81,3 +81,4 @@ namespace Utils
 		return min +(max - min) * random;
 	}
 }
+

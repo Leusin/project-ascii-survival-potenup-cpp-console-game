@@ -161,6 +161,30 @@ void Actor::SetOwner(Level* owner)
 	this->owner = owner;
 }
 
+void Actor::SetImage(const char* newImage)
+{
+	// 새 이미지 문자열이 기존 이미지와 동일한지 확인
+	if (this->image != nullptr && strcmp(this->image, newImage) == 0)
+	{
+		return;
+	}
+
+	int newWidth = (int)strlen(newImage);
+
+	//새 이미지의 길이가 기존 이미지와 같은지 확인
+	if (image != nullptr && newWidth == this->width)
+	{
+		// 길이가 같으므로 메모리 재할당 없이 문자열만 덮어쓰기
+		strcpy_s(this->image, newWidth + 1, newImage);
+	}
+
+	SafeDelete(this->image);
+
+	// iamge 초기화
+	this->image = new char[newWidth + 1]; // 문자열 메모리 할당
+	strcpy_s(this->image, newWidth + 1, newImage); // 문자열 복사
+}
+
 void Actor::SetLifetime(float newLifetime)
 {
 	// 입력값 확인.

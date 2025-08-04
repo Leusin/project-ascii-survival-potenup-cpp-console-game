@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor\Player\Player.cpp" />
+    <ClCompile Include="Actor\Weapons\Knife.cpp" />
     <ClCompile Include="Actor\Weapons\Weapon.cpp" />
     <ClCompile Include="Actor\Weapons\Weapon.h" />
     <ClCompile Include="Game\Game.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor\Weapons\Knife.h" />
     <ClInclude Include="Stats\CharacterStats.h" />
     <ClInclude Include="Stats\WeaponStats.h" />
     <ClInclude Include="Actor\Player\Player.h" />

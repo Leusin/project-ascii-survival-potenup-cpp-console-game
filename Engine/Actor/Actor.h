@@ -43,6 +43,8 @@ public:
 	class Level* GetOwner() const;
 	void SetOwner(class Level* owner);
 
+	void SetImage(const char* newImage);
+
 	/// <summary>
 	/// 수명 주기 설정 함수.
 	/// 0.0f 이상 값으로 한 번이라도 호출되지 않으면 자동 삭제되지 않는다.

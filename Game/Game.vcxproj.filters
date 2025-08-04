@@ -33,6 +33,9 @@
     <ClCompile Include="Actor\Weapons\Weapon.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Actor\Weapons\Knife.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Player\Player.h">
@@ -48,6 +51,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Stats\WeaponStats.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Weapons\Knife.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

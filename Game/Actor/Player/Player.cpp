@@ -3,8 +3,9 @@
 #include "Engine.h"
 #include "Input.h"
 #include "Math/Color.h"
-#include "Actor/Weapons/Weapon.h"
 #include "Level/Level.h"
+
+#include "Actor/Weapons/Knife.h"
 
 Player::Player()
 	: Actor("@", Color::Red)
@@ -76,11 +77,10 @@ void Player::Tick(float deltaTime)
 
 		direction = moveInput;
 	}
-
+	 
 	if(Input::Get().GetKeyDown(VK_SPACE))
 	{
-		Weapon* weapon = new Weapon(worldPosition);
-		weapon->SetDirection(direction); // 무기의 방향 설정
+		Weapon* weapon = new Knife(worldPosition, direction);
 		GetOwner()->AddActor(weapon);
 	}
 }

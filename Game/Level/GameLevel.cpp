@@ -4,6 +4,8 @@
 #include "Actor/Actor.h"
 #include "Actor/Player/Player.h"
 
+//TEST
+#include "Actor/Enemy/Enemy.h"
 
 GameLevel::GameLevel()
 {
@@ -12,6 +14,11 @@ GameLevel::GameLevel()
 
 	// 타일맵 로드 후 배경에 출력
 	ReadTileMapFile("TileMap.txt");
+
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	//AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	//AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	//AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
 }
 
 GameLevel::~GameLevel()
@@ -27,6 +34,12 @@ void GameLevel::BeginPlay()
 void GameLevel::Tick(float deltaTime)
 {
 	super::Tick(deltaTime);
+
+	// 카메라 포지션 업데이트
+	if (player != nullptr)
+	{
+		cameraPostion = player->GetWorldPosition();
+	}
 }
 
 void GameLevel::Render()
@@ -43,17 +56,9 @@ void GameLevel::Render()
 	char buffer1[40] = { };
 	sprintf_s(buffer1, 40, "Player Pos: (%.2f, %.2f)", player->GetWorldPosition().x, player->GetWorldPosition().y);
 	Engine::Get().WriteToBuffer(Vector2(0, 0), buffer1); // 출력.
-
-	//
-	// 플레이어 랜더
-	//
-
-	// 플레이어는 무조건 정중앙에서 랜더
-	//char playerImg[2] = { '@' };
-	//Engine::Get().WriteToBuffer( { Engine::Get().Width() / 2, Engine::Get().Height() / 2 }, playerImg);
 }
 
-Vector2 GameLevel::GetPlayerPosition() const
+Vector2 GameLevel::GetCameraPosition() const
 {
 	return player->GetWorldPosition();
 }

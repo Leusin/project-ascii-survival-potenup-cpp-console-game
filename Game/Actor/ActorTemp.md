@@ -8,7 +8,9 @@ class Temp :public Actor
 
 public:
 	Temp();
-	~Temp();
+	virtual ~Temp();
 
+	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
+	virtual void Render() override;
 };

@@ -16,7 +16,7 @@ public:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
-	Vector2 GetPlayerPosition() const;
+	Vector2 GetCameraPosition() const;
 
 private:
 	void ReadTileMapFile(const char* filename);
@@ -25,6 +25,8 @@ private:
 private:
 	// Note: Level에서 알아서 지워 줄 것이다. 메모리 관리하면 안됨
 	class Player* player; 
+	
+	Vector2 cameraPostion = Vector2::Zero;
 
 	//TEST
 	char* tileMap = nullptr;

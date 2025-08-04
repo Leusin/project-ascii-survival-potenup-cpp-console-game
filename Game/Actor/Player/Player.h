@@ -5,7 +5,6 @@
 #include "Math/Vector2.h"
 #include "Stats/CharacterStats.h"
 
-
 class Player : public Actor
 {
 	RTTI_DECLARATIONS(Player, Actor)
@@ -25,6 +24,7 @@ private:
 	/// <summary>
 	/// 플레이어의 위치이자 카메라의 위치이기도 하다.
 	///   영향받는 것.
+	///	  - 적의 위치
 	///   - 배경
 	///   - 아이템
 	/// </summary>

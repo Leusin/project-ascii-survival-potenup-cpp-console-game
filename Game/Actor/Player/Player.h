@@ -3,7 +3,7 @@
 #include "Actor/Actor.h"
 
 #include "Math/Vector2.h"
-#include "Actor/Component/CharacterStats.h"
+#include "Stats/CharacterStats.h"
 
 
 class Player : public Actor

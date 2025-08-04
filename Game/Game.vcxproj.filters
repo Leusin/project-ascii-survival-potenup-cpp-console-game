@@ -44,7 +44,10 @@
     <ClInclude Include="Game\Game.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Actor\Component\CharacterStats.h">
+    <ClInclude Include="Stats\CharacterStats.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Stats\WeaponStats.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

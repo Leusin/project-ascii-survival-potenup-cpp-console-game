@@ -13,11 +13,13 @@ class Player : public Actor
 public:
 	Player();
 
+	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
 public:
-	Vector2 GetWorldPosition() const;
+	const Vector2& GetWorldPosition() const;
+	const Vector2& GetDirection() const;
 
 private:
 	/// <summary>
@@ -33,5 +35,5 @@ private:
 
 	// 마지막으로 이동한 방향
 	// 투사체 의 방향이 될 것
-	Vector2 direction = { 0, -1 };
+	Vector2 direction = Vector2::Right;
 };

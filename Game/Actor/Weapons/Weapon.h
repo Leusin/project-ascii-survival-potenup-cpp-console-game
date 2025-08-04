@@ -17,7 +17,8 @@ public:
 	virtual void Render() override;
 
 protected:
+	inline Vector2& GetPlayerPosition() const { return playerPosition; };
+
 	WeaponStats stats;
 	Vector2& playerPosition; // 플레이어의 위치 (월드 좌표계에서)
-	Vector2 worldPosition = Vector2::Zero; // 무기의 월드 위치
 };

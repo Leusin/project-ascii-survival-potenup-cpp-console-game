@@ -5,7 +5,6 @@
 #include "Actor/Player/Player.h"
 
 
-
 GameLevel::GameLevel()
 {
 	player = new Player();

@@ -57,6 +57,7 @@ public:
 	inline bool IsExpired() const { return isExpired; };
 	inline bool AutoDestory() const { return autoDestroy; };
 	inline char* GetImage() const { return image; };
+	inline Color GetColor() const { return color; };
 
 private:
 	Vector2 position; // 개체의 위치

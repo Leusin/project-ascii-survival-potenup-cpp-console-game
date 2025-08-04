@@ -5,7 +5,6 @@
 Weapon::Weapon(Vector2& playerPosition)
 	: Actor("-", Color::White, { Engine::Get().Width() / 2, Engine::Get().Height() / 2 })
 	, playerPosition(playerPosition)
-	, worldPosition(playerPosition)
 {
 	SetSortingOrder(5);
 }

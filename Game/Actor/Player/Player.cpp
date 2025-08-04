@@ -4,15 +4,24 @@
 #include "Input.h"
 #include "Math/Color.h"
 #include "Level/Level.h"
-
 #include "Actor/Weapons/Knife.h"
 
 Player::Player()
 	: Actor("@", Color::Red)
 	, worldPosition(Position())
 {
+	// SET
 	stats.speed = 5.f;
 	SetSortingOrder(10);
+}
+
+void Player::BeginPlay()
+{
+	super::BeginPlay();
+
+	// 기본 무기 
+	Weapon* weapon = new Knife(worldPosition, direction);
+	GetOwner()->AddActor(weapon);
 }
 
 void Player::Tick(float deltaTime)
@@ -77,12 +86,6 @@ void Player::Tick(float deltaTime)
 
 		direction = moveInput;
 	}
-	 
-	if(Input::Get().GetKeyDown(VK_SPACE))
-	{
-		Weapon* weapon = new Knife(worldPosition, direction);
-		GetOwner()->AddActor(weapon);
-	}
 }
 
 /// <summary>
@@ -97,8 +100,12 @@ void Player::Render()
 	Engine::Get().WriteToBuffer({ Engine::Get().Width() / 2, Engine::Get().Height() / 2 }, GetImage(), Color::White, GetSortingOrder());
 }
 
-Vector2 Player::GetWorldPosition() const
+const Vector2& Player::GetWorldPosition() const
 {
 	return worldPosition;
 }
 
+const Vector2& Player::GetDirection() const
+{
+	return direction;
+}

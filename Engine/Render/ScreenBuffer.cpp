@@ -20,11 +20,22 @@ ScreenBuffer::ScreenBuffer(const Vector2& screenSize)
 		return;
 	}
 
-	// 콘솔 버퍼 크기 설정.
-	SetConsoleScreenBufferSize(buffer, Vector2(screenSize.x, screenSize.y));
+	// 콘솔 창 크기 설정.
 	SMALL_RECT rect{ 0, 0, (short)screenSize.x, (short)screenSize.y };
+	BOOL setWindowsInfoResult = SetConsoleWindowInfo(buffer, true, &rect);
+	if (!setWindowsInfoResult)
+	{
+		std::cerr << "Failed to set console window size\n";
+		__debugbreak();
+	}
 
-	SetConsoleWindowInfo(buffer, true, &rect); // 콘솔 창 크기 설정.
+	// 콘솔 버퍼 크기 설정.
+	BOOL setScreenBufferSizeResult = SetConsoleScreenBufferSize(buffer, Vector2(screenSize.x + 1, screenSize.y + 1));
+	if (!setScreenBufferSizeResult)
+	{
+		std::cerr << "Failed to set screen buffer size\n";
+		__debugbreak();
+	}
 
 	// 커서 안보이게 설정.
 	CONSOLE_CURSOR_INFO info{ 1, FALSE };
@@ -34,16 +45,26 @@ ScreenBuffer::ScreenBuffer(const Vector2& screenSize)
 ScreenBuffer::ScreenBuffer(HANDLE console, const Vector2& screenSize)
 	: screenSize(screenSize), buffer(console)
 {
+	// 콘솔 창 크기 설정.
+	SMALL_RECT rect{ 0, 0, (short)screenSize.x, (short)screenSize.y };
+	BOOL setWindowsInfoResult = SetConsoleWindowInfo(buffer, true, &rect);
+	if (!setWindowsInfoResult)
+	{
+		std::cerr << "Failed to set console window size\n";
+		__debugbreak();
+	}
+
+	// 콘솔 버퍼 크기 설정.
+	BOOL setScreenBufferSizeResult = SetConsoleScreenBufferSize(buffer, Vector2(screenSize.x + 1, screenSize.y + 1));
+	if (!setScreenBufferSizeResult)
+	{
+		std::cerr << "Failed to set screen buffer size\n";
+		__debugbreak();
+	}
+
 	// 커서 안보이게 설정.
 	CONSOLE_CURSOR_INFO cursorInfo{ 1, FALSE };
 	SetConsoleCursorInfo(buffer, &cursorInfo);
-
-	// 현재 콘솔의 크기를 가져와서 원하는 크기로 조정한 뒤 다시 적용
-	CONSOLE_SCREEN_BUFFER_INFOEX bufferInfo = {};
-	GetConsoleScreenBufferInfoEx(buffer, &bufferInfo);
-	bufferInfo.dwSize.X = (SHORT)((int)screenSize.x + 1);
-	bufferInfo.dwSize.Y = (SHORT)((int)screenSize.y + 1);
-	SetConsoleScreenBufferInfoEx(buffer, &bufferInfo);
 }
 
 ScreenBuffer::~ScreenBuffer()
@@ -68,8 +89,6 @@ void ScreenBuffer::Clear()
 	FillConsoleOutputCharacter(buffer, ' ', ((int)screenSize.x + 1) * (int)screenSize.y + 1, position, &writtenCount);
 
 }
-
-
 
 void ScreenBuffer::Render(CHAR_INFO* charInfo)
 {

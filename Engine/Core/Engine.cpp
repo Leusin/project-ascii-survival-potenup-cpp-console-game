@@ -42,7 +42,7 @@ Engine::Engine()
 
 	// 이미지 버퍼 생성.
 	Vector2 screenSize(settings.width, settings.height);
-	imageBuffer = new ImageBuffer(((int)screenSize.x + 1) * (int)screenSize.y + 1);
+	imageBuffer = new ImageBuffer((settings.width + 1) * settings.height + 1);
 
 	ClearImageBuffer(); // 버퍼 초기화 (문자 버퍼).
 
@@ -56,7 +56,11 @@ Engine::Engine()
 	// 콘솔창 이벤트 등록
 	//
 
-	SetConsoleCtrlHandler(ConsoleMessageProcedure, TRUE);
+	SetConsoleCtrlHandler(ConsoleMessageProcedure, TRUE);\
+
+	// 콘솔 창 크기 변경 안되도록 설정.
+	// "관리자 모드에서만 제대로 실행됨"
+	DisableToResizeWindow();
 
 	// cls 호출.
 	system("cls");
@@ -395,4 +399,20 @@ void Engine::ClearImageBuffer()
 	buffer.Char.AsciiChar = '\0';
 	buffer.Attributes = 0;
 	imageBuffer->sortingOrderArray[index] = -1;
+}
+
+void Engine::DisableToResizeWindow()
+{
+	// 콘솔 창 핸들 가져오기.
+	HWND window = GetConsoleWindow();
+
+	// 콘솔 창에 설정된 스타일 값 가져오기.
+	LONG style = GetWindowLong(window, GWL_STYLE);
+
+	// 콘솔 창 스타일에서 크기 조절 관련 옵션 제거.
+	style &= ~WS_MAXIMIZEBOX;
+	style &= ~WS_SIZEBOX;
+
+	// 콘솔창에 변경된 스타일 적용.
+	SetWindowLongW(window, GWL_STYLE, style);
 }

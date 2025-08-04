@@ -126,6 +126,8 @@ private:
 	void ClearImageBuffer();
 
 private:
+	void DisableToResizeWindow();
+
 	bool isQuit = false; // 엔진 종료 플래그
 
 	Input input; // 입력 관리자

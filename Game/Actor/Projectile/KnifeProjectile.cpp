@@ -30,6 +30,15 @@ void KnifeProjectile::Tick(float deltaTime)
 
 	// 화면 좌표계로 변환
 	Vector2 screenPosition = Engine::Get().OrthogonalToScreenCoords(projectilePosition, playerPosition);
+
+	// 화면 좌표계 가장자리에 있을 경우 제거
+	if (screenPosition.x < -1 || screenPosition.x > Engine::Get().Width() ||
+		screenPosition.y < -1 || screenPosition.y > Engine::Get().Height())
+	{
+		Destroy();
+	}
+
+	// 화면 좌표계에 실제로 적용
 	SetPosition(screenPosition);
 }
 

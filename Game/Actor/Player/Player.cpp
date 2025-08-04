@@ -49,9 +49,6 @@ void Player::Tick(float deltaTime)
 		// 현재 위치 업데이트
 		worldPosition = worldPosition + moveDirection * stats.speed * deltaTime;
 
-		// 플레이어는 항상 화면 중앙에 그려지므로, 이 코드는 불필요
-		//SetPosition(worldPosition);
-
 		direction = moveInput;
 	}
 

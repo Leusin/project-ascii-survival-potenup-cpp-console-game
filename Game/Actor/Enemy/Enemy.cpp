@@ -91,6 +91,7 @@ void Enemy::MoveToPlayer(float deltaTime)
 	// 플레이어가 있어야할 타일이면 못감
 	if (nextScreenPos == Engine::Get().OrthogonalToScreenCoords(playerPosition, playerPosition))
 	{
+		// 이 때 플레이어에게 대미지를 가하는 것과 같음
 		return;
 	}
 

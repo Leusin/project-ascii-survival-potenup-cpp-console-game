@@ -182,6 +182,7 @@
     <ClInclude Include="Actor\Enemy\Enemy.h" />
     <ClInclude Include="Actor\Projectile\KnifeProjectile.h" />
     <ClInclude Include="Actor\Weapons\Knife.h" />
+    <ClInclude Include="Interface\IDamageable.h" />
     <ClInclude Include="Stats\CharacterStats.h" />
     <ClInclude Include="Stats\WeaponStats.h" />
     <ClInclude Include="Actor\Player\Player.h" />

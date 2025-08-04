@@ -4,7 +4,7 @@
 #include "Level/GameLevel.h"
 #include "Actor/Projectile/KnifeProjectile.h"
 
-Knife::Knife(Vector2& playerPosition, Vector2& direiction)
+Knife::Knife(Vector2F& playerPosition, Vector2F& direiction)
 	: Weapon(playerPosition)
 	, direction(direiction)
 {

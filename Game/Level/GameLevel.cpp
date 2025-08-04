@@ -22,6 +22,14 @@ GameLevel::GameLevel()
 	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
 	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
 	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
 }
 
 GameLevel::~GameLevel()
@@ -58,10 +66,10 @@ void GameLevel::Render()
 	// 디버깅을 위해 캐릭터의 위치 출력
 	char buffer1[40] = { };
 	sprintf_s(buffer1, 40, "Player Pos: (%.2f, %.2f)", player->GetWorldPosition().x, player->GetWorldPosition().y);
-	Engine::Get().WriteToBuffer(Vector2(0, 0), buffer1); // 출력.
+	Engine::Get().WriteToBuffer(Vector2I(0, 0), buffer1); // 출력.
 }
 
-Vector2 GameLevel::GetCameraPosition() const
+Vector2F GameLevel::GetCameraPosition() const
 {
 	return player->GetWorldPosition();
 }

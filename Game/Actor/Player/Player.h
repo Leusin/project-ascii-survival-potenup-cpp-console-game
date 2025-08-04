@@ -2,7 +2,7 @@
 
 #include "Actor/Actor.h"
 
-#include "Math/Vector2.h"
+#include "Math/Vector2F.h"
 #include "Stats/CharacterStats.h"
 
 class Player : public Actor
@@ -17,8 +17,8 @@ public:
 	virtual void Render() override;
 
 public:
-	const Vector2& GetWorldPosition() const;
-	const Vector2& GetDirection() const;
+	const Vector2F& GetWorldPosition() const;
+	const Vector2F& GetDirection() const;
 
 private:
 	/// <summary>
@@ -28,12 +28,12 @@ private:
 	///   - 배경
 	///   - 아이템
 	/// </summary>
-	Vector2 worldPosition;
+	Vector2F worldPosition;
 
 	CharacterStats stats;
-	Vector2 moveInput = { 0, 0 };
+	Vector2F moveInput = { 0, 0 };
 
 	// 마지막으로 이동한 방향
 	// 투사체 의 방향이 될 것
-	Vector2 direction = Vector2::Right;
+	Vector2F direction = Vector2F::Right;
 };

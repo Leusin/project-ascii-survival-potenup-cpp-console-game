@@ -2,12 +2,11 @@
 
 #include "Engine.h"
 #include "Input.h"
-#include "Math/Color.h"
 #include "Level/Level.h"
 #include "Actor/Weapons/Knife.h"
 
 Player::Player()
-	: Actor("@", Color::Red)
+	: Actor("@", Color::White)
 	, worldPosition(Position())
 {
 	// SET
@@ -32,39 +31,8 @@ void Player::Tick(float deltaTime)
 		return;
 	}
 
-	/// 방향키 입력
-	// 화면 좌표계와 상관없이 직교 좌표계로 움직이게 처리하고 나중에 처리해야할듯
-
-	/// 대각선 입력 처리
-	/*
-	if (Input::Get().GetKey(VK_UP) || Input::Get().GetKey('W')) // 위, W
-	{
-		Vector2 position = Position();
-		position.y -= 1;
-		SetPosition(position);
-	}
-	if (Input::Get().GetKey(VK_LEFT) || Input::Get().GetKey('A')) // 좌, A
-	{
-		Vector2 position = Position();
-		position.x -= 1;
-		SetPosition(position);
-	}
-	if (Input::Get().GetKey(VK_DOWN) || Input::Get().GetKey('S')) // 아래, S
-	{
-		Vector2 position = Position();
-		position.y += 1;
-		SetPosition(position);
-	}
-	if (Input::Get().GetKey(VK_RIGHT) || Input::Get().GetKey('D')) // 우, D
-	{
-		Vector2 position = Position();
-		position.x += 1;
-		SetPosition(position);
-	}
-	*/
-
 	// 1. 방향 입력 받기 (입력 로직만)
-	Vector2 moveInput = Vector2::Zero;
+	Vector2F moveInput = Vector2F::Zero;
 
 	// 직교 좌표계로 입력 받기
 	if (Input::Get().GetKey(VK_UP) || Input::Get().GetKey('W')) { moveInput.y += 1.f; }; // 위로 이동하면 Y +
@@ -73,10 +41,10 @@ void Player::Tick(float deltaTime)
 	if (Input::Get().GetKey(VK_RIGHT) || Input::Get().GetKey('D')) { moveInput.x += 1.f; };
 
 	// 2. 입력이 있을 때만 이동 처리 (물리적 이동)
-	if (!(moveInput == Vector2::Zero))
+	if (moveInput.SqrMagnitude() > 0.f)
 	{
 		// 이동 방향
-		Vector2 moveDirection = moveInput.Normalize();
+		Vector2F moveDirection = moveInput.Normalize();
 
 		// 현재 위치 업데이트
 		worldPosition = worldPosition + moveDirection * stats.speed * deltaTime;
@@ -86,6 +54,9 @@ void Player::Tick(float deltaTime)
 
 		direction = moveInput;
 	}
+
+	// 어차피 화면 정 중앙이긴 하지만,
+	SetPosition(Engine::Get().OrthogonalToScreenCoords(worldPosition, worldPosition));
 }
 
 /// <summary>
@@ -93,19 +64,15 @@ void Player::Tick(float deltaTime)
 /// </summary>
 void Player::Render()
 {
-	// TEST용
-	// 플레이어의 위치는 무조건 화면 가운데에서 그려져야하기 때문에 안 쓴다.
-	// 부모 클래스의 Render는 순전히 디버깅용
-	//super::Render();
-	Engine::Get().WriteToBuffer({ Engine::Get().Width() / 2, Engine::Get().Height() / 2 }, GetImage(), Color::White, GetSortingOrder());
+	super::Render();
 }
 
-const Vector2& Player::GetWorldPosition() const
+const Vector2F& Player::GetWorldPosition() const
 {
 	return worldPosition;
 }
 
-const Vector2& Player::GetDirection() const
+const Vector2F& Player::GetDirection() const
 {
 	return direction;
 }

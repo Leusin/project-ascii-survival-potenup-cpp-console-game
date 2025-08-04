@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Level/Level.h"
-#include "Math/Vector2.h"
+#include "Math/Vector2F.h"
 
 class GameLevel : public Level
 
@@ -16,7 +16,7 @@ public:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
-	Vector2 GetCameraPosition() const;
+	Vector2F GetCameraPosition() const;
 
 private:
 	void ReadTileMapFile(const char* filename);
@@ -26,7 +26,7 @@ private:
 	// Note: Level에서 알아서 지워 줄 것이다. 메모리 관리하면 안됨
 	class Player* player; 
 	
-	Vector2 cameraPostion = Vector2::Zero;
+	Vector2F cameraPostion = Vector2F::Zero;
 
 	//TEST
 	char* tileMap = nullptr;

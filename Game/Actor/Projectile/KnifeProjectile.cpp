@@ -2,7 +2,7 @@
 
 #include "Engine.h"
 
-KnifeProjectile::KnifeProjectile(float damage, float speed, Vector2& playerPosition, Vector2& direiction)
+KnifeProjectile::KnifeProjectile(float damage, float speed, Vector2F& playerPosition, Vector2F& direiction)
 	: Actor("-", Color::White, { Engine::Get().Width() / 2, Engine::Get().Height() / 2 })
 	, speed(speed)
 	, damage(damage)
@@ -29,7 +29,7 @@ void KnifeProjectile::Tick(float deltaTime)
 	projectilePosition = projectilePosition + direction.Normalize() * speed * deltaTime;
 
 	// 화면 좌표계로 변환
-	Vector2 screenPosition = Engine::Get().OrthogonalToScreenCoords(projectilePosition, playerPosition);
+	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(projectilePosition, playerPosition);
 
 	// 화면 좌표계 가장자리에 있을 경우 제거
 	if (screenPosition.x < -1 || screenPosition.x > Engine::Get().Width() ||
@@ -50,7 +50,7 @@ void KnifeProjectile::Render()
 	if (strcmp(GetImage(), "/") == 0)
 	{
 		// 렌더링에만 사용할 임시 위치 변수를 만듭니다.
-		Vector2 renderPosition = Position();
+		Vector2I renderPosition = Position();
 		renderPosition.x += 1;
 
 		// SetPosition()을 사용하지 않고, 바로 Draw 함수를 호출합니다.
@@ -72,17 +72,11 @@ void KnifeProjectile::SetImafeByDirection()
 	// 좌측 상단
 	else if (direction.x < 0 && direction.y < 0)
 	{
-		Vector2 renderPosition = Position();
-		renderPosition.x += 1;
-		SetPosition(renderPosition);
 		SetImage("/");
 	}
 	// 우측 하단
 	else if (direction.x > 0 && direction.y > 0)
 	{
-		Vector2 renderPosition = Position();
-		renderPosition.x += 1;
-		SetPosition(renderPosition);
 		SetImage("/");
 	}
 	// 좌측 하단

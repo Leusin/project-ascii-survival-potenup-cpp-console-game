@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Actor/Actor.h"
-#include "Math/Vector2.h"
+#include "Math/Vector2F.h"
 #include "Stats/WeaponStats.h"
 
 class Weapon :public Actor
@@ -9,7 +9,7 @@ class Weapon :public Actor
 	RTTI_DECLARATIONS(Weapon, Actor)
 
 public:
-	Weapon(Vector2& playerPosition);
+	Weapon(Vector2F& playerPosition);
 	virtual ~Weapon() = default;
 
 	virtual void BeginPlay() override;
@@ -17,8 +17,8 @@ public:
 	virtual void Render() override;
 
 protected:
-	inline Vector2& GetPlayerPosition() const { return playerPosition; };
+	inline Vector2F& GetPlayerPosition() const { return playerPosition; };
 
 	WeaponStats stats;
-	Vector2& playerPosition; // 플레이어의 위치 (월드 좌표계에서)
+	Vector2F& playerPosition; // 플레이어의 위치 (월드 좌표계에서)
 };

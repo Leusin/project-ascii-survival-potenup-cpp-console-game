@@ -179,7 +179,8 @@ xcopy $(OutDir)Engine.dll ..\Lib\Engine\ /y</Command>
     <ClCompile Include="Core\Engine.cpp" />
     <ClCompile Include="Core\Input.cpp" />
     <ClCompile Include="Level\Level.cpp" />
-    <ClCompile Include="Math\Vector2.cpp" />
+    <ClCompile Include="Math\Vector2F.cpp" />
+    <ClCompile Include="Math\Vector2I.cpp" />
     <ClCompile Include="Render\ScreenBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +191,8 @@ xcopy $(OutDir)Engine.dll ..\Lib\Engine\ /y</Command>
     <ClInclude Include="Core\RTTI.h" />
     <ClInclude Include="Level\Level.h" />
     <ClInclude Include="Math\Color.h" />
-    <ClInclude Include="Math\Vector2.h" />
+    <ClInclude Include="Math\Vector2F.h" />
+    <ClInclude Include="Math\Vector2I.h" />
     <ClInclude Include="Render\ScreenBuffer.h" />
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>

@@ -12,7 +12,7 @@ class Knife : public Weapon
 	RTTI_DECLARATIONS(Knife, Weapon)
 
 public:
-	Knife(Vector2& playerPosition, Vector2& direiction);
+	Knife(Vector2F& playerPosition, Vector2F& direiction);
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
@@ -24,7 +24,7 @@ private:
 	/// <summary>
 	/// 투척 방향
 	/// </summary>
-	Vector2& direction = Vector2::Right;
+	Vector2F& direction = Vector2F::Right;
 
 	Timer cooldownTimer;
 };

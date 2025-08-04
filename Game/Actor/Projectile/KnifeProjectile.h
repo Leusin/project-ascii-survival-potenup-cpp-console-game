@@ -11,7 +11,7 @@ class KnifeProjectile :public Actor
 	RTTI_DECLARATIONS(KnifeProjectile, Actor)
 
 public:
-	KnifeProjectile(float damage, float speed, Vector2& playerPosition, Vector2& direiction);
+	KnifeProjectile(float damage, float speed, Vector2F& playerPosition, Vector2F& direiction);
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
@@ -28,12 +28,12 @@ private:
 	/// <summary>
 	/// 투척 방향
 	/// </summary>
-	Vector2 direction = Vector2::Right;
+	Vector2F direction = Vector2F::Right;
 
-	Vector2& playerPosition; // 플레이어의 위치 (월드 좌표계에서)
+	Vector2F& playerPosition; // 플레이어의 위치 (월드 좌표계에서)
 
 	/// <summary>
 	/// 투사체의 월드 위치
 	/// </summary>
-	Vector2 projectilePosition = Vector2::Zero;
+	Vector2F projectilePosition = Vector2F::Zero;
 };

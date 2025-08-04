@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Windows.h>
-#include "Math/Vector2.h"
+#include "Math/Vector2I.h"
 
 /// <summary>
 /// 
@@ -12,10 +12,10 @@ class ScreenBuffer
 
 public:
 	// 새 버퍼 생성 시 사용
-	ScreenBuffer(const Vector2& screenSize);
+	ScreenBuffer(const Vector2I& screenSize);
 
 	// 콘솔에 전달된 핸들을 통해 콘솔 버퍼 생성
-	ScreenBuffer(HANDLE console, const Vector2& screenSize);
+	ScreenBuffer(HANDLE console, const Vector2I& screenSize);
 
 	~ScreenBuffer();
 
@@ -26,5 +26,5 @@ public:
 private:
 	HANDLE buffer = nullptr; // 콘솔 핸들
 	
-	Vector2 screenSize; // 화면 크기
+	Vector2I screenSize; // 화면 크기
 };

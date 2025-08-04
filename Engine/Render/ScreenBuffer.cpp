@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Engine.h"
 
-ScreenBuffer::ScreenBuffer(const Vector2& screenSize)
+ScreenBuffer::ScreenBuffer(const Vector2I& screenSize)
 	: screenSize(screenSize)
 {
 	unsigned long accessMode = GENERIC_READ | GENERIC_WRITE; // 접근 모드 설정(읽기, 쓰기)
@@ -30,7 +30,7 @@ ScreenBuffer::ScreenBuffer(const Vector2& screenSize)
 	}
 
 	// 콘솔 버퍼 크기 설정.
-	BOOL setScreenBufferSizeResult = SetConsoleScreenBufferSize(buffer, Vector2(screenSize.x + 1, screenSize.y + 1));
+	BOOL setScreenBufferSizeResult = SetConsoleScreenBufferSize(buffer, Vector2I(screenSize.x + 1, screenSize.y + 1));
 	if (!setScreenBufferSizeResult)
 	{
 		std::cerr << "Failed to set screen buffer size\n";
@@ -42,7 +42,7 @@ ScreenBuffer::ScreenBuffer(const Vector2& screenSize)
 	SetConsoleCursorInfo(buffer, &info);
 }
 
-ScreenBuffer::ScreenBuffer(HANDLE console, const Vector2& screenSize)
+ScreenBuffer::ScreenBuffer(HANDLE console, const Vector2I& screenSize)
 	: screenSize(screenSize), buffer(console)
 {
 	// 콘솔 창 크기 설정.
@@ -55,7 +55,7 @@ ScreenBuffer::ScreenBuffer(HANDLE console, const Vector2& screenSize)
 	}
 
 	// 콘솔 버퍼 크기 설정.
-	BOOL setScreenBufferSizeResult = SetConsoleScreenBufferSize(buffer, Vector2(screenSize.x + 1, screenSize.y + 1));
+	BOOL setScreenBufferSizeResult = SetConsoleScreenBufferSize(buffer, Vector2I(screenSize.x + 1, screenSize.y + 1));
 	if (!setScreenBufferSizeResult)
 	{
 		std::cerr << "Failed to set screen buffer size\n";
@@ -79,7 +79,7 @@ ScreenBuffer::~ScreenBuffer()
 void ScreenBuffer::Clear()
 {
 	// 커서 위치.
-	Vector2 position;
+	Vector2I position;
 
 	// 콘솔에 기록한 글자 수를 반환받기 위한 변수.
 	DWORD writtenCount = 0;
@@ -93,7 +93,7 @@ void ScreenBuffer::Clear()
 void ScreenBuffer::Render(CHAR_INFO* charInfo)
 {
 	// 버퍼 위치 초기화.
-	Vector2 bufferPosition;
+	Vector2I bufferPosition;
 
 	// 기록할 영역의 크기.
 	SMALL_RECT writeRegion{ 0, 0, (short)screenSize.x - 1, (short)screenSize.y - 1 };

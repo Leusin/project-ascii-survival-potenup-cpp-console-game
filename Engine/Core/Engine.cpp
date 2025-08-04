@@ -41,7 +41,7 @@ Engine::Engine()
 	//
 
 	// 이미지 버퍼 생성.
-	Vector2 screenSize(settings.width, settings.height);
+	Vector2I screenSize(settings.width, settings.height);
 	imageBuffer = new ImageBuffer((settings.width + 1) * settings.height + 1);
 
 	ClearImageBuffer(); // 버퍼 초기화 (문자 버퍼).
@@ -127,7 +127,7 @@ void Engine::Run()
 	Utils::SetConsoleTextColor(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
 }
 
-void Engine::WriteToBuffer(const Vector2& position, const char* image, Color color, int sortingOrder)
+void Engine::WriteToBuffer(const Vector2I& position, const char* image, Color color, int sortingOrder)
 {
 	// 문자열 길이.
 	int length = static_cast<int>(strlen(image));
@@ -212,31 +212,31 @@ ScreenBuffer* Engine::GetRenderer() const
 	return renderTargets[currentRenderTargetIndex];
 }
 
-Vector2 Engine::OrthogonalToScreenCoords(const Vector2& worldPos, const Vector2& cameraPos)
+Vector2I Engine::OrthogonalToScreenCoords(const Vector2F& worldPos, const Vector2F& cameraPos)
 {
-	Vector2 screenPos;
+	Vector2I screenPos;
 
 	// 1. 카메라 위치를 기준으로 상대적 위치를 계산합니다.
-	screenPos.x = (worldPos.x - cameraPos.x);
-	screenPos.y = (worldPos.y - cameraPos.y);
+	screenPos.x = (int)(worldPos.x - cameraPos.x);
+	screenPos.y = (int)(worldPos.y - cameraPos.y);
 
 	// 2. Y축을 뒤집습니다. (y-up -> y-down)
 	screenPos.y *= -1;
 
 	// 3. 화면 중앙을 기준으로 옮깁니다.
-	screenPos.x += (float)halfWidth();
-	screenPos.y += (float)halfHeight();
+	screenPos.x += halfWidth();
+	screenPos.y += halfHeight();
 
 	return screenPos;
 }
 
-Vector2 Engine::ScreenToOrthogonalCoords(const Vector2& screenPos, const Vector2& cameraPos)
+Vector2F Engine::ScreenToOrthogonalCoords(const Vector2I& screenPos, const Vector2F& cameraPos)
 {
-	Vector2 worldPos;
+	Vector2F worldPos;
 
 	// 1. 화면 중앙을 기준으로 상대적 위치를 계산합니다.
-	worldPos.x = screenPos.x - halfWidth();
-	worldPos.y = screenPos.y - halfHeight();
+	worldPos.x = screenPos.x - (float)halfWidth();
+	worldPos.y = screenPos.y - (float)halfHeight();
 
 	// 2. Y축을 뒤집습니다. (y-down -> y-up)
 	worldPos.y *= -1;

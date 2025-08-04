@@ -5,7 +5,7 @@
 #include "Utils/Utils.h"
 #include "Level/Level.h"
 
-Actor::Actor(const char* image, Color color, const Vector2& position)
+Actor::Actor(const char* image, Color color, const Vector2I& position)
 	: color(color), position(position)
 {
 	// iamge 초기화
@@ -109,12 +109,12 @@ void Actor::QuitGame()
 	Engine::Get().Quit();
 }
 
-Vector2 Actor::Position() const
+Vector2I Actor::Position() const
 {
 	return position;
 }
 
-void Actor::SetPosition(const Vector2& newPosition)
+void Actor::SetPosition(const Vector2I& newPosition)
 {
 	if (position == newPosition)
 	{

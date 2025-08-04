@@ -25,6 +25,7 @@ public:
 	void DestroyActor(Actor* newActor); // 액터 삭제
 	void ProcessAddAndDestroyActors(); // 추가 또는 삭제 요청된 액터 처리
 
+	const std::vector<Actor*>& GetActors() const;
 protected:
 	std::vector<Actor*> actors; // 레벨에 배치된 모든 액터 관리
 

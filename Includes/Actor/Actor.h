@@ -2,7 +2,7 @@
 
 #include "Core.h"
 #include "RTTI.h"
-#include "Math/Vector2.h"
+#include "Math/Vector2I.h"
 #include "Math/Color.h"
 
 /// <summary>
@@ -16,7 +16,7 @@ class Engine_API Actor : public RTTI
 	RTTI_DECLARATIONS(Actor, RTTI)
 
 public:
-	Actor(const char* image = "", Color color = Color::White, const Vector2& position = Vector2::Zero);
+	Actor(const char* image = "", Color color = Color::White, const Vector2I& position = Vector2I::Zero);
 	virtual ~Actor();
 
 	virtual void BeginPlay(); // 단 한번만 호출.
@@ -34,8 +34,8 @@ public:
 /// Getter와 Setter 함수
 /// </summary>
 public:
-	Vector2 Position() const;
-	void SetPosition(const Vector2& newPosition);
+	Vector2I Position() const;
+	void SetPosition(const Vector2I& newPosition);
 
 	unsigned int GetSortingOrder() const;
 	void SetSortingOrder(unsigned int sortingOrder);
@@ -60,7 +60,7 @@ public:
 	inline Color GetColor() const { return color; };
 
 private:
-	Vector2 position; // 개체의 위치
+	Vector2I position; // 개체의 위치
 
 	char* image = nullptr;
 

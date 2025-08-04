@@ -103,3 +103,8 @@ void Level::ProcessAddAndDestroyActors()
 
 	addRequestedActors.clear();
 }
+
+const std::vector<Actor*>& Level::GetActors() const
+{
+	return actors;
+}

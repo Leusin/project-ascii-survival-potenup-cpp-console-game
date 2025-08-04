@@ -3,7 +3,7 @@
 #include<Windows.h>
 #include "Core.h"
 #include "Input.h"
-#include "Math/Vector2.h"
+#include "Math/Vector2I.h"
 #include "Math/Color.h"
 
 /**
@@ -62,7 +62,7 @@ public:
 	/// <param name="image">기록할 문자</param>
 	/// <param name="color">문자의 색상</param>
 	/// <param name="sortingOrder">이미지 순서</param>
-	void WriteToBuffer(const Vector2& position, const char* image, Color color = Color::White, int sortingOrder = 0);
+	void WriteToBuffer(const Vector2I& position, const char* image, Color color = Color::White, int sortingOrder = 0);
 	// 버퍼를 곧바로 교환 요청할 때 사용하는 함수.
 	void PresentImmediately();
 
@@ -84,12 +84,12 @@ public:
 	/// <summary>
 	///  직교 좌표계 → 화면 좌표계 변환 함수
 	/// </summary>
-	Vector2 OrthogonalToScreenCoords(const Vector2& worldPos, const Vector2& cameraPos = Vector2::Zero);
+	Vector2I OrthogonalToScreenCoords(const Vector2F& worldPos, const Vector2F& cameraPos = Vector2F::Zero);
 
 	/// <summary>
 	/// 화면 좌표계 → 직교 좌표계 변환 함수 
 	/// </summary>
-	Vector2 ScreenToOrthogonalCoords(const Vector2& screenPos, const Vector2& cameraPos = Vector2::Zero);
+	Vector2F ScreenToOrthogonalCoords(const Vector2I& screenPos, const Vector2F& cameraPos = Vector2F::Zero);
 
 protected:
 	class Level* mainLevel = nullptr; // 메인 레벨

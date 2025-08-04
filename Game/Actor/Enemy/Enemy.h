@@ -1,19 +1,23 @@
 #pragma once
 
 #include "Actor/Actor.h"
+
 #include "Stats/CharacterStats.h"
+#include "Math/Vector2F.h"
 
 class Enemy :public Actor
 {
 	RTTI_DECLARATIONS(Enemy, Actor)
 
 public:
-	Enemy(Vector2& cameraPostion);
+	Enemy(Vector2F& cameraPostion);
 	//virtual ~Enemy();
 
 	//virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
+
+	virtual void OnDestroy() override;
 
 private:
 	void SetSpawnPosition();
@@ -28,6 +32,6 @@ private:
 private:
 	CharacterStats stat;
 
-	Vector2 worldPosition;
-	Vector2& playerPostion;
+	Vector2F worldPosition;
+	Vector2F& playerPosition;
 };

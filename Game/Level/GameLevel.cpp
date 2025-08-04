@@ -16,9 +16,12 @@ GameLevel::GameLevel()
 	ReadTileMapFile("TileMap.txt");
 
 	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	//AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	//AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	//AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
 }
 
 GameLevel::~GameLevel()

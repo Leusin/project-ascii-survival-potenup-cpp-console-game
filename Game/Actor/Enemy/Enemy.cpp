@@ -7,11 +7,33 @@
 
 Enemy::Enemy(Vector2& cameraPostion)
 	: Actor("E", Color::Blue)
-	, cameraPostion(cameraPostion)
+	, playerPostion(cameraPostion)
 {
+	stat.speed = 1.4f;
+
 
 	SetSortingOrder(5);
 
+	SetSpawnPosition();
+}
+
+
+void Enemy::Tick(float deltaTime)
+{
+	super::Tick(deltaTime);
+
+	MoveToPlayer(deltaTime);
+}
+
+void Enemy::Render()
+{
+	super::Render();
+
+	HandleScreenWrap();
+}
+
+void Enemy::SetSpawnPosition()
+{
 	//
 	// 스폰 위치 가장 자리 중 랜덤으로
 	// 
@@ -22,22 +44,22 @@ Enemy::Enemy(Vector2& cameraPostion)
 	if (PosType == 0)
 	{
 		// 위 쪽이라면 (x, 1)
-		spawnPostion = { Utils::Random(0, Engine::Get().Width()) , 0 };
+		spawnPostion = { Utils::Random(0, Engine::Get().Width() - 1) , 0 };
 	}
 	else if (PosType == 1)
 	{
 		// 왼 쪽이라면 (1, y)
-		spawnPostion = { 0, Utils::Random(1, Engine::Get().Height()) };
+		spawnPostion = { 0, Utils::Random(1, Engine::Get().Height() - 1) };
 	}
 	else if (PosType == 2)
 	{
 		// 아래 쪽이라면 (x, hight)
-		spawnPostion = { Utils::Random(0, Engine::Get().Width()) , Engine::Get().Height() };
+		spawnPostion = { Utils::Random(0, Engine::Get().Width() - 1) , Engine::Get().Height() - 1 };
 	}
 	else if (PosType == 1)
 	{
 		// 오른 쪽이라면 (width, y)
-		spawnPostion = { Engine::Get().Width(), Utils::Random(0, Engine::Get().Height()) };
+		spawnPostion = { Engine::Get().Width(), Utils::Random(0, Engine::Get().Height() - 1) };
 	}
 
 	SetPosition(spawnPostion);
@@ -49,16 +71,26 @@ Enemy::Enemy(Vector2& cameraPostion)
 	worldPosition = Engine::Get().ScreenToOrthogonalCoords(spawnPostion);
 }
 
-void Enemy::Tick(float deltaTime)
+void Enemy::MoveToPlayer(float deltaTime)
 {
-	super::Tick(deltaTime);
+	// 월드 좌표계를 플레이어를 향해 이동하도록 조작한다.
+	Vector2 moveDistance = playerPostion - worldPosition;
 
+	if (moveDistance.SqrMagnitude() < 1.4f)
+	{
+		return;
+	}
 
-	//
-	// 화면 이탈 확인 및 월드 좌표 조정
-	//
+	worldPosition = worldPosition + moveDistance.Normalize() * stat.speed * deltaTime;
 
-	Vector2 screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPostion);
+	// 월드 좌표계를 화면 좌표계로 변환한다.
+	Vector2 screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, playerPostion);
+	SetPosition(screenPosition);
+}
+
+void Enemy::HandleScreenWrap()
+{
+	Vector2 screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, playerPostion);
 
 	/// 좌우 화면 처리
 
@@ -85,12 +117,7 @@ void Enemy::Tick(float deltaTime)
 		worldPosition.y += Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 위로 이동
 	}
 
-	screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPostion);
+	screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, playerPostion);
 
 	SetPosition(screenPosition);
-}
-
-void Enemy::Render()
-{
-	super::Render();
 }

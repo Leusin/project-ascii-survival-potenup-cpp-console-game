@@ -21,6 +21,11 @@ Actor::~Actor()
 
 void Actor::BeginPlay()
 {
+	if (hasBegonPlay)
+	{
+		return;
+	}
+
 	hasBegonPlay = true;
 }
 

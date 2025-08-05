@@ -11,7 +11,10 @@ Player::Player()
 	, worldPosition(Position())
 {
 	// SET
+	stats.hp = 20.f;
 	stats.speed = 5.f;
+
+	baseMaxHp = stats.hp;
 
 	SetSortingOrder(10);
 
@@ -117,7 +120,9 @@ void Player::TakeDamage(float damage)
 
 	isOnDamaged = true;
 
-	// TODO: 데미지 처리
+	float damaged = stats.hp - damage;
+
+	stats.hp = (damaged < 0) ? 0 : damaged;
 }
 
 const Vector2F& Player::GetWorldPosition() const
@@ -128,6 +133,11 @@ const Vector2F& Player::GetWorldPosition() const
 const Vector2F& Player::GetDirection() const
 {
 	return direction;
+}
+
+float Player::GetHpRatio() const
+{
+	return stats.hp / baseMaxHp;
 }
 
 float Player::GetExpRatio() const

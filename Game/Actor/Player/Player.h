@@ -26,10 +26,19 @@ public: // GetterSetter
 	const Vector2F& GetDirection() const;
 
 	/// <summary>
+	/// 현재 hp 와 최대 hp 의 비율. UI 에 사용
+	/// </summary>
+	/// <returns></returns>
+	float GetHpRatio() const;
+
+	/// <summary>
 	/// 현재 경험치와 다음 레벨로 가는 경험치 비율 반환. UI 에 사용
 	/// </summary>
 	float GetExpRatio() const;
 
+	/// <summary>
+	/// 경험치 추가 밎 레벨업 검사
+	/// </summary>
 	void AddExp(float exp);
 
 private:
@@ -60,6 +69,7 @@ private:
 	//
 	// 데미지 처리 관련
 	//
+	float baseMaxHp;
 	bool isOnDamaged = false;
 	Timer onDamagedTimer;
 	float invulnerableTime = 0.1f;

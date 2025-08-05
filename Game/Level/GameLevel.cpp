@@ -70,7 +70,22 @@ void GameLevel::Render()
 {
 	super::Render();
 
+	/*
+	* 현재 랜더 순서:
+	*
+	* INT_MAX - 디버그 정보
+	*
+	* 10 - Player
+	*
+	* 5 - Enemy, KnigeProjectile
+	*
+	* 0 - 배경
+	*
+	*/
+
 	RenderBackground(); // 배경 그리기
+
+	RenderUI();
 
 	RenderDebugeData(); // 디버그 데이터 랜더
 }
@@ -200,10 +215,35 @@ void GameLevel::RenderBackground()
 	}
 }
 
+void GameLevel::RenderUI()
+{
+	int sortingOrder = 10;
+	int barWidth = Engine::Get().Width();
+
+	// EXP 
+	float expRatio = player->GetExpRatio();
+	float filledExp = static_cast<int>(barWidth * expRatio); // 채워진 부분의 너비
+
+	// HP
+	float hpRatio = player->GetHpRatio();
+	int filledHp = static_cast<int>(barWidth * hpRatio); // 채워진 부분의 너비
+
+	for (int xi = 0; xi < Engine::Get().Width(); ++xi)
+	{
+		Color hpColor = (xi < filledHp) ? Color::Red : Color::White;
+		Color exColor = (xi < filledExp) ? Color::Blue : Color::White;
+		char hpbarChar[2] = { '#', '\0' };
+
+		Engine::Get().WriteToBuffer({xi, 0}, hpbarChar, exColor, sortingOrder);
+		Engine::Get().WriteToBuffer({xi, Engine::Get().Height() - 1 }, hpbarChar, hpColor, sortingOrder);
+	}
+
+}
+
 void GameLevel::ProcessDebuge()
 {
-	// F1 키를 눌렀을 때 디버그 모드를 토글
-	if (Input::Get().GetKeyDown(VK_F1))
+	// 틸트'~' 키를 눌렀을 때 디버그 모드를 토글
+	if (Input::Get().GetKeyDown(VK_OEM_3))
 	{
 		DebugManager::Get().ToggleDebugMode();
 	}
@@ -213,13 +253,14 @@ void GameLevel::ProcessDebuge()
 		return;
 	}
 
-	// F2 키를 눌렀을 때 게임 일시 정지 토글
-	if (Input::Get().GetKeyDown(VK_F2))
+	// !/1번 키를 눌렀을 때 게임 일시 정지 토글
+	if (Input::Get().GetKeyDown('1'))
 	{
 		DebugManager::Get().ToggleGamePause();
 	}
 
-	if (Input::Get().GetKeyDown('E'))
+	// @/2번 키를 눌렀을 때 하나 스폰
+	if (Input::Get().GetKeyDown('2'))
 	{
 		AddActor(new Enemy(cameraPostion));
 	};
@@ -233,35 +274,26 @@ void GameLevel::RenderDebugeData()
 	// 1. 모드 상태
 	if (!DebugManager::Get().IsDebugMode())
 	{
-		char buffer[60] = {};
-		sprintf_s(buffer, 60, "[KEY 'F1']Switch DEBUG Mode");
-		Engine::Get().WriteToBuffer(Vector2I(0, 0), buffer, Color::White, renderOrder);
-
 		return;
 	}
 	else
 	{
 		char buffer1[60] = {};
-		sprintf_s(buffer1, 60, "[KEY'F1']Switch GAME Mode");
-		Engine::Get().WriteToBuffer(Vector2I(0, 0), buffer1, Color::Green, renderOrder);
+		sprintf_s(buffer1, 60, "[KEY'~']ToggleDEBUG");
+		Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 6), buffer1, Color::Green, renderOrder);
 
 		sprintf_s(buffer1, 60, "-------------------- ");
-		Engine::Get().WriteToBuffer(Vector2I(0, 1), buffer1, Color::Green, renderOrder);
+		Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 5), buffer1, Color::Green, renderOrder);
 	}
 
 	// 2. 일시정지 안내
 	char buffer2[60] = {};
-	sprintf_s(buffer2, 60, "[KEY'F2']Game Pause");
+	sprintf_s(buffer2, 60, "[KEY'1']GamePause");
 	Color isPusecolor = DebugManager::Get().IsGamePaused() ? Color::Red : Color::Green;
-	Engine::Get().WriteToBuffer(Vector2I(0, 2), buffer2, isPusecolor, renderOrder);
+	Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 4), buffer2, isPusecolor, renderOrder);
 
 	// 3. 적 스폰 정보
 	char buffer3[60] = {};
-	sprintf_s(buffer3, 60, "[KEY'E']Enemy Spwned:(%d)", Enemy::count);
-	Engine::Get().WriteToBuffer(Vector2I(0, 3), buffer3, Color::Green, renderOrder);
-
-	// 4. 플레이어 위치
-	char buffer4[60] = {};
-	sprintf_s(buffer4, 60, "Player Pos:(%.1f,%.1f)", player->GetWorldPosition().x, player->GetWorldPosition().y);
-	Engine::Get().WriteToBuffer(Vector2I(0, 4), buffer4, Color::Green, renderOrder);
+	sprintf_s(buffer3, 60, "[KEY'2']EnemySpwned:(%d)", Enemy::count);
+	Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 3), buffer3, Color::Green, renderOrder);
 }

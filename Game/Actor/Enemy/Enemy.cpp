@@ -16,6 +16,7 @@ Enemy::Enemy(Vector2F& cameraPostion)
 
 	stats.hp = 10.0f;
 	stats.speed = 4.0f;
+	stats.damage = 1.0f;
 
 	SetSortingOrder(5);
 

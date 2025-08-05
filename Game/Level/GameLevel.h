@@ -21,7 +21,12 @@ public:
 
 private:
 	void ReadTileMapFile(const char* filename);
-	void RenderBackground();
+
+	//
+	// Render 관련
+	//
+	void RenderBackground(); 
+	void RenderUI();
 
 	// 디버그 관련 처리
 	void ProcessDebuge();

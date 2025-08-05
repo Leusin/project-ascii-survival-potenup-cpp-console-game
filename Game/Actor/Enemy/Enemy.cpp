@@ -21,7 +21,7 @@ Enemy::Enemy(const Vector2I& cameraPostion)
 
 	SetSortingOrder(5);
 
-	SetSpawnPosition();
+	SetRendomSpawnPosition();
 
 	onDamagedTimer.SetTargetTime(onDamagedTargetTime);
 	count++;
@@ -77,7 +77,7 @@ void Enemy::TakeDamage(float damage)
 	}
 }
 
-void Enemy::SetSpawnPosition()
+void Enemy::SetRendomSpawnPosition()
 {
 	//
 	// 스폰 위치 가장 자리 중 랜덤으로

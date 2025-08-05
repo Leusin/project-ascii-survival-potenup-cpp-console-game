@@ -5,23 +5,18 @@
 #include "level/GameLevel.h"
 #include "Actor/Enemy/Enemy.h"
 
-KnifeProjectile::KnifeProjectile(float damage, float speed, Vector2F& playerPosition, Vector2F& direiction)
+KnifeProjectile::KnifeProjectile(float damage, float speed, const Vector2I& cameraPosition, Vector2F& direiction)
 	: Actor("-", Color::White, { Engine::Get().Width() / 2, Engine::Get().Height() / 2 })
 	, speed(speed)
 	, damage(damage)
 	, direction(direiction)
-	, playerPosition(playerPosition)
-	, projectilePosition(playerPosition)
+	, cameraPosition(cameraPosition)
+	, projectilePosition(cameraPosition)
 {
 	SetSortingOrder(5);
 
 	// 방향에 따라 다른 아스키 표시
 	SetImafeByDirection();
-}
-
-void KnifeProjectile::BeginPlay()
-{
-	super::BeginPlay();
 }
 
 void KnifeProjectile::Tick(float deltaTime)
@@ -31,13 +26,13 @@ void KnifeProjectile::Tick(float deltaTime)
 	// 다음 위치 계산
 	Vector2F movement = direction.Normalize() * speed * deltaTime; // 이동할 크기
 	Vector2F nextPosition = projectilePosition + movement; // 이동될 위치
-	Vector2I nextScreenPos = Engine::Get().OrthogonalToScreenCoords(nextPosition, playerPosition); // 다음에 이동할 화면 위치
+	Vector2I nextScreenPos = Engine::Get().OrthogonalToScreenCoords(nextPosition, cameraPosition); // 다음에 이동할 화면 위치
 
 	// 계산위치 실제로 적용
 	projectilePosition = nextPosition;
 
 	// 화면 좌표계로 변환
-	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(projectilePosition, playerPosition);
+	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(projectilePosition, cameraPosition);
 
 	// 화면 좌표계 가장자리에 있을 경우 제거
 	if (screenPosition.x < -1 || screenPosition.x > Engine::Get().Width() - 1 ||

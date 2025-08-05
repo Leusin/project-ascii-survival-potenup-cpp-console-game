@@ -9,7 +9,7 @@ class Weapon :public Actor
 	RTTI_DECLARATIONS(Weapon, Actor)
 
 public:
-	Weapon(Vector2F& playerPosition);
+	Weapon(const Vector2I& cameraPosition);
 	virtual ~Weapon() = default;
 
 	virtual void BeginPlay() override;
@@ -17,8 +17,8 @@ public:
 	virtual void Render() override;
 
 protected:
-	inline Vector2F& GetPlayerPosition() const { return playerPosition; };
+	inline const Vector2I& GetCameraPosition() const { return cameraPosition; };
 
 	WeaponStats stats;
-	Vector2F& playerPosition; // 플레이어의 위치 (월드 좌표계에서)
+	const Vector2I& cameraPosition; // 플레이어의 위치 (월드 좌표계에서)
 };

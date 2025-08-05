@@ -26,7 +26,7 @@ public:
 
 	static unsigned int count;
 private:
-	void SetSpawnPosition();
+	void SetRendomSpawnPosition();
 
 	/// <summary>
 	/// 플레이어를 향해 이동 및 이동 가능 검사, 플레이어 공격 

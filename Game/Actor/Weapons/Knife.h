@@ -12,7 +12,7 @@ class Knife : public Weapon
 	RTTI_DECLARATIONS(Knife, Weapon)
 
 public:
-	Knife(Vector2F& playerPosition, Vector2F& direiction);
+	Knife(const Vector2I& cameraPosition, Vector2F& direiction);
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;

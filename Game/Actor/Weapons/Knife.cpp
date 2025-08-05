@@ -4,8 +4,8 @@
 #include "Level/GameLevel.h"
 #include "Actor/Projectile/KnifeProjectile.h"
 
-Knife::Knife(Vector2F& playerPosition, Vector2F& direiction)
-	: Weapon(playerPosition)
+Knife::Knife(const Vector2I& cameraPosition, Vector2F& direiction)
+	: Weapon(cameraPosition)
 	, direction(direiction)
 {
 	stats.baseDamaged = 6.5f;
@@ -37,5 +37,5 @@ void Knife::Tick(float deltaTime)
 
 void Knife::Fire()
 {
-	GetOwner()->AddActor(new KnifeProjectile(stats.baseDamaged, stats.speed, GetPlayerPosition(), direction));
+	GetOwner()->AddActor(new KnifeProjectile(stats.baseDamaged, stats.speed, GetCameraPosition(), direction));
 }

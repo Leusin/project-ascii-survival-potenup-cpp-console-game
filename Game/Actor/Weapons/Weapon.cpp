@@ -2,9 +2,9 @@
 
 #include "Engine.h"
 
-Weapon::Weapon(Vector2F& playerPosition)
+Weapon::Weapon(const Vector2I& cameraPosition)
 	: Actor("-", Color::White, { Engine::Get().Width() / 2, Engine::Get().Height() / 2 })
-	, playerPosition(playerPosition)
+	, cameraPosition(cameraPosition)
 {
 	SetSortingOrder(5);
 }

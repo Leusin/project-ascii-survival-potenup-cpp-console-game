@@ -30,7 +30,7 @@ void Player::BeginPlay()
 	super::BeginPlay();
 
 	// 기본 무기 
-	Weapon* weapon = new Knife(worldPosition, direction);
+	Weapon* weapon = new Knife(cameraPosition, direction);
 	GetOwner()->AddActor(weapon);
 }
 

@@ -144,11 +144,14 @@ void Enemy::MoveToPlayer(float deltaTime)
 					playerDamageable->TakeDamage(stats.damage);
 				}
 
-				continue;
+				break;
 			}
 		}
 
+		//
 		// 적이 있는 경우, 이동하지 않음
+		//
+
 		if (!actor->As<Enemy>())
 		{
 			continue;
@@ -165,9 +168,11 @@ void Enemy::MoveToPlayer(float deltaTime)
 		}
 	}
 
-
-	worldPosition = nextPosition; // 새 월드 위치 적용
-	SetPosition(nextScreenPos); // 새 화면 위치 적용
+	if (nextScreenPos != Engine::Get().ScreenCenter())
+	{
+		worldPosition = nextPosition; // 새 월드 위치 적용
+		SetPosition(nextScreenPos); // 새 화면 위치 적용
+	}
 }
 
 void Enemy::HandleScreenWrap()

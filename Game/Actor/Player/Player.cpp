@@ -16,6 +16,8 @@ Player::Player()
 	SetSortingOrder(10);
 
 	onDamagedTimer.SetTargetTime(invulnerableTime);
+
+	SetPosition(Engine::Get().ScreenCenter());
 }
 
 void Player::BeginPlay()
@@ -37,18 +39,22 @@ void Player::Tick(float deltaTime)
 		return;
 	}
 
-	Vector2F moveInput = Vector2F::Zero;
+	Vector2I moveInput = Vector2I::Zero;
 
 	// 직교 좌표계로 입력 받음
-	if (Input::Get().GetKey(VK_UP) || Input::Get().GetKey('W')) { moveInput.y += 1.f; }; // 위로 이동하면 Y +
-	if (Input::Get().GetKey(VK_DOWN) || Input::Get().GetKey('S')) { moveInput.y += -1.f; }; // 아래로 이동하면 Y-
-	if (Input::Get().GetKey(VK_LEFT) || Input::Get().GetKey('A')) { moveInput.x += -1.f; };
-	if (Input::Get().GetKey(VK_RIGHT) || Input::Get().GetKey('D')) { moveInput.x += 1.f; };
+	if (Input::Get().GetKey(VK_UP) || Input::Get().GetKey('W')) { moveInput.y += 1; }; // 위로 이동하면 Y +
+	if (Input::Get().GetKey(VK_DOWN) || Input::Get().GetKey('S')) { moveInput.y += -1; }; // 아래로 이동하면 Y-
+	if (Input::Get().GetKey(VK_LEFT) || Input::Get().GetKey('A')) { moveInput.x += -1; };
+	if (Input::Get().GetKey(VK_RIGHT) || Input::Get().GetKey('D')) { moveInput.x += 1; };
 
 	// 입력이 있을 때만 이동 처리
-	if (moveInput.SqrMagnitude() > 0.f)
+	if (moveInput != Vector2I::Zero)
 	{
-		Vector2F moveDirection = moveInput.Normalize(); // 이동 방향
+		// 마지막으로 보고 있었던 방향 업데이트
+		direction.x = (float)moveInput.x; 
+		direction.y = (float)moveInput.y;
+
+		Vector2F moveDirection = direction.Normalize(); // 이동 방향
 
 		Vector2F movement = moveDirection * stats.speed * deltaTime; // 이동 거리
 
@@ -58,8 +64,12 @@ void Player::Tick(float deltaTime)
 		// 이동 위치 검사. 적이 있다면 이동해서는 안됨
 		//
 		
-		// 
-		Vector2I nextTilePos = Engine::Get().OrthogonalToScreenCoords(nextPosition, worldPosition); // 다음에 이동할 화면 위치
+		// 충돌 검사
+		bool canMove = true;
+		
+		Vector2I ScreenMove = moveInput;
+		ScreenMove.y *= -1;
+		Vector2I nextTilePos = Engine::Get().ScreenCenter() + ScreenMove;
 
 		std::vector<Actor*> actors = GetOwner()->GetActors();
 		for (Actor* actor : actors)
@@ -78,20 +88,17 @@ void Player::Tick(float deltaTime)
 			// 이동하려는 경로에 타일에 적이 있는지
 			if (actor->Position() == nextTilePos)
 			{
-				return;
+				canMove = false; // 충돌 발생
+				break; // 루프 종료
 			}
 		}
 
-		//
-		// 이동 위치 검사 완료 -----
-		//
-
-		worldPosition = nextPosition; // 이동 위치 업데이트
-		direction = moveInput; // 마지막으로 보고 있었던 방향
+		// 이동 위치 업데이트
+		if (canMove)
+		{
+			worldPosition = nextPosition;
+		}
 	}
-
-	// 플레이어는 정 중앙 화면으로 위치 고정
-	SetPosition(Engine::Get().ScreenCenter());
 }
 
 void Player::Render()

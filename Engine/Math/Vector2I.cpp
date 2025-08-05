@@ -11,6 +11,26 @@ Vector2I::Vector2I(int x, int y)
 {
 }
 
+Vector2I Vector2I::operator+(const Vector2I& other) const
+{
+	return { x + other.x, y + other.y };
+}
+
+Vector2I Vector2I::operator-(const Vector2I& other) const
+{
+	return { x - other.x, y - other.y };
+}
+
+bool Vector2I::operator==(const Vector2I& other) const
+{
+	return x == other.x && y == other.y ;
+}
+
+bool Vector2I::operator!=(const Vector2I& other) const
+{
+	return x != other.x || y != other.y;
+}
+
 Vector2I::operator COORD()
 {
 	COORD coord;

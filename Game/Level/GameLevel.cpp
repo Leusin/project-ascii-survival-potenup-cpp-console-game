@@ -237,9 +237,6 @@ void GameLevel::RenderDebugeData()
 		sprintf_s(buffer, 60, "Switch DEBUG to 'F1'");
 		Engine::Get().WriteToBuffer(Vector2I(0, 0), buffer, Color::White, renderOrder);
 
-		sprintf_s(buffer, 60, "Switch DEBUG to 'F1'");
-		Engine::Get().WriteToBuffer(Vector2I(0, 1), buffer, Color::White, renderOrder);
-
 		return;
 	}
 	else

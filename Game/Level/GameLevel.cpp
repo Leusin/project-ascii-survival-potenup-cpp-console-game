@@ -31,7 +31,7 @@ GameLevel::GameLevel()
 	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
 
 	// TODO: 개발 완료 시 아래 함수 지우기
-	//DebugManager::Get().ToggleDebugMode();
+	DebugManager::Get().ToggleDebugMode();
 }
 
 GameLevel::~GameLevel()
@@ -234,7 +234,7 @@ void GameLevel::RenderDebugeData()
 	if (!DebugManager::Get().IsDebugMode())
 	{
 		char buffer[60] = {};
-		sprintf_s(buffer, 60, "Switch DEBUG to 'F1'");
+		sprintf_s(buffer, 60, "[KEY 'F1'] Switch DEBUG Mode");
 		Engine::Get().WriteToBuffer(Vector2I(0, 0), buffer, Color::White, renderOrder);
 
 		return;
@@ -242,26 +242,26 @@ void GameLevel::RenderDebugeData()
 	else
 	{
 		char buffer1[60] = {};
-		sprintf_s(buffer1, 60, "[DEBUG]");
+		sprintf_s(buffer1, 60, "[KEY'F1'] Switch GAME Mode");
 		Engine::Get().WriteToBuffer(Vector2I(0, 0), buffer1, Color::Green, renderOrder);
 
-		sprintf_s(buffer1, 60, "Switch GAME to 'F1'");
+		sprintf_s(buffer1, 60, "-------------------- ");
 		Engine::Get().WriteToBuffer(Vector2I(0, 1), buffer1, Color::Green, renderOrder);
 	}
 
 	// 2. 일시정지 안내
 	char buffer2[60] = {};
-	sprintf_s(buffer2, 60, "Game Pause [KEY 'F2']");
+	sprintf_s(buffer2, 60, "[KEY'F2'] Game Pause");
 	Color isPusecolor = DebugManager::Get().IsGamePaused() ? Color::Red : Color::Green;
 	Engine::Get().WriteToBuffer(Vector2I(0, 2), buffer2, isPusecolor, renderOrder);
 
-	// 3. 플레이어 위치
+	// 3. 적 스폰 정보
 	char buffer3[60] = {};
-	sprintf_s(buffer3, 60, "Player Pos: (%.1f, %.1f)", player->GetWorldPosition().x, player->GetWorldPosition().y);
+	sprintf_s(buffer3, 60, "[KEY'E'] Enemy Spwned:(%d)", Enemy::count);
 	Engine::Get().WriteToBuffer(Vector2I(0, 3), buffer3, Color::Green, renderOrder);
 
-	// 4. 적 스폰 정보
+	// 4. 플레이어 위치
 	char buffer4[60] = {};
-	sprintf_s(buffer4, 60, "Enemy Spwned [KEY 'E'] : (%d)", Enemy::count);
+	sprintf_s(buffer4, 60, "Player Pos:(%.1f, %.1f)", player->GetWorldPosition().x, player->GetWorldPosition().y);
 	Engine::Get().WriteToBuffer(Vector2I(0, 4), buffer4, Color::Green, renderOrder);
 }

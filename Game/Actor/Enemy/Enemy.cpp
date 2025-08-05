@@ -97,10 +97,10 @@ void Enemy::SetSpawnPosition()
 		// 아래 쪽이라면 (x, hight)
 		spawnPostion = { Utils::Random(0, Engine::Get().Width() - 1) , Engine::Get().Height() - 1 };
 	}
-	else if (PosType == 1)
+	else if (PosType == 3)
 	{
 		// 오른 쪽이라면 (width, y)
-		spawnPostion = { Engine::Get().Width(), Utils::Random(0, Engine::Get().Height() - 1) };
+		spawnPostion = { Engine::Get().Width() - 1, Utils::Random(0, Engine::Get().Height() - 1) };
 	}
 
 	SetPosition(spawnPostion);

@@ -1,5 +1,6 @@
 #include "Player.h"
 
+#include<cmath>
 #include "Engine.h"
 #include "Input.h"
 #include "Level/Level.h"
@@ -118,6 +119,8 @@ void Player::Tick(float deltaTime)
 		if (canMove)
 		{
 			worldPosition = nextPosition;
+			cameraPosition.x = (int)round(worldPosition.x);
+			cameraPosition.y = (int)round(worldPosition.y);
 		}
 	}
 }
@@ -143,9 +146,9 @@ void Player::TakeDamage(float damage)
 	stats.hp = (damaged < 0) ? 0 : damaged;
 }
 
-const Vector2F& Player::GetWorldPosition() const
+const Vector2I& Player::GetCameraPosition() const
 {
-	return worldPosition;
+	return cameraPosition;
 }
 
 const Vector2F& Player::GetDirection() const

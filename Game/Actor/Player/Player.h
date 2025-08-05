@@ -21,10 +21,7 @@ public:// 생성자, 오버라이드
 public: // Interface 구현
 	virtual void TakeDamage(float damage) override;
 
-public: // GetterSetter
-	const Vector2F& GetWorldPosition() const;
-	const Vector2F& GetDirection() const;
-
+public:
 	/// <summary>
 	/// 현재 hp 와 최대 hp 의 비율. UI 에 사용
 	/// </summary>
@@ -49,6 +46,10 @@ private:
 	/// </summary>
 	float CalculateMaxExp() const;
 
+public: // GetterSetter
+	const Vector2I& GetCameraPosition() const;
+	const Vector2F& GetDirection() const;
+
 private:
 	/// <summary>
 	/// 플레이어의 위치이자 카메라의 위치이기도 하다.
@@ -58,6 +59,7 @@ private:
 	///   - 아이템
 	/// </summary>
 	Vector2F worldPosition;
+	Vector2I cameraPosition; // 다른 객체들은 이걸 참조한다.
 
 	CharacterStats stats;
 	Vector2F moveInput = { 0, 0 };

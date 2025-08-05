@@ -4,7 +4,6 @@
 #include "Math/Vector2F.h"
 
 class GameLevel : public Level
-
 {
 	RTTI_DECLARATIONS(GameLevel, Level)
 
@@ -17,7 +16,6 @@ public:
 	virtual void Render() override;
 
 public:
-	Vector2F GetCameraPosition() const;
 
 private:
 	void ReadTileMapFile(const char* filename);
@@ -34,8 +32,6 @@ private:
 
 private:
 	class Player* player; 
-	
-	Vector2F cameraPostion = Vector2F::Zero;
 
 	// 타일 맵 데이터
 	char* tileMap = nullptr;

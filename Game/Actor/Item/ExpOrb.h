@@ -7,7 +7,7 @@ class ExpOrb: public Actor
 	RTTI_DECLARATIONS(ExpOrb, Actor)
 
 public:
-	ExpOrb(Vector2F spawnPosition, Vector2F& cameraPostion, float exp = 1.0f);
+	ExpOrb(Vector2I spawnPosition, const Vector2I& cameraPostion, float exp = 1.0f);
 	//virtual ~ExpOrb();
 
 	//virtual void BeginPlay() override;
@@ -19,6 +19,6 @@ public:
 
 private:
 	float exp;
-	const Vector2I worldPosition;
-	Vector2F& cameraPosition;
+	Vector2I worldPosition;
+	const Vector2I& cameraPosition;
 };

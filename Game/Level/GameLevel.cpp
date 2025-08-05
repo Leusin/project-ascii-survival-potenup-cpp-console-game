@@ -14,21 +14,11 @@ GameLevel::GameLevel()
 	// 타일맵 로드 후 배경에 출력
 	ReadTileMapFile("TileMap.txt");
 
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
-	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
+	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
+	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
+	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
+	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
 
 	// TODO: 개발 완료 시 아래 함수 지우기
 	DebugManager::Get().ToggleDebugMode();
@@ -58,12 +48,6 @@ void GameLevel::Tick(float deltaTime)
 	}
 
 	super::Tick(deltaTime);
-
-	// 카메라 포지션 업데이트
-	if (player != nullptr)
-	{
-		cameraPostion = player->GetWorldPosition();
-	}
 }
 
 void GameLevel::Render()
@@ -90,11 +74,6 @@ void GameLevel::Render()
 	RenderUI(); // UI 그리기
 
 	RenderDebugeData(); // 디버그 데이터 랜더
-}
-
-Vector2F GameLevel::GetCameraPosition() const
-{
-	return player->GetWorldPosition();
 }
 
 void GameLevel::ReadTileMapFile(const char* filename)
@@ -203,8 +182,8 @@ void GameLevel::RenderBackground()
 		for (int screenX = 0; screenX < Engine::Get().Width(); ++screenX)
 		{
 			// 화면 좌표에 카메라 월드 좌표를 더하여, 그려야 할 타일의 월드 좌표를 구함
-			int worldY = (int)player->GetWorldPosition().y - screenY;
-			int worldX = (int)player->GetWorldPosition().x + screenX; // Y축은 아래로 갈수록 값이 줄어들어야 함
+			int worldY = (int)player->GetCameraPosition().y - screenY;
+			int worldX = (int)player->GetCameraPosition().x + screenX; // Y축은 아래로 갈수록 값이 줄어들어야 함
 
 			// 타일링
 			int tileX = (worldX % tileWidth + tileWidth) % tileWidth;
@@ -264,7 +243,7 @@ void GameLevel::ProcessDebuge()
 	// @/2번 키를 눌렀을 때 하나 스폰
 	if (Input::Get().GetKeyDown('2'))
 	{
-		AddActor(new Enemy(cameraPostion));
+		AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
 	};
 }
 

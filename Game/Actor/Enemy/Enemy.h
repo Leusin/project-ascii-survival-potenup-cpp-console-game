@@ -12,7 +12,7 @@ class Enemy :public Actor, public IDamageable
 	RTTI_DECLARATIONS(Enemy, Actor)
 
 public:
-	Enemy(Vector2F& cameraPostion);
+	Enemy(const Vector2I& cameraPostion);
 	virtual ~Enemy();
 
 	//virtual void BeginPlay() override;
@@ -43,7 +43,7 @@ private:
 	CharacterStats stats;
 
 	Vector2F worldPosition;
-	Vector2F& playerPosition;
+	const Vector2I& cameraPosition;
 
 	Color renderColor;
 

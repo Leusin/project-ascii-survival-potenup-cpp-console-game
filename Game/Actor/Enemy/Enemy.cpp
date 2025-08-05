@@ -9,9 +9,9 @@
 
 unsigned int Enemy::count = 0;
 
-Enemy::Enemy(Vector2F& cameraPostion)
+Enemy::Enemy(const Vector2I& cameraPostion)
 	: Actor("E", Color::Blue)
-	, playerPosition(cameraPostion)
+	, cameraPosition(cameraPostion)
 {
 	renderColor = Color::Blue;
 
@@ -62,7 +62,8 @@ void Enemy::Render()
 
 void Enemy::OnDestroy()
 {
-	GetOwner()->AddActor(new ExpOrb(worldPosition, playerPosition));
+	Vector2I expOrbSpawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
+	GetOwner()->AddActor(new ExpOrb(expOrbSpawnPos, cameraPosition));
 }
 
 void Enemy::TakeDamage(float damage)
@@ -119,7 +120,9 @@ void Enemy::MoveToPlayer(float deltaTime)
 {
 	// 월드 좌표계를 플레이어를 향해 이동하도록 조작한다.
 
-	Vector2F toPlayer = playerPosition - worldPosition;
+	Vector2F playerPos = {(float)round(cameraPosition.x), (float)round(cameraPosition.y) };
+
+	Vector2F toPlayer = playerPos - worldPosition;
 
 	Vector2F movement = toPlayer.Normalize() * stats.speed * deltaTime;
 
@@ -129,7 +132,7 @@ void Enemy::MoveToPlayer(float deltaTime)
 	// 다음 이동 위치 확인
 	//
 
-	Vector2I nextScreenPos = Engine::Get().OrthogonalToScreenCoords(nextPosition, playerPosition); // 다음에 이동할 화면 위치
+	Vector2I nextScreenPos = Engine::Get().OrthogonalToScreenCoords(nextPosition, cameraPosition); // 다음에 이동할 화면 위치
 
 	std::vector<Actor*> actors = GetOwner()->GetActors();
 
@@ -180,7 +183,7 @@ void Enemy::MoveToPlayer(float deltaTime)
 
 void Enemy::HandleScreenWrap()
 {
-	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, playerPosition);
+	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
 
 	/// 좌우 화면 처리
 
@@ -207,7 +210,7 @@ void Enemy::HandleScreenWrap()
 		worldPosition.y += Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 위로 이동
 	}
 
-	screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, playerPosition);
+	screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
 
 	SetPosition(screenPosition);
 }

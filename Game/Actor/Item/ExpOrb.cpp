@@ -4,11 +4,11 @@
 #include "Utils/Utils.h"
 #include "Actor/Player/Player.h"
 
-ExpOrb::ExpOrb(Vector2F spawnPosition, Vector2F& cameraPostion, float exp)
+ExpOrb::ExpOrb(Vector2I spawnPosition, const Vector2I& cameraPostion, float exp)
 	: Actor("*", Color::LightCyan)
 	, exp(exp)
 	, cameraPosition(cameraPostion)
-	, worldPosition{ (int)spawnPosition.x, (int)spawnPosition.y }
+	, worldPosition{ spawnPosition }
 {
 	SetSortingOrder(3);
 

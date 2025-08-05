@@ -80,6 +80,6 @@ private:
 	// 경험치 관련
 	//
 	float currentExp = 0.f;
-	const float baseExp = 10.f;
+	const float baseExp = 5.f;
 	const float growthRate = 1.1f; // 레벨업에 필요한 경험치 증가율
 };

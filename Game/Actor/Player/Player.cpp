@@ -3,6 +3,7 @@
 #include<cmath>
 #include "Engine.h"
 #include "Input.h"
+#include "Game/Game.h"
 #include "Level/Level.h"
 #include "Actor/Enemy/Enemy.h"
 #include "Actor/Weapons/Knife.h"
@@ -180,6 +181,9 @@ void Player::AddExp(float exp)
 	// 레벨업 처리
 	currentExp -= toNextLevel;
 	++stats.level;
+
+	// 레벨업 이벤트
+	Game::Get().TriggerUpgradeLevel();
 }
 
 void Player::ProcessDamaged(float deltaTime)

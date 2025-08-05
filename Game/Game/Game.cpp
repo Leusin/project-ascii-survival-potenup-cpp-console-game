@@ -3,8 +3,12 @@
 #include "Level/GameLevel.h"
 #include "Level/UpgradeLevel.h"
 
+Game* Game::instance = nullptr;
+
 Game::Game()
 {
+	instance = this;
+
 	// 메인 게임
 	AddLevel(new GameLevel());
 
@@ -29,8 +33,18 @@ Game::~Game()
 	Engine::CleanUp();
 }
 
+Game& Game::Get()
+{
+	return *instance;
+}
+
 void Game::TriggerUpgradeLevel()
 {
+	if (showUpgrade)
+	{
+		return;
+	}
+
 	showUpgrade = true;
 
 	backgroundLevel = mainLevel; // 게임 레벨을 background 로 빌어 둠
@@ -39,8 +53,24 @@ void Game::TriggerUpgradeLevel()
 
 void Game::ReturnToGameLevel()
 {
+	if (!showUpgrade)
+	{
+		return;
+	}
+
 	showUpgrade = false;
 
 	mainLevel = backgroundLevel; // background 로 밀어둔 게임 레벨 보이기
+	backgroundLevel = nullptr;
+}
+
+void Game::RenderBackgrounLevel()
+{
+	if (!backgroundLevel)
+	{
+		return;
+	}
+
+	backgroundLevel->Render();
 }
 

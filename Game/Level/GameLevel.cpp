@@ -1,6 +1,7 @@
 #include "GameLevel.h"
 
 #include "Engine.h"
+#include "Game/Game.h"
 #include "Utils/DebugManager.h"
 #include "Actor/Actor.h"
 #include "Actor/Enemy/Enemy.h"
@@ -203,7 +204,7 @@ void GameLevel::RenderUI()
 
 	// EXP 
 	float expRatio = player->GetExpRatio();
-	float filledExp = static_cast<int>(barWidth * expRatio); // 채워진 부분의 너비
+	float filledExp = static_cast<float>(barWidth * expRatio); // 채워진 부분의 너비
 
 	// HP
 	float hpRatio = player->GetHpRatio();
@@ -240,11 +241,18 @@ void GameLevel::ProcessDebuge()
 		DebugManager::Get().ToggleGamePause();
 	}
 
-	// @/2번 키를 눌렀을 때 하나 스폰
+	// 2번 키를 눌렀을 업그레이드 레벨로 이동
 	if (Input::Get().GetKeyDown('2'))
+	{
+		Game::Get().TriggerUpgradeLevel();
+	};
+
+	// 3번 키를 눌렀을 때 하나 스폰
+	if (Input::Get().GetKeyDown('3'))
 	{
 		AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
 	};
+
 }
 
 void GameLevel::RenderDebugeData()
@@ -261,20 +269,25 @@ void GameLevel::RenderDebugeData()
 	{
 		char buffer1[60] = {};
 		sprintf_s(buffer1, 60, "[KEY'~']ToggleDEBUG");
-		Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 6), buffer1, Color::Green, renderOrder);
+		Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 8), buffer1, Color::Green, renderOrder);
 
 		sprintf_s(buffer1, 60, "-------------------- ");
-		Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 5), buffer1, Color::Green, renderOrder);
+		Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 7), buffer1, Color::Green, renderOrder);
 	}
 
 	// 2. 일시정지 안내
 	char buffer2[60] = {};
 	sprintf_s(buffer2, 60, "[KEY'1']GamePause");
 	Color isPusecolor = DebugManager::Get().IsGamePaused() ? Color::Red : Color::Green;
-	Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 4), buffer2, isPusecolor, renderOrder);
+	Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 6), buffer2, isPusecolor, renderOrder);
 
-	// 3. 적 스폰 정보
+	// 3. 업그레이드 레벨로 이동
 	char buffer3[60] = {};
-	sprintf_s(buffer3, 60, "[KEY'2']EnemySpwned:(%d)", Enemy::count);
-	Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 3), buffer3, Color::Green, renderOrder);
+	sprintf_s(buffer3, 60, "[KEY'2']UpgradeLevel");
+	Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 5), buffer3, Color::Green, renderOrder);
+
+	// 4. 적 스폰 정보
+	char buffer4[60] = {};
+	sprintf_s(buffer4, 60, "[KEY'3']EnemySpwned:(%d)", Enemy::count);
+	Engine::Get().WriteToBuffer(Vector2I(0, Engine::Get().Height() - 4), buffer4, Color::Green, renderOrder);
 }

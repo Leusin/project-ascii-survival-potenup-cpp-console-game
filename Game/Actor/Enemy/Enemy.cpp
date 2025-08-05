@@ -62,6 +62,15 @@ void Enemy::Render()
 
 void Enemy::OnDestroy()
 {
+	// 3분의 1 확률로 아이템 스폰하기
+
+	int randNum = Utils::Random(0, 2);
+
+	if (randNum != 0)
+	{
+		return;
+	}
+
 	Vector2I expOrbSpawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
 	GetOwner()->AddActor(new ExpOrb(expOrbSpawnPos, cameraPosition));
 }

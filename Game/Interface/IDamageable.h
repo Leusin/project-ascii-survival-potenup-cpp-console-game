@@ -3,5 +3,5 @@
 class IDamageable
 {
 public:
-	virtual void TakeDamage(int damage) abstract;
+	virtual void TakeDamage(float damage) abstract;
 };

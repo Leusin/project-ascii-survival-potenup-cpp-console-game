@@ -1,6 +1,9 @@
 #include "KnifeProjectile.h"
 
+#include <vector>
 #include "Engine.h"
+#include "level/GameLevel.h"
+#include "Actor/Enemy/Enemy.h"
 
 KnifeProjectile::KnifeProjectile(float damage, float speed, Vector2F& playerPosition, Vector2F& direiction)
 	: Actor("-", Color::White, { Engine::Get().Width() / 2, Engine::Get().Height() / 2 })
@@ -25,8 +28,13 @@ void KnifeProjectile::Tick(float deltaTime)
 {
 	super::Tick(deltaTime);
 
-	// 무기의 월드 위치 업데이트
-	projectilePosition = projectilePosition + direction.Normalize() * speed * deltaTime;
+	// 다음 위치 계산
+	Vector2F movement = direction.Normalize() * speed * deltaTime; // 이동할 크기
+	Vector2F nextPosition = projectilePosition + movement; // 이동될 위치
+	Vector2I nextScreenPos = Engine::Get().OrthogonalToScreenCoords(nextPosition, playerPosition); // 다음에 이동할 화면 위치
+
+	// 계산위치 실제로 적용
+	projectilePosition = nextPosition;
 
 	// 화면 좌표계로 변환
 	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(projectilePosition, playerPosition);
@@ -40,25 +48,36 @@ void KnifeProjectile::Tick(float deltaTime)
 
 	// 화면 좌표계에 실제로 적용
 	SetPosition(screenPosition);
+
+	//
+	// 현재 위치에 적이 있는지 검사 
+	// 
+	std::vector<Actor*> actors = GetOwner()->GetActors();
+
+	for (Actor* actor : actors)
+	{
+		if (!actor->As<Enemy>())
+		{
+			continue;
+		}
+
+		if (actor->Position() != screenPosition)
+		{
+			continue;
+		}
+
+		// TODO: 데미지 처리
+		IDamageable* enemyDamageable = dynamic_cast<IDamageable*> (actor);
+		if (enemyDamageable)
+		{
+			enemyDamageable->TakeDamage(damage);
+			Destroy();
+		}
+	}
 }
 
 void KnifeProjectile::Render()
 {
-	// NOTE
-	// "/" 를 그리는 방향에서는 왜인지 x 축으로 -1 한 칸 밀려서 스폰된다.
-	// 그래서 그거 보정
-	if (strcmp(GetImage(), "/") == 0)
-	{
-		// 렌더링에만 사용할 임시 위치 변수를 만듭니다.
-		Vector2I renderPosition = Position();
-		renderPosition.x += 1;
-
-		// SetPosition()을 사용하지 않고, 바로 Draw 함수를 호출합니다.
-		Engine::Get().WriteToBuffer(renderPosition, GetImage(), GetColor(), GetSortingOrder());
-
-		return;
-	}
-
 	super::Render();
 }
 

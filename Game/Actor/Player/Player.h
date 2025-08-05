@@ -2,23 +2,31 @@
 
 #include "Actor/Actor.h"
 
+#include "Utils/Timer.h"
 #include "Math/Vector2F.h"
 #include "Stats/CharacterStats.h"
+#include "Interface/IDamageable.h"
 
-class Player : public Actor
+class Player : public Actor, public IDamageable
 {
 	RTTI_DECLARATIONS(Player, Actor)
 
-public:
+public:// 생성자, 오버라이드
 	Player();
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
-public:
+public: // Interface 구현
+	virtual void TakeDamage(float damage) override;
+
+public: // GetterSetter
 	const Vector2F& GetWorldPosition() const;
 	const Vector2F& GetDirection() const;
+
+private:
+	void ProcessDamaged(float deltaTime);
 
 private:
 	/// <summary>
@@ -36,4 +44,8 @@ private:
 	// 마지막으로 이동한 방향
 	// 투사체 의 방향이 될 것
 	Vector2F direction = Vector2F::Right;
+
+	bool isOnDamaged = false;
+	Timer onDamagedTimer;
+	float invulnerableTime = 0.1f;
 };

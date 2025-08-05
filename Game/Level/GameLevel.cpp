@@ -51,6 +51,12 @@ void GameLevel::Tick(float deltaTime)
 	{
 		cameraPostion = player->GetWorldPosition();
 	}
+
+	// TODO 디버그 모드떄만 발동 할 수 있도록 수정
+	if (Input::Get().GetKey('E')) 
+	{
+		AddActor(new Enemy(cameraPostion));
+	};
 }
 
 void GameLevel::Render()
@@ -145,22 +151,22 @@ void GameLevel::ReadTileMapFile(const char* filename)
 	// 1차원 배열 할당
 	tileMap = new char[tileSizeX * tileSizeY];
 	memset(tileMap, ' ', tileSizeX * tileSizeY); // 공백으로 초기화
-	
+
 	//
 	// 파싱해서 tileMap에 넣기
 	//
 
 	int x = 0, y = 0;
-	for (size_t i = 0; i < fileSize; ++i) 
+	for (size_t i = 0; i < fileSize; ++i)
 	{
 		char ch = buffer[i];
-		if (ch == '\n') 
+		if (ch == '\n')
 		{
 			++y;
 			x = 0;
 			continue;
 		}
-		if (x < tileSizeX && y < tileSizeY) 
+		if (x < tileSizeX && y < tileSizeY)
 		{
 			tileMap[y * tileSizeX + x] = ch;
 			++x;

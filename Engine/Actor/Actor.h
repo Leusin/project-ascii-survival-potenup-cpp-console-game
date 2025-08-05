@@ -57,7 +57,9 @@ public:
 	inline bool IsExpired() const { return isExpired; };
 	inline bool AutoDestory() const { return autoDestroy; };
 	inline char* GetImage() const { return image; };
-	inline Color GetColor() const { return color; };
+
+protected:
+	Color color = Color::White;// = Color::Blue | Color::Green | Color::Red;
 
 private:
 	Vector2I position; // 개체의 위치
@@ -65,8 +67,6 @@ private:
 	char* image = nullptr;
 
 	int width = 0; // 문자열 길이
-
-	Color color = Color::White;// = Color::Blue | Color::Green | Color::Red;
 
 	bool hasBegonPlay = false; // 호출이 되었는지 확인
 

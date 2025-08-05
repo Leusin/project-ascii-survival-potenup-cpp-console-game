@@ -3,21 +3,40 @@
 #include "Engine.h"
 #include "Utils/Utils.h"
 #include "Level/Level.h"
+#include "Actor/Player/Player.h"
+#include "Interface/IDamageable.h"
 
 Enemy::Enemy(Vector2F& cameraPostion)
 	: Actor("E", Color::Blue)
 	, playerPosition(cameraPostion)
 {
+	renderColor = Color::Blue;
+
+	stat.hp = 10.0f;
 	stat.speed = 4.0f;
 
 	SetSortingOrder(5);
 
 	SetSpawnPosition();
+
+	onDamagedTimer.SetTargetTime(onDamagedTargetTime);
 }
 
 void Enemy::Tick(float deltaTime)
 {
 	super::Tick(deltaTime);
+
+	// 데미지를 입는 중인지 검사
+	if (isOnDamaged)
+	{
+		onDamagedTimer.Tick(deltaTime);
+
+		if (onDamagedTimer.IsTimeout())
+		{
+			isOnDamaged = false;
+			onDamagedTimer.Reset();
+		}
+	}
 
 	MoveToPlayer(deltaTime);
 }
@@ -26,11 +45,24 @@ void Enemy::Render()
 {
 	super::Render();
 
+	color = isOnDamaged ? Color::White : renderColor;
+
 	HandleScreenWrap();
 }
 
 void Enemy::OnDestroy()
 {
+}
+
+void Enemy::TakeDamage(float damage)
+{
+	isOnDamaged = true;
+
+	stat.hp -= damage;
+	if (stat.hp <= 0.f)
+	{
+		Destroy();
+	}
 }
 
 void Enemy::SetSpawnPosition()
@@ -78,43 +110,52 @@ void Enemy::MoveToPlayer(float deltaTime)
 
 	Vector2F toPlayer = playerPosition - worldPosition;
 
-    Vector2F movement = toPlayer.Normalize() * stat.speed * deltaTime;
-	
+	Vector2F movement = toPlayer.Normalize() * stat.speed * deltaTime;
+
 	Vector2F nextPosition = worldPosition + movement; // 다음 이동할 월드 위치
 
 	//
-	// 이동 가능 여부 검사
+	// 다음 이동 위치 확인
 	//
-	
+
 	Vector2I nextScreenPos = Engine::Get().OrthogonalToScreenCoords(nextPosition, playerPosition); // 다음에 이동할 화면 위치
 
-	// 플레이어가 있어야할 타일이면 못감
-	if (nextScreenPos == Engine::Get().OrthogonalToScreenCoords(playerPosition, playerPosition))
+	std::vector<Actor*> actors = GetOwner()->GetActors();
+
+	for (Actor* actor : actors)
 	{
-		// 이 때 플레이어에게 대미지를 가하는 것과 같음
-		return;
+		// 플레이어가 있는 경우, 플레이어에게 데미지를 가함
+		if (actor->As<Player>())
+		{
+			if (actor->Position() == nextScreenPos)
+			{
+				IDamageable* playerDamageable = dynamic_cast<IDamageable*>(actor);
+
+				if (playerDamageable)
+				{
+					playerDamageable->TakeDamage(stat.damage);
+				}
+
+				continue;
+			}
+		}
+
+		// 적이 있는 경우, 이동하지 않음
+		if (!actor->As<Enemy>())
+		{
+			continue;
+		}
+
+		if (actor == this)
+		{
+			continue;
+		}
+
+		if (actor->Position() == nextScreenPos)
+		{
+			return;
+		}
 	}
-
-	// 다른 적이 있는 타일이면 못감.
-	 std::vector<Actor*> actors = GetOwner()->GetActors();
-
-	 for (const Actor* actor : actors)
-	 {
-		 if (!actor->As<Enemy>())
-		 {
-			 continue;
-		 }
-
-		 if (actor == this)
-		 {
-			 continue;
-		 }
-
-		 if (actor->Position() == nextScreenPos)
-		 {
-			 return;
-		 }
-	 }
 
 
 	worldPosition = nextPosition; // 새 월드 위치 적용

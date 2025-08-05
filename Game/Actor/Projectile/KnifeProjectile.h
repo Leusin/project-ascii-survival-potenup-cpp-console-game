@@ -22,7 +22,6 @@ private:
 
 private:
 	float speed;
-	
 	float damage;
 	
 	/// <summary>

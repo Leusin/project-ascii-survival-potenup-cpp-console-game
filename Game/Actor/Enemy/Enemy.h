@@ -2,16 +2,17 @@
 
 #include "Actor/Actor.h"
 
-#include "Stats/CharacterStats.h"
+#include "Utils/Timer.h"
 #include "Math/Vector2F.h"
+#include "Stats/CharacterStats.h"
+#include "Interface/IDamageable.h"
 
-class Enemy :public Actor
+class Enemy :public Actor, public IDamageable
 {
 	RTTI_DECLARATIONS(Enemy, Actor)
 
 public:
 	Enemy(Vector2F& cameraPostion);
-	//virtual ~Enemy();
 
 	//virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
@@ -19,9 +20,16 @@ public:
 
 	virtual void OnDestroy() override;
 
+public: 
+	virtual void TakeDamage(float damage) override; // IDamageable
+
 private:
 	void SetSpawnPosition();
 
+	/// <summary>
+	/// 플레이어를 향해 이동 및 이동 가능 검사, 플레이어 공격 
+	/// </summary>
+	/// <param name="deltaTime"></param>
 	void MoveToPlayer(float deltaTime);
 	
 	/// <summary>
@@ -34,4 +42,10 @@ private:
 
 	Vector2F worldPosition;
 	Vector2F& playerPosition;
+
+	Color renderColor;
+
+	bool isOnDamaged = false;
+	Timer onDamagedTimer;
+	float onDamagedTargetTime = 0.25f;
 };

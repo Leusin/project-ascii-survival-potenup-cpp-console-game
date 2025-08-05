@@ -48,6 +48,12 @@
     <ClCompile Include="Actor\Item\ExpOrb.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Level\UpgradeLevel.h">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\UpgradeLevel.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Player\Player.h">

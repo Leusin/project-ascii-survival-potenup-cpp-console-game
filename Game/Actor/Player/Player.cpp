@@ -5,6 +5,7 @@
 #include "Level/Level.h"
 #include "Actor/Enemy/Enemy.h"
 #include "Actor/Weapons/Knife.h"
+#include "Actor/Item/ExpOrb.h"
 
 Player::Player()
 	: Actor("@", Color::White)
@@ -77,6 +78,23 @@ void Player::Tick(float deltaTime)
 		std::vector<Actor*> actors = GetOwner()->GetActors();
 		for (Actor* actor : actors)
 		{
+			if (actor->As<ExpOrb>())
+			{
+				if (actor->Position() != nextTilePos)
+				{
+					continue;
+				}
+
+				ExpOrb* itme = dynamic_cast<ExpOrb*>(actor);
+
+				if (itme)
+				{
+					itme->OnCollected(this);
+				}
+
+				continue;
+			}
+
 			// 적이 있는 경우, 이동하지 않음
 			if (!actor->As<Enemy>())
 			{
@@ -178,6 +196,6 @@ void Player::ProcessDamaged(float deltaTime)
 
 float Player::CalculateMaxExp() const
 {
-	return baseExp * powf(growthRate, stats.level); // 레벨에 따라 지수적으로 증가
+	return baseExp * powf(growthRate, (float)stats.level); // 레벨에 따라 지수적으로 증가
 }
 

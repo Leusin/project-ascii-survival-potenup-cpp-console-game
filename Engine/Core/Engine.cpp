@@ -222,8 +222,8 @@ Vector2I Engine::OrthogonalToScreenCoords(const Vector2F& worldPos, const Vector
 	Vector2I screenPos;
 
 	// 1. 카메라 위치를 기준으로 상대적 위치를 계산합니다.
-	screenPos.x = (int)(worldPos.x - cameraPos.x);
-	screenPos.y = (int)(worldPos.y - cameraPos.y);
+	screenPos.x = (int)round(worldPos.x) - (int)round(cameraPos.x);
+	screenPos.y = (int)round(worldPos.y) - (int)round(cameraPos.y);
 
 	// 2. Y축을 뒤집습니다. (y-up -> y-down)
 	screenPos.y *= -1;

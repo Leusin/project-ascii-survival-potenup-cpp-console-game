@@ -4,6 +4,7 @@
 #include "Utils/Utils.h"
 #include "Level/Level.h"
 #include "Actor/Player/Player.h"
+#include "Actor/Item/ExpOrb.h"
 #include "Interface/IDamageable.h"
 
 unsigned int Enemy::count = 0;
@@ -14,8 +15,8 @@ Enemy::Enemy(Vector2F& cameraPostion)
 {
 	renderColor = Color::Blue;
 
-	stats.hp = 10.0f;
-	stats.speed = 4.0f;
+	stats.hp = 5.0f;
+	stats.speed = 1.8f;
 	stats.damage = 1.0f;
 
 	SetSortingOrder(5);
@@ -61,6 +62,7 @@ void Enemy::Render()
 
 void Enemy::OnDestroy()
 {
+	GetOwner()->AddActor(new ExpOrb(worldPosition, playerPosition));
 }
 
 void Enemy::TakeDamage(float damage)

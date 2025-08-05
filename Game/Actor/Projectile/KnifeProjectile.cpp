@@ -40,8 +40,8 @@ void KnifeProjectile::Tick(float deltaTime)
 	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(projectilePosition, playerPosition);
 
 	// 화면 좌표계 가장자리에 있을 경우 제거
-	if (screenPosition.x < -1 || screenPosition.x > Engine::Get().Width() ||
-		screenPosition.y < -1 || screenPosition.y > Engine::Get().Height())
+	if (screenPosition.x < -1 || screenPosition.x > Engine::Get().Width() - 1 ||
+		screenPosition.y < -1 || screenPosition.y > Engine::Get().Height() - 1)
 	{
 		Destroy();
 	}

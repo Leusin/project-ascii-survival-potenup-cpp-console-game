@@ -89,6 +89,8 @@ void Level::ProcessAddAndDestroyActors()
 			printf(" ");
 		}
 
+		actor->OnDestroy();
+
 		SafeDelete(actor);
 	}
 

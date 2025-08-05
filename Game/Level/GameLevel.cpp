@@ -78,14 +78,16 @@ void GameLevel::Render()
 	* 10 - Player
 	*
 	* 5 - Enemy, KnigeProjectile
-	*
+	* 
+	* 3 - ExpOrb
+	* 
 	* 0 - 배경
 	*
 	*/
 
 	RenderBackground(); // 배경 그리기
 
-	RenderUI();
+	RenderUI(); // UI 그리기
 
 	RenderDebugeData(); // 디버그 데이터 랜더
 }

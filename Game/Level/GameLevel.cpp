@@ -1,11 +1,10 @@
 #include "GameLevel.h"
 
 #include "Engine.h"
+#include "Utils/DebugManager.h"
 #include "Actor/Actor.h"
-#include "Actor/Player/Player.h"
-
-//TEST
 #include "Actor/Enemy/Enemy.h"
+#include "Actor/Player/Player.h"
 
 GameLevel::GameLevel()
 {
@@ -30,6 +29,9 @@ GameLevel::GameLevel()
 	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
 	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
 	AddActor(new Enemy(cameraPostion)); // 적 스폰 TEST
+
+	// TODO: 개발 완료 시 아래 함수 지우기
+	//DebugManager::Get().ToggleDebugMode();
 }
 
 GameLevel::~GameLevel()
@@ -44,6 +46,17 @@ void GameLevel::BeginPlay()
 
 void GameLevel::Tick(float deltaTime)
 {
+	ProcessDebuge();
+
+	//
+	// 디버그 모드이고, 일시 정지 일 때
+	//
+
+	if (DebugManager::Get().IsDebugMode() && DebugManager::Get().IsGamePaused())
+	{
+		return; // 아래의 모든 로직을 건너뜀
+	}
+
 	super::Tick(deltaTime);
 
 	// 카메라 포지션 업데이트
@@ -51,12 +64,6 @@ void GameLevel::Tick(float deltaTime)
 	{
 		cameraPostion = player->GetWorldPosition();
 	}
-
-	// TODO 디버그 모드떄만 발동 할 수 있도록 수정
-	if (Input::Get().GetKey('E')) 
-	{
-		AddActor(new Enemy(cameraPostion));
-	};
 }
 
 void GameLevel::Render()
@@ -65,14 +72,7 @@ void GameLevel::Render()
 
 	RenderBackground(); // 배경 그리기
 
-	//
-	// 디버그 정보 
-	//
-
-	// 디버깅을 위해 캐릭터의 위치 출력
-	char buffer1[40] = { };
-	sprintf_s(buffer1, 40, "Player Pos: (%.2f, %.2f)", player->GetWorldPosition().x, player->GetWorldPosition().y);
-	Engine::Get().WriteToBuffer(Vector2I(0, 0), buffer1); // 출력.
+	RenderDebugeData(); // 디버그 데이터 랜더
 }
 
 Vector2F GameLevel::GetCameraPosition() const
@@ -145,12 +145,12 @@ void GameLevel::ReadTileMapFile(const char* filename)
 		}
 	}
 
-	tileSizeX = width;
-	tileSizeY = height;
+	tileWidth = width;
+	tileHeight = height;
 
 	// 1차원 배열 할당
-	tileMap = new char[tileSizeX * tileSizeY];
-	memset(tileMap, ' ', tileSizeX * tileSizeY); // 공백으로 초기화
+	tileMap = new char[tileWidth * tileHeight];
+	memset(tileMap, ' ', tileWidth * tileHeight); // 공백으로 초기화
 
 	//
 	// 파싱해서 tileMap에 넣기
@@ -166,9 +166,9 @@ void GameLevel::ReadTileMapFile(const char* filename)
 			x = 0;
 			continue;
 		}
-		if (x < tileSizeX && y < tileSizeY)
+		if (x < tileWidth && y < tileHeight)
 		{
-			tileMap[y * tileSizeX + x] = ch;
+			tileMap[y * tileWidth + x] = ch;
 			++x;
 		}
 	}
@@ -190,12 +190,81 @@ void GameLevel::RenderBackground()
 			int worldX = (int)player->GetWorldPosition().x + screenX; // Y축은 아래로 갈수록 값이 줄어들어야 함
 
 			// 타일링
-			int tileX = (worldX % tileSizeX + tileSizeX) % tileSizeX;
-			int tileY = (worldY % tileSizeY + tileSizeY) % tileSizeY;
+			int tileX = (worldX % tileWidth + tileWidth) % tileWidth;
+			int tileY = (worldY % tileHeight + tileHeight) % tileHeight;
 
-			char tileChar[2] = { tileMap[tileY * tileSizeX + tileX], '\0' };
+			char tileChar[2] = { tileMap[tileY * tileWidth + tileX], '\0' };
 
 			Engine::Get().WriteToBuffer({ screenX, screenY }, tileChar, Color::Intensity, 0);
 		}
 	}
+}
+
+void GameLevel::ProcessDebuge()
+{
+	// F1 키를 눌렀을 때 디버그 모드를 토글
+	if (Input::Get().GetKeyDown(VK_F1))
+	{
+		DebugManager::Get().ToggleDebugMode();
+	}
+
+	if (!DebugManager::Get().IsDebugMode())
+	{
+		return;
+	}
+
+	// F2 키를 눌렀을 때 게임 일시 정지 토글
+	if (Input::Get().GetKeyDown(VK_F2))
+	{
+		DebugManager::Get().ToggleGamePause();
+	}
+
+	if (Input::Get().GetKeyDown('E'))
+	{
+		AddActor(new Enemy(cameraPostion));
+	};
+}
+
+void GameLevel::RenderDebugeData()
+{
+	// 디버그므로 가장 앞으로
+	int renderOrder = INT_MAX;
+
+	// 1. 모드 상태
+	if (!DebugManager::Get().IsDebugMode())
+	{
+		char buffer[60] = {};
+		sprintf_s(buffer, 60, "Switch DEBUG to 'F1'");
+		Engine::Get().WriteToBuffer(Vector2I(0, 0), buffer, Color::White, renderOrder);
+
+		sprintf_s(buffer, 60, "Switch DEBUG to 'F1'");
+		Engine::Get().WriteToBuffer(Vector2I(0, 1), buffer, Color::White, renderOrder);
+
+		return;
+	}
+	else
+	{
+		char buffer1[60] = {};
+		sprintf_s(buffer1, 60, "[DEBUG]");
+		Engine::Get().WriteToBuffer(Vector2I(0, 0), buffer1, Color::Green, renderOrder);
+
+		sprintf_s(buffer1, 60, "Switch GAME to 'F1'");
+		Engine::Get().WriteToBuffer(Vector2I(0, 1), buffer1, Color::Green, renderOrder);
+	}
+
+	// 2. 일시정지 안내
+	char buffer2[60] = {};
+	sprintf_s(buffer2, 60, "Game Pause [KEY 'F2']");
+	Color isPusecolor = DebugManager::Get().IsGamePaused() ? Color::Red : Color::Green;
+	Engine::Get().WriteToBuffer(Vector2I(0, 2), buffer2, isPusecolor, renderOrder);
+
+	// 3. 플레이어 위치
+	char buffer3[60] = {};
+	sprintf_s(buffer3, 60, "Player Pos: (%.1f, %.1f)", player->GetWorldPosition().x, player->GetWorldPosition().y);
+	Engine::Get().WriteToBuffer(Vector2I(0, 3), buffer3, Color::Green, renderOrder);
+
+	// 4. 적 스폰 정보
+	char buffer4[60] = {};
+	sprintf_s(buffer4, 60, "Enemy Spwned [KEY 'E'] : (%d)", Enemy::count);
+	Engine::Get().WriteToBuffer(Vector2I(0, 4), buffer4, Color::Green, renderOrder);
 }

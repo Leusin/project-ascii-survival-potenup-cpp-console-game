@@ -13,6 +13,7 @@ class Enemy :public Actor, public IDamageable
 
 public:
 	Enemy(Vector2F& cameraPostion);
+	virtual ~Enemy();
 
 	//virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
@@ -23,6 +24,7 @@ public:
 public: 
 	virtual void TakeDamage(float damage) override; // IDamageable
 
+	static unsigned int count;
 private:
 	void SetSpawnPosition();
 
@@ -38,7 +40,7 @@ private:
 	void HandleScreenWrap();
 
 private:
-	CharacterStats stat;
+	CharacterStats stats;
 
 	Vector2F worldPosition;
 	Vector2F& playerPosition;
@@ -48,4 +50,5 @@ private:
 	bool isOnDamaged = false;
 	Timer onDamagedTimer;
 	float onDamagedTargetTime = 0.25f;
+
 };

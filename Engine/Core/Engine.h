@@ -78,6 +78,8 @@ public:
 	// 화면의 높이
 	int Height() const;
 	int halfHeight() const;
+	// 화면 중앙
+	Vector2I ScreenCenter();
 
 	class ScreenBuffer* GetRenderer() const;
 

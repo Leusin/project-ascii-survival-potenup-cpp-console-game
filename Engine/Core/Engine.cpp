@@ -207,6 +207,11 @@ int Engine::halfHeight() const
 	return settings.height / 2;
 }
 
+Vector2I Engine::ScreenCenter()
+{
+	return { halfWidth() , halfHeight()  };
+}
+
 ScreenBuffer* Engine::GetRenderer() const
 {
 	return renderTargets[currentRenderTargetIndex];

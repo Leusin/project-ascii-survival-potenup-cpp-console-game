@@ -16,20 +16,24 @@ public:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
+public:
 	Vector2F GetCameraPosition() const;
 
 private:
 	void ReadTileMapFile(const char* filename);
 	void RenderBackground();
 
+	// 디버그 관련 처리
+	void ProcessDebuge();
+	void RenderDebugeData();
+
 private:
-	// Note: Level에서 알아서 지워 줄 것이다. 메모리 관리하면 안됨
 	class Player* player; 
 	
 	Vector2F cameraPostion = Vector2F::Zero;
 
-	//TEST
+	// 타일 맵 데이터
 	char* tileMap = nullptr;
-	int tileSizeY = 0;
-	int tileSizeX = 0;
+	int tileHeight = 0; // 너비
+	int tileWidth = 0; // 높이
 };

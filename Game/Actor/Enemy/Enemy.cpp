@@ -6,20 +6,28 @@
 #include "Actor/Player/Player.h"
 #include "Interface/IDamageable.h"
 
+unsigned int Enemy::count = 0;
+
 Enemy::Enemy(Vector2F& cameraPostion)
 	: Actor("E", Color::Blue)
 	, playerPosition(cameraPostion)
 {
 	renderColor = Color::Blue;
 
-	stat.hp = 10.0f;
-	stat.speed = 4.0f;
+	stats.hp = 10.0f;
+	stats.speed = 4.0f;
 
 	SetSortingOrder(5);
 
 	SetSpawnPosition();
 
 	onDamagedTimer.SetTargetTime(onDamagedTargetTime);
+	count++;
+}
+
+Enemy::~Enemy()
+{
+	count--;
 }
 
 void Enemy::Tick(float deltaTime)
@@ -58,8 +66,8 @@ void Enemy::TakeDamage(float damage)
 {
 	isOnDamaged = true;
 
-	stat.hp -= damage;
-	if (stat.hp <= 0.f)
+	stats.hp -= damage;
+	if (stats.hp <= 0.f)
 	{
 		Destroy();
 	}
@@ -110,7 +118,7 @@ void Enemy::MoveToPlayer(float deltaTime)
 
 	Vector2F toPlayer = playerPosition - worldPosition;
 
-	Vector2F movement = toPlayer.Normalize() * stat.speed * deltaTime;
+	Vector2F movement = toPlayer.Normalize() * stats.speed * deltaTime;
 
 	Vector2F nextPosition = worldPosition + movement; // 다음 이동할 월드 위치
 
@@ -133,7 +141,7 @@ void Enemy::MoveToPlayer(float deltaTime)
 
 				if (playerDamageable)
 				{
-					playerDamageable->TakeDamage(stat.damage);
+					playerDamageable->TakeDamage(stats.damage);
 				}
 
 				continue;

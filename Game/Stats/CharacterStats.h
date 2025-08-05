@@ -5,6 +5,7 @@
 /// </summary>
 struct CharacterStats 
 {
+    unsigned int level = 0;;
     float hp;
     float speed;
     float damage;

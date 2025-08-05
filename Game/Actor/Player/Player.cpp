@@ -130,6 +130,27 @@ const Vector2F& Player::GetDirection() const
 	return direction;
 }
 
+float Player::GetExpRatio() const
+{
+	return currentExp / CalculateMaxExp();
+}
+
+void Player::AddExp(float exp)
+{
+	currentExp += exp;
+
+	// 레벨업이 가능한지 검사
+	float toNextLevel = CalculateMaxExp();
+	if (currentExp < toNextLevel) // 레벨업 불가 예외 처리
+	{
+		return;
+	}
+
+	// 레벨업 처리
+	currentExp -= toNextLevel;
+	++stats.level;
+}
+
 void Player::ProcessDamaged(float deltaTime)
 {
 	// 데미지를 입는 중인지 검사
@@ -144,3 +165,9 @@ void Player::ProcessDamaged(float deltaTime)
 		}
 	}
 }
+
+float Player::CalculateMaxExp() const
+{
+	return baseExp * powf(growthRate, stats.level); // 레벨에 따라 지수적으로 증가
+}
+

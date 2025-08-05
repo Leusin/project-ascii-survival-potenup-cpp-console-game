@@ -25,8 +25,20 @@ public: // GetterSetter
 	const Vector2F& GetWorldPosition() const;
 	const Vector2F& GetDirection() const;
 
+	/// <summary>
+	/// 현재 경험치와 다음 레벨로 가는 경험치 비율 반환. UI 에 사용
+	/// </summary>
+	float GetExpRatio() const;
+
+	void AddExp(float exp);
+
 private:
 	void ProcessDamaged(float deltaTime);
+
+	/// <summary>
+	/// 경험치 관련 데이터를 바탕으로 다음레벨 경험치를 계산
+	/// </summary>
+	float CalculateMaxExp() const;
 
 private:
 	/// <summary>
@@ -45,7 +57,17 @@ private:
 	// 투사체 의 방향이 될 것
 	Vector2F direction = Vector2F::Right;
 
+	//
+	// 데미지 처리 관련
+	//
 	bool isOnDamaged = false;
 	Timer onDamagedTimer;
 	float invulnerableTime = 0.1f;
+
+	//
+	// 경험치 관련
+	//
+	float currentExp = 0.f;
+	const float baseExp = 10.f;
+	const float growthRate = 1.1f; // 레벨업에 필요한 경험치 증가율
 };

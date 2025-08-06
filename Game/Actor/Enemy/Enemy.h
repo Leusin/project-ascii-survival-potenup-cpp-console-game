@@ -5,14 +5,14 @@
 #include "Utils/Timer.h"
 #include "Math/Vector2F.h"
 #include "Stats/CharacterStats.h"
+#include "Stats/EnemyStats.h"
 #include "Interface/IDamageable.h"
-
 class Enemy :public Actor, public IDamageable
 {
 	RTTI_DECLARATIONS(Enemy, Actor)
 
 public:
-	Enemy(const Vector2I& cameraPostion);
+	Enemy(const Vector2I& cameraPostion, const EnemyStats& stats = EnemyStats{});
 	virtual ~Enemy();
 
 	//virtual void BeginPlay() override;
@@ -24,7 +24,9 @@ public:
 public: 
 	virtual void TakeDamage(float damage) override; // IDamageable
 
-	static unsigned int count;
+public: 
+	static inline unsigned int GetAliveCount() { return aliveCount; };
+
 private:
 	void SetRendomSpawnPosition();
 
@@ -40,15 +42,14 @@ private:
 	void HandleScreenWrap();
 
 private:
-	CharacterStats stats;
+	EnemyStats stats;
 
 	Vector2F worldPosition;
 	const Vector2I& cameraPosition;
 
-	Color renderColor;
-
 	bool isOnDamaged = false;
 	Timer onDamagedTimer;
-	float onDamagedTargetTime = 0.25f;
+	const float onDamagedTargetTime = 0.25f;
 
+	static unsigned int aliveCount;
 };

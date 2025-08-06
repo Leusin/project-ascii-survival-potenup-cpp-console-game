@@ -24,6 +24,13 @@ Knife::Knife(const Vector2I& cameraPosition, Vector2F& direiction)
 
 void Knife::Tick(float deltaTime)
 {
+	super::Tick(deltaTime);
+
+	if (stats.currentLevel < 1)
+	{
+		return;
+	}
+
 	// 발사 중이 아닐 때만 쿨다운 타이머를 틱
 	if (!isFiring)
 	{

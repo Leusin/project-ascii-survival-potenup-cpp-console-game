@@ -7,29 +7,23 @@
 #include "Actor/Item/ExpOrb.h"
 #include "Interface/IDamageable.h"
 
-unsigned int Enemy::count = 0;
+unsigned int Enemy::aliveCount = 0;
 
-Enemy::Enemy(const Vector2I& cameraPostion)
-	: Actor("E", Color::Blue)
+Enemy::Enemy(const Vector2I& cameraPostion, const EnemyStats& stats)
+	: Actor(stats.icon, stats.color)
+	, stats(stats)
 	, cameraPosition(cameraPostion)
 {
-	renderColor = Color::Blue;
-
-	stats.hp = 5.0f;
-	stats.speed = 1.8f;
-	stats.damage = 1.0f;
-
 	SetSortingOrder(5);
-
 	SetRendomSpawnPosition();
-
 	onDamagedTimer.SetTargetTime(onDamagedTargetTime);
-	count++;
+
+	aliveCount++;
 }
 
 Enemy::~Enemy()
 {
-	count--;
+	aliveCount--;
 }
 
 void Enemy::Tick(float deltaTime)
@@ -55,7 +49,7 @@ void Enemy::Render()
 {
 	super::Render();
 
-	color = isOnDamaged ? Color::White : renderColor;
+	color = isOnDamaged ? Color::White : stats.color;
 
 	HandleScreenWrap();
 }

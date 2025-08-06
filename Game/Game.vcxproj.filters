@@ -60,6 +60,9 @@
     <ClCompile Include="Actor\Weapons\MagicWand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Stats\EnemyStats.h">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Player\Player.h">

@@ -17,6 +17,11 @@ void Weapon::BeginPlay()
 void Weapon::Tick(float deltaTime)
 {
 	super::Tick(deltaTime);
+
+	if (stats.currentLevel < 1)
+	{
+		return;
+	}
 }
 
 void Weapon::Render()

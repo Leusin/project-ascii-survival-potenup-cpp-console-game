@@ -23,6 +23,13 @@ MagicWand::MagicWand(const Vector2I& cameraPosition)
 
 void MagicWand::Tick(float deltaTime)
 {
+	super::Tick(deltaTime);
+
+	if (stats.currentLevel < 1)
+	{
+		return;
+	}
+
 	// 발사 중이 아닐 때만 쿨다운 타이머를 틱
 	if (!isFiring)
 	{
@@ -101,6 +108,9 @@ void MagicWand::LevelUp()
 		stats.amount = 8;
 		stats.projectileInterval = 0.4f;
 	}
+
+	cooldownTimer.SetTargetTime(stats.cooldown);
+	projectilesToFire = stats.amount;
 }
 
 void MagicWand::Fire()

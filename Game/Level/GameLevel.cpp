@@ -297,6 +297,6 @@ void GameLevel::RenderDebugeData()
 
 	// 4. 적 스폰 정보
 	char buffer4[60] = {};
-	sprintf_s(buffer4, 60, "[KEY'3']EnemySpwned:(%d)", Enemy::count);
+	sprintf_s(buffer4, 60, "[KEY'3']EnemySpwned:(%d)", Enemy::GetAliveCount());
 	Engine::Get().WriteToBuffer(Vector2I(0, 8), buffer4, Color::Green, renderOrder);
 }

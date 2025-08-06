@@ -5,13 +5,13 @@
 #include "level/GameLevel.h"
 #include "Actor/Enemy/Enemy.h"
 
-KnifeProjectile::KnifeProjectile(float damage, float speed, const Vector2I& cameraPosition, Vector2F& direiction)
+KnifeProjectile::KnifeProjectile(float damage, float speed, const Vector2I& cameraPosition, Vector2I& direiction, const Vector2I& offset)
 	: Actor("-", Color::LightWhite, { Engine::Get().Width() / 2, Engine::Get().Height() / 2 })
 	, speed(speed)
 	, damage(damage)
 	, direction(direiction)
 	, cameraPosition(cameraPosition)
-	, projectilePosition(cameraPosition)
+	, projectilePosition(cameraPosition + direiction + offset)
 {
 	SetSortingOrder(5);
 
@@ -35,8 +35,9 @@ void KnifeProjectile::Tick(float deltaTime)
 	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(projectilePosition, cameraPosition);
 
 	// 화면 좌표계 가장자리에 있을 경우 제거
-	if (screenPosition.x < -1 || screenPosition.x > Engine::Get().Width() - 1 ||
-		screenPosition.y < -1 || screenPosition.y > Engine::Get().Height() - 1)
+	// 1과 2를 더한 건 문자 크기까지 고려해서
+	if (screenPosition.x + 1 < 0 || screenPosition.x + 2 > Engine::Get().Width() ||
+		screenPosition.y + 1 < 0 || screenPosition.y + 2 > Engine::Get().Height())
 	{
 		Destroy();
 	}
@@ -102,22 +103,22 @@ void KnifeProjectile::SetImafeByDirection()
 	/// 상하좌우 방향을 나중에 판별
 
 	// 우측 방향
-	else if (direction.x > 0.5f && direction.y > -0.5f && direction.y < 0.5f)
+	else if (direction.x > 0.1f && direction.y > -0.1f && direction.y < 0.1f)
 	{
 		SetImage("-");
 	}
 	// 좌측 방향
-	else if (direction.x < -0.5f && direction.y > -0.5f && direction.y < 0.5f)
+	else if (direction.x < -0.1f && direction.y > -0.1f && direction.y < 0.1f)
 	{
 		SetImage("-");
 	}
 	// 위쪽 방향 (y축이 위로 갈수록 커지는 직교 좌표계 기준)
-	else if (direction.y > 0.5f && direction.x > -0.5f && direction.x < 0.5f)
+	else if (direction.y > 0.1f && direction.x > -0.1f && direction.x < 0.1f)
 	{
 		SetImage("|");
 	}
 	// 아래쪽 방향 (y축이 아래로 갈수록 커지는 좌표계 기준)
-	else if (direction.y < -0.5f && direction.x > -0.5f && direction.x < 0.5f)
+	else if (direction.y < -0.1f && direction.x > -0.1f && direction.x < 0.1f)
 	{
 		SetImage("|");
 	}

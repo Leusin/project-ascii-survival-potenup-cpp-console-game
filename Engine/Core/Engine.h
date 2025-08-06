@@ -86,12 +86,12 @@ public:
 	/// <summary>
 	///  직교 좌표계 → 화면 좌표계 변환 함수
 	/// </summary>
-	Vector2I OrthogonalToScreenCoords(const Vector2F& worldPos, const Vector2F& cameraPos = Vector2F::Zero);
+	Vector2I OrthogonalToScreenCoords(const Vector2F& worldPos, const Vector2I& cameraPos = Vector2I::Zero);
 
 	/// <summary>
 	/// 화면 좌표계 → 직교 좌표계 변환 함수 
 	/// </summary>
-	Vector2F ScreenToOrthogonalCoords(const Vector2I& screenPos, const Vector2F& cameraPos = Vector2F::Zero);
+	Vector2F ScreenToOrthogonalCoords(const Vector2I& screenPos, const Vector2I& cameraPos = Vector2I::Zero);
 
 protected:
 	class Level* mainLevel = nullptr; // 메인 레벨

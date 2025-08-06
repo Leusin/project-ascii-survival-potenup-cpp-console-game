@@ -108,7 +108,7 @@ void Enemy::SetRendomSpawnPosition()
 	// 월드 포지션도 갖게 해야함
 	//
 
-	worldPosition = Engine::Get().ScreenToOrthogonalCoords(spawnPostion);
+	worldPosition = Engine::Get().ScreenToOrthogonalCoords(spawnPostion, cameraPosition);
 }
 
 void Enemy::MoveToPlayer(float deltaTime)

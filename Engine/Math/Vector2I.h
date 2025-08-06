@@ -22,6 +22,7 @@ struct Engine_API Vector2I
     // 직교 좌표계에서의 방향 벡터
     static Vector2I Zero;
     static Vector2I One;
+    static Vector2I Right;
 
 public:
     int x = 0;

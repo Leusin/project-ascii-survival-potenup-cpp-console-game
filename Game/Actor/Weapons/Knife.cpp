@@ -4,7 +4,7 @@
 #include "Level/GameLevel.h"
 #include "Actor/Projectile/KnifeProjectile.h"
 
-Knife::Knife(const Vector2I& cameraPosition, Vector2F& direiction)
+Knife::Knife(const Vector2I& cameraPosition, Vector2I& direiction)
 	: Weapon(cameraPosition)
 	, direction(direiction)
 {
@@ -81,37 +81,54 @@ void Knife::LevelUp()
 	{
 		stats.baseDamaged = 6.5f;
 		stats.speed = 18.0f;
-		stats.cooldown = 1.f;
+		stats.cooldown = 2.f;
 		stats.amount = 1;
-		stats.projectileInterval = 0.1f;
+		stats.projectileInterval = 0.16f;
 	}
 	else if (stats.currentLevel == 2)
 	{
 		stats.baseDamaged = 6.5f;
 		stats.speed = 18.0f;
-		stats.cooldown = 0.8f;
-		stats.amount = 3;
-		stats.projectileInterval = 0.09f;
+		stats.cooldown = 1.8f;
+		stats.amount = 2;
+		stats.projectileInterval = 0.14f;
 	}
 	else if (stats.currentLevel == 3)
 	{
 		stats.baseDamaged = 6.5f;
 		stats.speed = 18.0f;
-		stats.cooldown = 0.8f;
-		stats.amount = 6;
-		stats.projectileInterval = 0.09f;
+		stats.cooldown = 1.4f;
+		stats.amount = 3;
+		stats.projectileInterval = 0.12f;
 	}
 	else if (stats.currentLevel == 4)
 	{
 		stats.baseDamaged = 10.f;
 		stats.speed = 20.0f;
-		stats.cooldown = 0.6f;
-		stats.amount = 10;
-		stats.projectileInterval = 0.06f;
+		stats.cooldown = 1.0f;
+		stats.amount = 5;
+		stats.projectileInterval = 0.1f;
 	}
 }
 
 void Knife::Fire()
 {
+	// 오프셋 값 (각도를 벌리는 정도를 조절)
+	float offsetMagnitude = 0.2f;
+
+	if (stats.currentLevel >= 3)
+	{
+		// 왼쪽으로 약간 회전
+		Vector2I sideOffset = { static_cast<int>(-direction.y), static_cast<int>(direction.x) };
+		GetOwner()->AddActor(new KnifeProjectile(stats.baseDamaged, stats.speed, GetCameraPosition(), direction, sideOffset));
+	}
+
+	if (stats.currentLevel >= 2)
+	{
+		// 오른쪽으로 약간 회전
+		Vector2I sideOffset = { static_cast<int>(direction.y), static_cast<int>(-direction.x) };
+		GetOwner()->AddActor(new KnifeProjectile(stats.baseDamaged, stats.speed, GetCameraPosition(), direction, sideOffset));
+	}
+
 	GetOwner()->AddActor(new KnifeProjectile(stats.baseDamaged, stats.speed, GetCameraPosition(), direction));
 }

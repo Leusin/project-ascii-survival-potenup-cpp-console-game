@@ -12,8 +12,6 @@ Game::Game()
 
 	// 메인 게임
 	AddLevel(new GameLevel());
-
-	upgradeLevel = new UpgradeLevel();
 }
 
 Game::~Game()
@@ -28,28 +26,30 @@ Game& Game::Get()
 
 void Game::GoToUpgradeLevel(const std::vector<class Weapon*>& weapons)
 {
-	if (showUpgrade)
+	if (GameInBackground)
 	{
 		return;
 	}
 
-	showUpgrade = true;
-
-	upgradeLevel->Initialize(weapons);
+	GameInBackground = true;
 
 	backgroundLevel = mainLevel; // 게임 레벨을 background 로 빌어 둠
+
+	// 매번 새로운 UpgradeLevel 객체 동적 할당
+	UpgradeLevel* upgradeLevel = new UpgradeLevel(weapons);
 	mainLevel = upgradeLevel; // 업그레이드가 보이게 함.
 }
 
 void Game::ReturnToGameLevel()
 {
-	if (!showUpgrade)
+	if (!GameInBackground)
 	{
 		return;
 	}
 
-	showUpgrade = false;
+	GameInBackground = false;
 
+	SafeDelete(mainLevel); // 현재 메인 레벨(업그레이드 레벨) 삭제
 	mainLevel = backgroundLevel; // background 로 밀어둔 게임 레벨 보이기
 	backgroundLevel = nullptr;
 }
@@ -66,16 +66,9 @@ void Game::RenderBackgrounLevel()
 
 void Game::CleanUp()
 {
-	if (showUpgrade)
+	if (GameInBackground)
 	{
 		SafeDelete(backgroundLevel);
-		// mainLevel 에 있던 upgradeLevel 는 Engine 이 정리해준다.
-	}
-	else
-	{
-		backgroundLevel = nullptr;
-		SafeDelete(upgradeLevel);
-		// mainLevel 에 있던 GameLevel 은 Engine 이 정리해준다.
 	}
 
 	Engine::CleanUp();

@@ -27,7 +27,7 @@ class UpgradeLevel : public Level
 	RTTI_DECLARATIONS(UpgradeLevel, Level)
 
 public:
-	UpgradeLevel();
+	UpgradeLevel(const std::vector<class Weapon*>& weapons);
 	~UpgradeLevel();
 
 	virtual void Tick(float deltaTime) override;
@@ -35,9 +35,9 @@ public:
 	
 public:
 	void SetTitleText(const char* text);
-	void Initialize(const std::vector<class Weapon*>& weapons);
 
 private:
+	void Initialize(const std::vector<class Weapon*>& weapons);
 	void ClenupItems();
 
 private:

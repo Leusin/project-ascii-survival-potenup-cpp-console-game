@@ -20,10 +20,9 @@ public:
 	virtual void CleanUp() override;
 
 private:
-	class UpgradeLevel* upgradeLevel = nullptr; // 강화 레벨
 	class Level* backgroundLevel = nullptr; // 대기중인 레벨
 
-	bool showUpgrade = false; // 만일 레벨이 3개 이상 늘어난다면 enum 으로 
+	bool GameInBackground = false; // 만일 레벨이 3개 이상 늘어난다면 enum 으로 
 
 	static Game* instance;
 };

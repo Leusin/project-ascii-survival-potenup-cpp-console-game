@@ -11,7 +11,7 @@ class KnifeProjectile :public Actor
 	RTTI_DECLARATIONS(KnifeProjectile, Actor)
 
 public:
-	KnifeProjectile(float damage, float speed, const Vector2I& cameraPosition, Vector2F& direiction);
+	KnifeProjectile(float damage, float speed, const Vector2I& cameraPosition, Vector2I& direiction, const Vector2I& offset = Vector2I::Zero);
 
 	//virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;

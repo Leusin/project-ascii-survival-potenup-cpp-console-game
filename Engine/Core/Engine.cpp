@@ -217,13 +217,13 @@ ScreenBuffer* Engine::GetRenderer() const
 	return renderTargets[currentRenderTargetIndex];
 }
 
-Vector2I Engine::OrthogonalToScreenCoords(const Vector2F& worldPos, const Vector2F& cameraPos)
+Vector2I Engine::OrthogonalToScreenCoords(const Vector2F& worldPos, const Vector2I& cameraPos)
 {
 	Vector2I screenPos;
 
 	// 1. 카메라 위치를 기준으로 상대적 위치를 계산합니다.
-	screenPos.x = (int)round(worldPos.x) - (int)round(cameraPos.x);
-	screenPos.y = (int)round(worldPos.y) - (int)round(cameraPos.y);
+	screenPos.x = (int)round(worldPos.x) - cameraPos.x;
+	screenPos.y = (int)round(worldPos.y) - cameraPos.y;
 
 	// 2. Y축을 뒤집습니다. (y-up -> y-down)
 	screenPos.y *= -1;
@@ -235,7 +235,7 @@ Vector2I Engine::OrthogonalToScreenCoords(const Vector2F& worldPos, const Vector
 	return screenPos;
 }
 
-Vector2F Engine::ScreenToOrthogonalCoords(const Vector2I& screenPos, const Vector2F& cameraPos)
+Vector2F Engine::ScreenToOrthogonalCoords(const Vector2I& screenPos, const Vector2I& cameraPos)
 {
 	Vector2F worldPos;
 

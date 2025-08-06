@@ -81,7 +81,7 @@ private:
 	// 입력 처리 관련
 	//
 	Vector2F moveInput = Vector2F::Zero;
-	Vector2F direction = Vector2F::Right; // 마지막으로 이동한 방향
+	Vector2I direction = Vector2I::Right; // 마지막으로 이동한 방향
 
 	//
 	// 데미지 처리 관련

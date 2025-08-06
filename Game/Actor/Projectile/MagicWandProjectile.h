@@ -11,7 +11,7 @@ class WagicWandProjectile :public Actor
 	RTTI_DECLARATIONS(WagicWandProjectile, Actor)
 
 public:
-	WagicWandProjectile(float damage, float speed, const Vector2I& cameraPosition, const Vector2F direiction);
+	WagicWandProjectile(float damage, float speed, const Vector2I& cameraPosition, const Vector2I direiction);
 
 	//virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;

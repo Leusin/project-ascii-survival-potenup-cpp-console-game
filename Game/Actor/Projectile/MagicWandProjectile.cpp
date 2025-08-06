@@ -4,7 +4,7 @@
 #include "level/GameLevel.h"
 #include "Actor/Enemy/Enemy.h"
 
-WagicWandProjectile::WagicWandProjectile(float damage, float speed, const Vector2I& cameraPosition, const Vector2F direiction)
+WagicWandProjectile::WagicWandProjectile(float damage, float speed, const Vector2I& cameraPosition, const Vector2I direiction)
 	: Actor("o", Color::LightWhite, { Engine::Get().Width() / 2, Engine::Get().Height() / 2 })
 	, speed(speed)
 	, damage(damage)
@@ -31,8 +31,9 @@ void WagicWandProjectile::Tick(float deltaTime)
 	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(projectilePosition, cameraPosition);
 
 	// 화면 좌표계 가장자리에 있을 경우 제거
-	if (screenPosition.x < -1 || screenPosition.x > Engine::Get().Width() - 1 ||
-		screenPosition.y < -1 || screenPosition.y > Engine::Get().Height() - 1)
+	// 1과 2를 더한 건 문자 크기까지 고려해서
+	if (screenPosition.x + 1 < 0 || screenPosition.x + 2 > Engine::Get().Width() ||
+		screenPosition.y + 1 < 0 || screenPosition.y + 2 > Engine::Get().Height())
 	{
 		Destroy();
 	}

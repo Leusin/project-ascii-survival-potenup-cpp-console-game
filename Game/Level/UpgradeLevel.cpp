@@ -28,12 +28,14 @@ upgradeItem::~upgradeItem()
 	SafeDeleteArray(description);
 }
 
-UpgradeLevel::UpgradeLevel()
+UpgradeLevel::UpgradeLevel(const std::vector<class Weapon*>& weapons)
 {
 	const char* source = ">>> Level Up! <<<";
 	size_t len = strlen(source) + 1;
 	this->title = new char[len];
 	strcpy_s(this->title, len, source);
+
+	Initialize(weapons);
 }
 
 UpgradeLevel::~UpgradeLevel()
@@ -137,7 +139,6 @@ void UpgradeLevel::Render()
 	int length = static_cast<int>(items.size());
 	if (length == 0)
 	{
-		Game::Get().ReturnToGameLevel();
 		return;
 	}
 

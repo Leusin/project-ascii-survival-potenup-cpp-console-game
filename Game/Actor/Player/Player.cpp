@@ -66,12 +66,11 @@ void Player::Tick(float deltaTime)
 	if (moveInput != Vector2I::Zero)
 	{
 		// 마지막으로 보고 있었던 방향 업데이트
-		direction.x = (float)moveInput.x; 
-		direction.y = (float)moveInput.y;
+		direction = moveInput;
 
-		Vector2F moveDirection = direction.Normalize(); // 이동 방향
+		Vector2F moveDirection = moveInput; // 이동 방향
 
-		Vector2F movement = moveDirection * speed * deltaTime; // 이동 거리
+		Vector2F movement = moveDirection.Normalize() * speed * deltaTime; // 이동 거리
 
 		Vector2F nextPosition = worldPosition + movement; // 다음 이동할 월드 위치
 
@@ -168,7 +167,7 @@ const Vector2F& Player::GetDirection() const
 
 float Player::GetHpRatio() const
 {
-	return currentHp / CalculateMaxExp();
+	return currentHp / CalculateMaxHp();
 }
 
 float Player::GetExpRatio() const

@@ -23,3 +23,13 @@ void Weapon::Render()
 {
 	super::Render();
 }
+
+void Weapon::LevelUp()
+{
+	if (stats.currentLevel + 1 > stats.maxLevel)
+	{
+		return;
+	}
+
+	++stats.currentLevel;
+}

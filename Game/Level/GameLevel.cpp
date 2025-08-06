@@ -247,10 +247,19 @@ void GameLevel::ProcessDebuge()
 		Game::Get().TriggerUpgradeLevel();
 	};
 
-	// 3번 키를 눌렀을 때 하나 스폰
+	// 3번 키를 눌렀을 때 10개 스폰
 	if (Input::Get().GetKeyDown('3'))
 	{
-		AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
+		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(new Enemy(player->GetCameraPosition()));
 	};
 
 }

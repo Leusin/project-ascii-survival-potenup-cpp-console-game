@@ -16,6 +16,8 @@ public:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
+	virtual void LevelUp();
+
 protected:
 	inline const Vector2I& GetCameraPosition() const { return cameraPosition; };
 

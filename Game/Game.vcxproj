@@ -172,18 +172,22 @@
     <ClCompile Include="Actor\Player\Player.cpp" />
     <ClCompile Include="Actor\Projectile\KnifeProjectile.cpp" />
     <ClCompile Include="Actor\Weapons\Knife.cpp" />
+    <ClCompile Include="Actor\Weapons\MagicWand.cpp" />
     <ClCompile Include="Actor\Weapons\Weapon.cpp" />
     <ClCompile Include="Actor\Weapons\Weapon.h" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Level\GameLevel.cpp" />
     <ClCompile Include="Level\UpgradeLevel.cpp" />
     <ClCompile Include="Level\UpgradeLevel.h" />
+    <ClCompile Include="Actor\Projectile\MagicWandProjectile.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Utils\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Enemy\Enemy.h" />
     <ClInclude Include="Actor\Item\ExpOrb.h" />
+    <ClInclude Include="Actor\Projectile\MagicWandProjectile.h" />
+    <ClInclude Include="Actor\Weapons\MagicWand.h" />
     <ClInclude Include="Interface\ICollecteable.h" />
     <ClInclude Include="Actor\Projectile\KnifeProjectile.h" />
     <ClInclude Include="Actor\Weapons\Knife.h" />

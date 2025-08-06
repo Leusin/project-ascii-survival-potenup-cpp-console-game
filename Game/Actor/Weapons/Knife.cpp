@@ -8,30 +8,92 @@ Knife::Knife(const Vector2I& cameraPosition, Vector2F& direiction)
 	: Weapon(cameraPosition)
 	, direction(direiction)
 {
+	stats.currentLevel = 1;
 	stats.baseDamaged = 6.5f;
 	stats.speed = 18.0f;
 	stats.cooldown = 1.f;
+	stats.amount = 1;
 	stats.projectileInterval = 0.1f;
 
 	cooldownTimer.SetTargetTime(stats.cooldown);
-}
-
-void Knife::BeginPlay()
-{
+	projectilesToFire = stats.amount;
 }
 
 void Knife::Tick(float deltaTime)
 {
-	cooldownTimer.Tick(deltaTime);
-
-	if (cooldownTimer.IsTimeout())
+	// 발사 중이 아닐 때만 쿨다운 타이머를 틱
+	if (!isFiring)
 	{
-		// TODO: 레벨에 따라 칼을 다르게 던지도록 해야 한다.
-		Fire();
+		cooldownTimer.Tick(deltaTime);
+	}
 
-		// 타이머 정리
+	// 발사 시작
+	if (cooldownTimer.IsTimeout() && !isFiring)
+	{
+		isFiring = true;
+		projectilesToFire  = stats.amount;
 		cooldownTimer.Reset();
-		//cooldownTimer.SetTargetTime(stats.cooldown);
+		cooldownTimer.SetTargetTime(stats.cooldown);
+	}
+
+	// 발사 중일 때
+	if (isFiring)
+	{
+		fireIntervalTimer.Tick(deltaTime);
+
+		if (fireIntervalTimer.IsTimeout())
+		{
+			Fire();
+			projectilesToFire--;
+
+			if (projectilesToFire <= 0)
+			{
+				isFiring = false; // 발사 종료
+			}
+			else
+			{
+				fireIntervalTimer.Reset(); // 다음 발사를 위해 간격 타이머 재설정
+				fireIntervalTimer.SetTargetTime(stats.projectileInterval);
+			}
+		}
+	}
+}
+
+void Knife::LevelUp()
+{
+	super::LevelUp();
+
+	if (stats.currentLevel == 1)
+	{
+		stats.baseDamaged = 6.5f;
+		stats.speed = 18.0f;
+		stats.cooldown = 1.f;
+		stats.amount = 1;
+		stats.projectileInterval = 0.1f;
+	}
+	else if (stats.currentLevel == 2)
+	{
+		stats.baseDamaged = 6.5f;
+		stats.speed = 18.0f;
+		stats.cooldown = 0.8f;
+		stats.amount = 3;
+		stats.projectileInterval = 0.09f;
+	}
+	else if (stats.currentLevel == 3)
+	{
+		stats.baseDamaged = 6.5f;
+		stats.speed = 18.0f;
+		stats.cooldown = 0.8f;
+		stats.amount = 6;
+		stats.projectileInterval = 0.09f;
+	}
+	else if (stats.currentLevel == 4)
+	{
+		stats.baseDamaged = 10.f;
+		stats.speed = 20.0f;
+		stats.cooldown = 0.6f;
+		stats.amount = 10;
+		stats.projectileInterval = 0.06f;
 	}
 }
 

@@ -51,10 +51,10 @@ struct WeaponStats
 	/// <summary>
 	/// 사용당 발사되는 발사체의 양입니다.
 	/// </summary>
-	float amount = 1;
+	int amount = 1;
 
 	/// <summary>
-	/// 각 재사용 대기시간 사이에 발사체를 추가로 발사하는 데 필요한 시간입니다.
+	/// 발사체를 추가로 발사하는 데 필요한 시간입니다.
 	/// </summary>
-	float projectileInterval;
+	float projectileInterval = 0.1f;
 };

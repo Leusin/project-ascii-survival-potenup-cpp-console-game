@@ -7,12 +7,12 @@
 /// 현재 가진 무기 스텟 데이터를 바탕으로
 /// 인정 간격 직선으로 나아가는 투사체를 발사시킨다.
 /// </summary>
-class Knife : public Weapon
+class MagicWand : public Weapon
 {
-	RTTI_DECLARATIONS(Knife, Weapon)
+	RTTI_DECLARATIONS(MagicWand, Weapon)
 
 public:
-	Knife(const Vector2I& cameraPosition, Vector2F& direiction);
+	MagicWand(const Vector2I& cameraPosition);
 
 	//virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
@@ -24,12 +24,7 @@ private:
 	void Fire();
 
 	bool isFiring = false;
-	int projectilesToFire;
-
-	/// <summary>
-	/// 투척 방향
-	/// </summary>
-	Vector2F& direction = Vector2F::Right;
+	int projectilesToFire = 0;
 
 	Timer cooldownTimer;
 	Timer fireIntervalTimer;

@@ -9,6 +9,9 @@
 #include "Actor/Weapons/Knife.h"
 #include "Actor/Item/ExpOrb.h"
 
+// TEST
+#include "Actor/Weapons/MagicWand.h"
+
 Player::Player()
 	: Actor("@", Color::White)
 	, worldPosition(Position())
@@ -30,9 +33,8 @@ void Player::BeginPlay()
 {
 	super::BeginPlay();
 
-	// 기본 무기 
-	Weapon* weapon = new Knife(cameraPosition, direction);
-	GetOwner()->AddActor(weapon);
+	GetOwner()->AddActor(new Knife(cameraPosition, direction));
+	GetOwner()->AddActor(new MagicWand(cameraPosition));
 }
 
 void Player::Tick(float deltaTime)

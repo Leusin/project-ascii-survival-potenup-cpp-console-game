@@ -18,20 +18,7 @@ Game::Game()
 
 Game::~Game()
 {
-	if (showUpgrade)
-	{
-		//게임 레벨 재거
-		SafeDelete(backgroundLevel);
-		mainLevel = nullptr;
-	}
-	else
-	{
-		backgroundLevel = nullptr;
-	}
-
-	SafeDelete(upgradeLevel);
-
-	Engine::CleanUp();
+	CleanUp();
 }
 
 Game& Game::Get()
@@ -75,5 +62,23 @@ void Game::RenderBackgrounLevel()
 	}
 
 	backgroundLevel->Render();
+}
+
+void Game::CleanUp()
+{
+	Engine::CleanUp();
+
+	if (showUpgrade)
+	{
+		//게임 레벨 재거
+		SafeDelete(backgroundLevel);
+		mainLevel = nullptr;
+	}
+	else
+	{
+		backgroundLevel = nullptr;
+	}
+
+	SafeDelete(upgradeLevel);
 }
 

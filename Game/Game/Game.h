@@ -17,6 +17,8 @@ public:
 
 	void RenderBackgrounLevel();
 
+	virtual void CleanUp() override;
+
 private:
 	class UpgradeLevel* upgradeLevel = nullptr; // 강화 레벨
 	class Level* backgroundLevel = nullptr; // 대기중인 레벨

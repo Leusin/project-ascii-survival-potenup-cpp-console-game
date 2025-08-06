@@ -30,10 +30,9 @@ public:
 	UpgradeLevel();
 	~UpgradeLevel();
 
-private:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
-
+	
 public:
 	void SetTitleText(const char* text);
 	void Initialize(const std::vector<class Weapon*>& weapons);

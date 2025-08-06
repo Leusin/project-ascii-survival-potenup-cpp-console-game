@@ -5,8 +5,8 @@
 #include "Input.h"
 #include "Game/Game.h"
 #include "Level/Level.h"
+#include "Actor/Item/Item.h"
 #include "Actor/Enemy/Enemy.h"
-#include "Actor/Item/ExpOrb.h"
 #include "Actor/Weapons/Knife.h"
 #include "Actor/Weapons/MagicWand.h"
 
@@ -83,14 +83,14 @@ void Player::Tick(float deltaTime)
 		std::vector<Actor*> actors = GetOwner()->GetActors();
 		for (Actor* actor : actors)
 		{
-			if (actor->As<ExpOrb>())
+			if (actor->As<Item>())
 			{
 				if (actor->Position() != nextTilePos)
 				{
 					continue;
 				}
 
-				ExpOrb* itme = dynamic_cast<ExpOrb*>(actor);
+				Item* itme = dynamic_cast<Item*>(actor);
 
 				if (itme)
 				{

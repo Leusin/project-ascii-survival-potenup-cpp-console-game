@@ -66,19 +66,18 @@ void Game::RenderBackgrounLevel()
 
 void Game::CleanUp()
 {
-	Engine::CleanUp();
-
 	if (showUpgrade)
 	{
-		//게임 레벨 재거
 		SafeDelete(backgroundLevel);
-		mainLevel = nullptr;
+		// mainLevel 에 있던 upgradeLevel 는 Engine 이 정리해준다.
 	}
 	else
 	{
 		backgroundLevel = nullptr;
+		SafeDelete(upgradeLevel);
+		// mainLevel 에 있던 GameLevel 은 Engine 이 정리해준다.
 	}
 
-	SafeDelete(upgradeLevel);
+	Engine::CleanUp();
 }
 

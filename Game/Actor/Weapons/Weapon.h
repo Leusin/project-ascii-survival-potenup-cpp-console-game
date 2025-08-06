@@ -18,6 +18,10 @@ public:
 
 	virtual void LevelUp();
 
+public:
+	inline int GetLeve() { return stats.currentLevel; };
+	inline bool IsMaxLeve() { return stats.currentLevel >= stats.maxLevel; };
+
 protected:
 	inline const Vector2I& GetCameraPosition() const { return cameraPosition; };
 

@@ -2,6 +2,7 @@
 
 #include "Utils/Utils.h"
 #include "Game/Game.h"
+#include "Actor/Weapons/Weapon.h"
 
 upgradeItem::upgradeItem(const char* icon, const char* name, const char* description, OnSelected onSelected)
 	: onSelected(onSelected)
@@ -32,7 +33,7 @@ UpgradeLevel::UpgradeLevel()
 	size_t len = strlen(source) + 1;
 	this->title = new char[len];
 	strcpy_s(this->title, len, source);
-	
+
 
 	// 메뉴 아이템 추가
 	items.emplace_back(new upgradeItem("/", "Resum Game", "description", []() { Game::Get().ReturnToGameLevel(); }));
@@ -46,12 +47,7 @@ UpgradeLevel::~UpgradeLevel()
 {
 	SafeDeleteArray(title);
 
-	for (upgradeItem* item : items)
-	{
-		SafeDelete(item);
-	}
-
-	items.clear();
+	ClenupItems();
 }
 
 void UpgradeLevel::SetTitleText(const char* text)
@@ -63,9 +59,30 @@ void UpgradeLevel::SetTitleText(const char* text)
 	strcpy_s(this->title, len, "LevelUp");
 }
 
+void UpgradeLevel::Initialize(const std::vector<class Weapon*>& weapons)
+{
+	ClenupItems();
+
+	
+	/*
+	for (Weapon* weapon : weapons)
+	{
+		
+		items.emplace_back(new upgradeItem("&", "Quit Game", "description", [weapon&]() { weapon->LevelUp(); }));
+	}
+	*/
+}
+
 void UpgradeLevel::Tick(float deltaTime)
 {
 	super::Tick(deltaTime);
+
+	// 벡터가 비어있다면 아무것도 하지 않음
+	if (length == 0)
+	{
+		return;
+	}
+
 	if (Input::Get().GetKeyDown(VK_UP))
 	{
 		currentIndex = (currentIndex - 1 + length) % length;
@@ -183,4 +200,20 @@ void UpgradeLevel::Render()
 		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset, currentYOffset + 3), descriptionbuffer, textColor, sortingOrder);
 	}
 
+}
+
+void UpgradeLevel::ClenupItems()
+{
+	if (items.empty())
+	{
+		return;
+	}
+
+	for (upgradeItem* item : items)
+	{
+		SafeDelete(item);
+	}
+
+	items.clear();
+	length = 0;
 }

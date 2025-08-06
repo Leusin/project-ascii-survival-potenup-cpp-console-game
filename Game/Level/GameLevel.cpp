@@ -244,7 +244,7 @@ void GameLevel::ProcessDebuge()
 	// 2번 키를 눌렀을 업그레이드 레벨로 이동
 	if (Input::Get().GetKeyDown('2'))
 	{
-		Game::Get().TriggerUpgradeLevel();
+		Game::Get().GoToUpgradeLevel(player->weapons);
 	};
 
 	// 3번 키를 눌렀을 때 10개 스폰

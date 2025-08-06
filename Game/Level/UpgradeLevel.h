@@ -28,12 +28,16 @@ public:
 	UpgradeLevel();
 	~UpgradeLevel();
 
-public:
-	void SetTitleText(const char* text);
-
 private:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
+
+public:
+	void SetTitleText(const char* text);
+	void Initialize(const std::vector<class Weapon*>& weapons);
+
+private:
+	void ClenupItems();
 
 private:
 	char* title;

@@ -6,10 +6,8 @@
 #include "Game/Game.h"
 #include "Level/Level.h"
 #include "Actor/Enemy/Enemy.h"
-#include "Actor/Weapons/Knife.h"
 #include "Actor/Item/ExpOrb.h"
-
-// TEST
+#include "Actor/Weapons/Knife.h"
 #include "Actor/Weapons/MagicWand.h"
 
 Player::Player()
@@ -33,8 +31,11 @@ void Player::BeginPlay()
 {
 	super::BeginPlay();
 
-	GetOwner()->AddActor(new Knife(cameraPosition, direction));
-	GetOwner()->AddActor(new MagicWand(cameraPosition));
+	// 무기 등록
+	weapons.emplace_back(new Knife(cameraPosition, direction));
+	GetOwner()->AddActor(weapons.back());
+	weapons.emplace_back(new MagicWand(cameraPosition));
+	GetOwner()->AddActor(weapons.back());
 }
 
 void Player::Tick(float deltaTime)
@@ -185,7 +186,7 @@ void Player::AddExp(float exp)
 	++stats.level;
 
 	// 레벨업 이벤트
-	Game::Get().TriggerUpgradeLevel();
+	Game::Get().GoToUpgradeLevel(weapons);
 }
 
 void Player::ProcessDamaged(float deltaTime)

@@ -2,6 +2,7 @@
 
 #include "Level/GameLevel.h"
 #include "Level/UpgradeLevel.h"
+#include "Actor/Weapons/Weapon.h"
 
 Game* Game::instance = nullptr;
 
@@ -38,7 +39,7 @@ Game& Game::Get()
 	return *instance;
 }
 
-void Game::TriggerUpgradeLevel()
+void Game::GoToUpgradeLevel(const std::vector<class Weapon*>& weapons)
 {
 	if (showUpgrade)
 	{
@@ -46,6 +47,8 @@ void Game::TriggerUpgradeLevel()
 	}
 
 	showUpgrade = true;
+
+	upgradeLevel->Initialize(weapons);
 
 	backgroundLevel = mainLevel; // 게임 레벨을 background 로 빌어 둠
 	mainLevel = upgradeLevel; // 업그레이드가 보이게 함.

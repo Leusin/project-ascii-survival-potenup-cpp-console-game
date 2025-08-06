@@ -2,6 +2,7 @@
 
 #include "Actor/Actor.h"
 
+#include <vector>
 #include "Utils/Timer.h"
 #include "Math/Vector2F.h"
 #include "Stats/CharacterStats.h"
@@ -49,6 +50,10 @@ private:
 public: // GetterSetter
 	const Vector2I& GetCameraPosition() const;
 	const Vector2F& GetDirection() const;
+
+public:
+	// 플레이어 무기 목록
+	std::vector<class Weapon*> weapons;
 
 private:
 	/// <summary>

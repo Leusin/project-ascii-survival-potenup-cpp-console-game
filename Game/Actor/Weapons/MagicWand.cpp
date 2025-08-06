@@ -7,6 +7,9 @@
 MagicWand::MagicWand(const Vector2I& cameraPosition)
 	: Weapon(cameraPosition)
 {
+	icon = 'o';
+	SetImage("Magic Wand");
+
 	stats.currentLevel = 1;
 	stats.baseDamaged = 4.5f;
 	stats.speed = 12.0f;
@@ -56,6 +59,10 @@ void MagicWand::Tick(float deltaTime)
 			}
 		}
 	}
+}
+
+void MagicWand::Render()
+{
 }
 
 void MagicWand::LevelUp()

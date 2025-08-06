@@ -1,5 +1,6 @@
 #include "UpgradeLevel.h"
 
+#include <random>
 #include "Utils/Utils.h"
 #include "Game/Game.h"
 #include "Actor/Weapons/Weapon.h"
@@ -33,14 +34,6 @@ UpgradeLevel::UpgradeLevel()
 	size_t len = strlen(source) + 1;
 	this->title = new char[len];
 	strcpy_s(this->title, len, source);
-
-
-	// 메뉴 아이템 추가
-	items.emplace_back(new upgradeItem("/", "Resum Game", "description", []() { Game::Get().ReturnToGameLevel(); }));
-	items.emplace_back(new upgradeItem("*", "Quit Game", "description", []() { Game::Get().Quit(); }));
-	items.emplace_back(new upgradeItem("&", "Quit Game", "description", []() { Game::Get().Quit(); }));
-
-	length = static_cast<int>(items.size());
 }
 
 UpgradeLevel::~UpgradeLevel()
@@ -63,14 +56,40 @@ void UpgradeLevel::Initialize(const std::vector<class Weapon*>& weapons)
 {
 	ClenupItems();
 
-	
-	/*
+	std::vector<Weapon*> upgradeCandidates;
 	for (Weapon* weapon : weapons)
 	{
-		
-		items.emplace_back(new upgradeItem("&", "Quit Game", "description", [weapon&]() { weapon->LevelUp(); }));
+		if (weapon->GetLevel() < weapon->GetMaxLevel())
+		{
+			upgradeCandidates.emplace_back(weapon);
+		}
 	}
-	*/
+
+	// 후보 목록을 무작위로 섞음
+	// std::shuffle은 <random> 헤더 필요
+	std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(upgradeCandidates.begin(), upgradeCandidates.end(), g);
+
+	for (int i = 0; i < upgradeCandidates.size() && i < maxItemCount; i++)
+	{
+		Weapon* candidate = upgradeCandidates[i];
+
+		char iconArray[] = { candidate->icon, '\0' };
+		char description[10];
+		if ((candidate->GetLevel() + 1) == candidate->GetMaxLevel())
+		{
+			sprintf_s(description, sizeof(description), "Lv. MAX");
+		}
+		else
+		{
+			sprintf_s(description, sizeof(description), "Lv. %d", candidate->GetLevel() + 1);
+		}
+
+		auto upgrade = [candidate]() {candidate->LevelUp(); };
+
+		items.emplace_back(new upgradeItem(iconArray, candidate->GetImage(), description, upgrade));
+	}
 }
 
 void UpgradeLevel::Tick(float deltaTime)
@@ -78,6 +97,7 @@ void UpgradeLevel::Tick(float deltaTime)
 	super::Tick(deltaTime);
 
 	// 벡터가 비어있다면 아무것도 하지 않음
+	int length = static_cast<int>(items.size());
 	if (length == 0)
 	{
 		return;
@@ -96,6 +116,7 @@ void UpgradeLevel::Tick(float deltaTime)
 		if (items[currentIndex]->onSelected != nullptr)
 		{
 			items[currentIndex]->onSelected();
+			Game::Get().ReturnToGameLevel();
 		}
 	}
 	if (Input::Get().GetKeyDown(VK_ESCAPE))
@@ -134,9 +155,10 @@ void UpgradeLevel::Render()
 	int screenWidth = Engine::Get().Width();
 	int lineLength = screenWidth - (2 * xOffset);
 	int frameHeight = 5; // 프레임의 총 높이 (5줄)
-	int textOffset = 8;
+	int textOffset = 4;
 
 	// 메뉴 아이템 렌더링.
+	int length = static_cast<int>(items.size());
 	for (int ix = 0; ix < length; ++ix)
 	{
 		// 메뉴 색상 설정
@@ -187,17 +209,17 @@ void UpgradeLevel::Render()
 		// 아이콘 (세 번째 줄)
 		char itemBuffer[10] = {};
 		sprintf_s(itemBuffer, 10, "'%s'", items[ix]->icon);
-		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset - 4, currentYOffset + 2), itemBuffer, textColor, sortingOrder);
+		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset, currentYOffset + 2), itemBuffer, textColor, sortingOrder);
 
 		// 이름 (세 번째 줄, 아이콘 옆)
 		char namebuffer[100] = {};
 		sprintf_s(namebuffer, 100, "%s", items[ix]->name);
-		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset, currentYOffset + 2), namebuffer, textColor, sortingOrder);
+		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset + 4, currentYOffset + 2), namebuffer, textColor, sortingOrder);
 
 		// 설명 (네 번째 줄)
 		char descriptionbuffer[100] = {};
 		sprintf_s(descriptionbuffer, 100, "%s", items[ix]->description);
-		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset, currentYOffset + 3), descriptionbuffer, textColor, sortingOrder);
+		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset + 4, currentYOffset + 3), descriptionbuffer, textColor, sortingOrder);
 	}
 
 }
@@ -215,5 +237,4 @@ void UpgradeLevel::ClenupItems()
 	}
 
 	items.clear();
-	length = 0;
 }

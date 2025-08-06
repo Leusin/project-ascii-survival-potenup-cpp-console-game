@@ -16,7 +16,7 @@ public:
 
 	//virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
-	//virtual void Render() override; // 랜더 할 필요 없다
+	virtual void Render() override; // 랜더 할 필요 없다
 
 	virtual void LevelUp() override;
 

@@ -19,8 +19,11 @@ public:
 	virtual void LevelUp();
 
 public:
-	inline int GetLeve() { return stats.currentLevel; };
-	inline bool IsMaxLeve() { return stats.currentLevel >= stats.maxLevel; };
+	inline int GetLevel() { return stats.currentLevel; };
+	inline int GetMaxLevel() { return stats.maxLevel; };
+	
+public:
+	char icon;
 
 protected:
 	inline const Vector2I& GetCameraPosition() const { return cameraPosition; };

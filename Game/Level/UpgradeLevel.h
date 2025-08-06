@@ -3,13 +3,15 @@
 #include "Level/Level.h"
 
 #include <vector>
+#include <functional>
 #include "Core/Core.h"
 #include "Actor/Actor.h"
 
+
+using OnSelected = std::function<void()>;
+
 struct upgradeItem
 {
-	typedef void (*OnSelected)(); // 함수 포인터 선언
-
 	upgradeItem(const char* icon, const char* name, const char* description, OnSelected onSelected);
 	~upgradeItem();
 
@@ -48,5 +50,5 @@ private:
 
 	std::vector<upgradeItem*> items; // 아이템 배열
 
-	int length = 0; // 메뉴 아이템 수
+	const int maxItemCount = 3;
 };

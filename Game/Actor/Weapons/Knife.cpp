@@ -8,6 +8,9 @@ Knife::Knife(const Vector2I& cameraPosition, Vector2F& direiction)
 	: Weapon(cameraPosition)
 	, direction(direiction)
 {
+	icon = '-';
+	SetImage("Knife");
+
 	stats.currentLevel = 1;
 	stats.baseDamaged = 6.5f;
 	stats.speed = 18.0f;
@@ -57,6 +60,10 @@ void Knife::Tick(float deltaTime)
 			}
 		}
 	}
+}
+
+void Knife::Render()
+{
 }
 
 void Knife::LevelUp()

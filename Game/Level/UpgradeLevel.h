@@ -6,14 +6,16 @@
 #include "Core/Core.h"
 #include "Actor/Actor.h"
 
-struct MenuItem
+struct upgradeItem
 {
 	typedef void (*OnSelected)(); // 함수 포인터 선언
 
-	MenuItem(const char* text, OnSelected onSelected);
-	~MenuItem();
+	upgradeItem(const char* icon, const char* name, const char* description, OnSelected onSelected);
+	~upgradeItem();
 
-	char* menuText = nullptr; // 메뉴 텍스트
+	char* icon = nullptr; // 아이템 아이콘
+	char* name = nullptr; // 아이템 이름
+	char* description = nullptr; // 아이템 설명
 	OnSelected onSelected = nullptr; // 메뉴 선택 시 실행할 동작
 };
 
@@ -26,17 +28,21 @@ public:
 	UpgradeLevel();
 	~UpgradeLevel();
 
+public:
+	void SetTitleText(const char* text);
+
 private:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
 private:
+	char* title;
 	int currentIndex = 0; // 현재 선택된 아이템의 인덱스
 
-	Color selectedColor = Color::Green; // 아이템 선택 색.
-	Color unselectedColor = Color::White; // 아이템 선택 안 됬을 때 색.
+	Color selectedColor = Color::LightYellow; // 아이템 선택 색.
+	Color unselectedColor = Color::Yellow; // 아이템 선택 안 됬을 때 색.
 
-	std::vector<MenuItem*> items; // 아이템 배열
+	std::vector<upgradeItem*> items; // 아이템 배열
 
 	int length = 0; // 메뉴 아이템 수
 };

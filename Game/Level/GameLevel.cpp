@@ -15,11 +15,12 @@ GameLevel::GameLevel()
 	// 타일맵 로드 후 배경에 출력
 	ReadTileMapFile("TileMap.txt");
 
-	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
-	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
-	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
-	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
-	AddActor(new Enemy(player->GetCameraPosition())); // 적 스폰 TEST
+
+	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
+	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
+	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
+	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
+	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
 
 	// TODO: 개발 완료 시 아래 함수 지우기
 	DebugManager::Get().ToggleDebugMode();
@@ -250,16 +251,16 @@ void GameLevel::ProcessDebuge()
 	// 3번 키를 눌렀을 때 10개 스폰
 	if (Input::Get().GetKeyDown('3'))
 	{
-		AddActor(new Enemy(player->GetCameraPosition()));
-		AddActor(new Enemy(player->GetCameraPosition()));
-		AddActor(new Enemy(player->GetCameraPosition()));
-		AddActor(new Enemy(player->GetCameraPosition()));
-		AddActor(new Enemy(player->GetCameraPosition()));
-		AddActor(new Enemy(player->GetCameraPosition()));
-		AddActor(new Enemy(player->GetCameraPosition()));
-		AddActor(new Enemy(player->GetCameraPosition()));
-		AddActor(new Enemy(player->GetCameraPosition()));
-		AddActor(new Enemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
 	};
 
 }

@@ -2,6 +2,7 @@
 
 #include "Level/Level.h"
 #include "Math/Vector2F.h"
+#include "Actor/Enemy/EnemyFactory.h"
 
 class GameLevel : public Level
 {
@@ -32,6 +33,7 @@ private:
 
 private:
 	class Player* player; 
+	EnemyFactory enemyFactory;
 
 	// 타일 맵 데이터
 	char* tileMap = nullptr;

@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClCompile Include="Actor\Enemy\Enemy.cpp" />
     <ClCompile Include="Actor\Item\ExpOrb.cpp" />
+    <ClCompile Include="Actor\Item\Item.cpp" />
     <ClCompile Include="Actor\Player\Player.cpp" />
     <ClCompile Include="Actor\Projectile\KnifeProjectile.cpp" />
     <ClCompile Include="Actor\Weapons\Knife.cpp" />
@@ -186,7 +187,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Enemy\Enemy.h" />
+    <ClInclude Include="Actor\Enemy\EnemyFactory.h" />
     <ClInclude Include="Actor\Item\ExpOrb.h" />
+    <ClInclude Include="Actor\Item\Item.h" />
     <ClInclude Include="Actor\Projectile\MagicWandProjectile.h" />
     <ClInclude Include="Actor\Weapons\MagicWand.h" />
     <ClInclude Include="Interface\ICollecteable.h" />

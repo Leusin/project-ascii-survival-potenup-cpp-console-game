@@ -5,35 +5,17 @@
 #include "Actor/Player/Player.h"
 
 ExpOrb::ExpOrb(Vector2I spawnPosition, const Vector2I& cameraPostion, float exp)
-	: Actor("*", Color::LightCyan)
+	: Item("*", Color::LightCyan, spawnPosition, cameraPostion)
 	, exp(exp)
-	, cameraPosition(cameraPostion)
-	, worldPosition{ spawnPosition }
 {
-	SetSortingOrder(3);
-
-	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
-	SetPosition(screenPosition);
-
-	//worldPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
-
-	if (exp > 25.f)
+	if (exp > 13.f)
 	{
 		color = Color::Red;
 	}
-	else if (exp > 10.f)
+	else if (exp > 6.f)
 	{
-		color = Color::LightBlue;
+		color = Color::Cyan;
 	}
-}
-
-void ExpOrb::Tick(float deltaTime)
-{
-	super::Tick(deltaTime);
-
-	// 화면 좌표계로 변환
-	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
-	SetPosition(screenPosition);
 }
 
 void ExpOrb::OnCollected(Player* player)

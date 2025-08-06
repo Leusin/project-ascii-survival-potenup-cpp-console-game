@@ -13,18 +13,24 @@
 Player::Player()
 	: Actor("@", Color::White)
 	, worldPosition(Position())
+	, level(1)
+	, speed(5.0f)
+	// 경험치 관련
+	, baseExp(5.0f)
+	, growthRate(1.1f)
+	, currentExp(0.0f)
+	// 체력 관련
+	, baseHp(20.0f)
+	, currentHp(0.0f)
+	, hpPerLevel(1.1f)
 {
-	// SET
-	stats.hp = 20.f;
-	stats.speed = 5.f;
-
-	baseMaxHp = stats.hp;
+	currentHp = CalculateMaxHp();
 
 	SetSortingOrder(10);
 
-	onDamagedTimer.SetTargetTime(invulnerableTime);
-
 	SetPosition(Engine::Get().ScreenCenter());
+
+	onDamagedTimer.SetTargetTime(invulnerableTime);
 }
 
 void Player::BeginPlay()
@@ -65,7 +71,7 @@ void Player::Tick(float deltaTime)
 
 		Vector2F moveDirection = direction.Normalize(); // 이동 방향
 
-		Vector2F movement = moveDirection * stats.speed * deltaTime; // 이동 거리
+		Vector2F movement = moveDirection * speed * deltaTime; // 이동 거리
 
 		Vector2F nextPosition = worldPosition + movement; // 다음 이동할 월드 위치
 
@@ -145,9 +151,9 @@ void Player::TakeDamage(float damage)
 
 	isOnDamaged = true;
 
-	float damaged = stats.hp - damage;
+	float damaged = currentHp - damage;
 
-	stats.hp = (damaged < 0) ? 0 : damaged;
+	currentHp = (damaged < 0) ? 0 : damaged;
 }
 
 const Vector2I& Player::GetCameraPosition() const
@@ -162,7 +168,7 @@ const Vector2F& Player::GetDirection() const
 
 float Player::GetHpRatio() const
 {
-	return stats.hp / baseMaxHp;
+	return currentHp / CalculateMaxExp();
 }
 
 float Player::GetExpRatio() const
@@ -183,10 +189,16 @@ void Player::AddExp(float exp)
 
 	// 레벨업 처리
 	currentExp -= toNextLevel;
-	++stats.level;
+	++level;
 
 	// 레벨업 이벤트
 	Game::Get().GoToUpgradeLevel(weapons);
+}
+
+void Player::AddHp(float amount)
+{
+	float currentMaxhp = CalculateMaxHp();
+	currentHp = (currentHp + amount) > currentMaxhp ? currentMaxhp : (currentHp + amount);
 }
 
 void Player::ProcessDamaged(float deltaTime)
@@ -204,8 +216,13 @@ void Player::ProcessDamaged(float deltaTime)
 	}
 }
 
+float Player::CalculateMaxHp() const
+{
+	return baseHp + (level * hpPerLevel);
+}
+
 float Player::CalculateMaxExp() const
 {
-	return baseExp * powf(growthRate, (float)stats.level); // 레벨에 따라 지수적으로 증가
+	return baseExp * powf(growthRate, (float)level); // 레벨에 따라 지수적으로 증가
 }
 

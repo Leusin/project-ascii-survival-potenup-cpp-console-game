@@ -21,6 +21,7 @@ public:
 
 	virtual void OnDestroy() override;
 
+
 public: 
 	virtual void TakeDamage(float damage) override; // IDamageable
 
@@ -41,6 +42,11 @@ private:
 	/// </summary>
 	void HandleScreenWrap();
 
+	/// <summary>
+	/// 아이템 드롭
+	/// </summary>
+	void TryToDropExpOrb();
+	void TryToDropHealOrb();
 private:
 	EnemyStats stats;
 

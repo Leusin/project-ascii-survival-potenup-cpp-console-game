@@ -5,6 +5,7 @@
 #include "Level/Level.h"
 #include "Actor/Player/Player.h"
 #include "Actor/Item/ExpOrb.h"
+#include "Actor/Item/HealOrb.h"
 #include "Interface/IDamageable.h"
 
 unsigned int Enemy::aliveCount = 0;
@@ -56,15 +57,8 @@ void Enemy::Render()
 
 void Enemy::OnDestroy()
 {
-	// 3분의 1 확률로 경험치 아이템 스폰하기
-	int dropChance = Utils::Random(0, 2);
-	if (dropChance != 0)
-	{
-		return;
-	}
-
-	Vector2I expOrbSpawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
-	GetOwner()->AddActor(new ExpOrb(expOrbSpawnPos, cameraPosition, stats.exp));
+	TryToDropExpOrb();
+	TryToDropHealOrb();
 }
 
 void Enemy::TakeDamage(float damage)
@@ -214,4 +208,30 @@ void Enemy::HandleScreenWrap()
 	screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
 
 	SetPosition(screenPosition);
+}
+
+void Enemy::TryToDropExpOrb()
+{
+	// 3분의 1 확률로 경험치 아이템 스폰하기
+	int dropChance = Utils::Random(0, 2);
+	if (dropChance != 0)
+	{
+		return;
+	}
+
+	Vector2I spawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
+	GetOwner()->AddActor(new ExpOrb(spawnPos, cameraPosition, stats.exp));
+}
+
+void Enemy::TryToDropHealOrb()
+{
+	// 30분의 1 확률로 경험치 아이템 스폰하기
+	int dropChance = Utils::Random(0, 29);
+	if (dropChance != 0)
+	{
+		return;
+	}
+
+	Vector2I spawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
+	GetOwner()->AddActor(new HealOrb(spawnPos, cameraPosition, stats.exp));
 }

@@ -39,11 +39,22 @@ public:
 	/// </summary>
 	void AddExp(float exp);
 
+	/// <summary>
+	/// 체력 회복
+	/// </summary>
+	void AddHp(float amount);
+
 private:
 	void ProcessDamaged(float deltaTime);
 
 	/// <summary>
-	/// 경험치 관련 데이터를 바탕으로 다음레벨 경험치를 계산
+	/// 레벨에 비례하여 단순 체력이 증가
+	/// </summary>
+	/// <returns></returns>
+	float CalculateMaxHp() const;
+
+	/// <summary>
+	/// 레벨과 성장 증가량을 바탕으로 계산
 	/// </summary>
 	float CalculateMaxExp() const;
 
@@ -63,28 +74,43 @@ private:
 	///   - 배경
 	///   - 아이템
 	/// </summary>
-	Vector2F worldPosition;
+	Vector2F worldPosition; // 이동을 계산할 때 쓰는 것
 	Vector2I cameraPosition; // 다른 객체들은 이걸 참조한다.
 
-	CharacterStats stats;
-	Vector2F moveInput = { 0, 0 };
-
-	// 마지막으로 이동한 방향
-	// 투사체 의 방향이 될 것
-	Vector2F direction = Vector2F::Right;
+	//
+	// 입력 처리 관련
+	//
+	Vector2F moveInput = Vector2F::Zero;
+	Vector2F direction = Vector2F::Right; // 마지막으로 이동한 방향
 
 	//
 	// 데미지 처리 관련
 	//
-	float baseMaxHp;
 	bool isOnDamaged = false;
 	Timer onDamagedTimer;
 	float invulnerableTime = 0.1f;
 
 	//
+	// 레벨
+	//
+	unsigned int level = 1;
+
+	//
+	// 이동 속도
+	//
+	float speed = 5.f;
+
+	//
 	// 경험치 관련
 	//
-	float currentExp = 0.f;
 	const float baseExp = 5.f;
-	const float growthRate = 1.1f; // 레벨업에 필요한 경험치 증가율
+	float growthRate = 1.1f; // 레벨업에 필요한 경험치 증가율
+	float currentExp = 0.f;
+
+	//
+	// 체력 관련
+	//
+	const float baseHp = 20.f;
+	float currentHp = 0.0f;
+	float hpPerLevel = 1.1f;
 };

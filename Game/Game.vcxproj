@@ -169,6 +169,8 @@
   <ItemGroup>
     <ClCompile Include="Actor\Enemy\Enemy.cpp" />
     <ClCompile Include="Actor\Item\ExpOrb.cpp" />
+    <ClCompile Include="Actor\Item\HealOrb.cpp" />
+    <ClCompile Include="Actor\Item\HealOrb.h" />
     <ClCompile Include="Actor\Item\Item.cpp" />
     <ClCompile Include="Actor\Player\Player.cpp" />
     <ClCompile Include="Actor\Projectile\KnifeProjectile.cpp" />

@@ -100,6 +100,7 @@ void UpgradeLevel::Tick(float deltaTime)
 	int length = static_cast<int>(items.size());
 	if (length == 0)
 	{
+		Game::Get().ReturnToGameLevel();
 		return;
 	}
 
@@ -133,6 +134,13 @@ void UpgradeLevel::Render()
 
 	Game::Get().RenderBackgrounLevel();
 
+	int length = static_cast<int>(items.size());
+	if (length == 0)
+	{
+		Game::Get().ReturnToGameLevel();
+		return;
+	}
+
 	// 랜더 순서
 	int sortingOrder = 100;
 
@@ -158,7 +166,6 @@ void UpgradeLevel::Render()
 	int textOffset = 4;
 
 	// 메뉴 아이템 렌더링.
-	int length = static_cast<int>(items.size());
 	for (int ix = 0; ix < length; ++ix)
 	{
 		// 메뉴 색상 설정

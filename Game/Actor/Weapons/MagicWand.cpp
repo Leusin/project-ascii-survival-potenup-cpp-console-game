@@ -10,12 +10,12 @@ MagicWand::MagicWand(const Vector2I& cameraPosition)
 	icon = 'o';
 	SetImage("Magic Wand");
 
-	stats.currentLevel = 1;
-	stats.baseDamaged = 4.5f;
-	stats.speed = 12.0f;
-	stats.cooldown = 2.f;
-	stats.amount = 1;
-	stats.projectileInterval = 0.8f;
+	stats.currentLevel = 0;
+	stats.baseDamaged = 0.f;
+	stats.speed = 0.f;
+	stats.cooldown = 0.f;
+	stats.amount = 0;
+	stats.projectileInterval = 0.0f;
 
 	cooldownTimer.SetTargetTime(stats.cooldown);
 	projectilesToFire = stats.amount;

@@ -278,25 +278,25 @@ void GameLevel::RenderDebugeData()
 	{
 		char buffer1[60] = {};
 		sprintf_s(buffer1, 60, "[KEY'~']ToggleDEBUG");
-		Engine::Get().WriteToBuffer(Vector2I(0, 8), buffer1, Color::Green, renderOrder);
+		Engine::Get().WriteToBuffer(Vector2I(0, 4), buffer1, Color::Green, renderOrder);
 
 		sprintf_s(buffer1, 60, "-------------------- ");
-		Engine::Get().WriteToBuffer(Vector2I(0, 9), buffer1, Color::Green, renderOrder);
+		Engine::Get().WriteToBuffer(Vector2I(0, 5), buffer1, Color::Green, renderOrder);
 	}
 
 	// 2. 일시정지 안내
 	char buffer2[60] = {};
 	sprintf_s(buffer2, 60, "[KEY'1']GamePause");
 	Color isPusecolor = DebugManager::Get().IsGamePaused() ? Color::Red : Color::Green;
-	Engine::Get().WriteToBuffer(Vector2I(0, 10), buffer2, isPusecolor, renderOrder);
+	Engine::Get().WriteToBuffer(Vector2I(0, 6), buffer2, isPusecolor, renderOrder);
 
 	// 3. 업그레이드 레벨로 이동
 	char buffer3[60] = {};
 	sprintf_s(buffer3, 60, "[KEY'2']UpgradeLevel");
-	Engine::Get().WriteToBuffer(Vector2I(0, 11), buffer3, Color::Green, renderOrder);
+	Engine::Get().WriteToBuffer(Vector2I(0, 7), buffer3, Color::Green, renderOrder);
 
 	// 4. 적 스폰 정보
 	char buffer4[60] = {};
 	sprintf_s(buffer4, 60, "[KEY'3']EnemySpwned:(%d)", Enemy::count);
-	Engine::Get().WriteToBuffer(Vector2I(0, 12), buffer4, Color::Green, renderOrder);
+	Engine::Get().WriteToBuffer(Vector2I(0, 8), buffer4, Color::Green, renderOrder);
 }

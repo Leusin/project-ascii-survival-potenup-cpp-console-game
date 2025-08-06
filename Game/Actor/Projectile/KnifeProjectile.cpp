@@ -6,7 +6,7 @@
 #include "Actor/Enemy/Enemy.h"
 
 KnifeProjectile::KnifeProjectile(float damage, float speed, const Vector2I& cameraPosition, Vector2F& direiction)
-	: Actor("-", Color::White, { Engine::Get().Width() / 2, Engine::Get().Height() / 2 })
+	: Actor("-", Color::LightWhite, { Engine::Get().Width() / 2, Engine::Get().Height() / 2 })
 	, speed(speed)
 	, damage(damage)
 	, direction(direiction)

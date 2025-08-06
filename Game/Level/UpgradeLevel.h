@@ -45,8 +45,8 @@ private:
 	char* title;
 	int currentIndex = 0; // 현재 선택된 아이템의 인덱스
 
-	Color selectedColor = Color::LightYellow; // 아이템 선택 색.
-	Color unselectedColor = Color::Yellow; // 아이템 선택 안 됬을 때 색.
+	Color selectedColor = Color::LightGreen; // 아이템 선택 색.
+	Color unselectedColor = Color::LightWhite; // 아이템 선택 안 됬을 때 색.
 
 	std::vector<upgradeItem*> items; // 아이템 배열
 

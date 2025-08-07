@@ -77,7 +77,6 @@ void UpgradeLevel::Initialize(const std::vector<class Weapon*>& weapons)
 	{
 		Weapon* candidate = upgradeCandidates[i];
 
-		char iconArray[] = { candidate->icon, '\0' };
 		char description[10];
 		if ((candidate->GetLevel() + 1) == candidate->GetMaxLevel())
 		{
@@ -90,7 +89,7 @@ void UpgradeLevel::Initialize(const std::vector<class Weapon*>& weapons)
 
 		auto upgrade = [candidate]() {candidate->LevelUp(); };
 
-		items.emplace_back(new upgradeItem(iconArray, candidate->GetImage(), description, upgrade));
+		items.emplace_back(new upgradeItem(candidate->GetImage(), candidate->name, description, upgrade));
 	}
 }
 

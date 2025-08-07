@@ -21,8 +21,8 @@ private:
 	void SetImafeByDirection();
 
 private:
-	float speed;
 	float damage;
+	float speed;
 	
 	/// <summary>
 	/// 투척 방향

@@ -9,7 +9,7 @@ class Weapon :public Actor
 	RTTI_DECLARATIONS(Weapon, Actor)
 
 public:
-	Weapon(const Vector2I& cameraPosition);
+	Weapon(const char* img, const char* name, const Vector2I& cameraPosition);
 	virtual ~Weapon() = default;
 
 	virtual void BeginPlay() override;
@@ -23,7 +23,7 @@ public:
 	inline int GetMaxLevel() { return stats.maxLevel; };
 	
 public:
-	char icon;
+	const char* name;
 
 protected:
 	inline const Vector2I& GetCameraPosition() const { return cameraPosition; };

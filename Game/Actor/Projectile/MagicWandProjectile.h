@@ -18,9 +18,6 @@ public:
 	virtual void Render() override;
 
 private:
-	void SetImafeByDirection();
-
-private:
 	float speed;
 	float damage;
 

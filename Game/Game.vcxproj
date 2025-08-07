@@ -174,10 +174,13 @@
     <ClCompile Include="Actor\Item\Item.cpp" />
     <ClCompile Include="Actor\Player\Player.cpp" />
     <ClCompile Include="Actor\Projectile\KnifeProjectile.cpp" />
+    <ClCompile Include="Actor\Projectile\WhipProjectile.cpp" />
+    <ClCompile Include="Actor\Projectile\WhipProjectile.h" />
     <ClCompile Include="Actor\Weapons\Knife.cpp" />
     <ClCompile Include="Actor\Weapons\MagicWand.cpp" />
     <ClCompile Include="Actor\Weapons\Weapon.cpp" />
     <ClCompile Include="Actor\Weapons\Weapon.h" />
+    <ClCompile Include="Actor\Weapons\Whip.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Level\GameLevel.cpp" />
     <ClCompile Include="Level\UpgradeLevel.cpp" />
@@ -194,6 +197,7 @@
     <ClInclude Include="Actor\Item\Item.h" />
     <ClInclude Include="Actor\Projectile\MagicWandProjectile.h" />
     <ClInclude Include="Actor\Weapons\MagicWand.h" />
+    <ClInclude Include="Actor\Weapons\Whip.h" />
     <ClInclude Include="Interface\ICollecteable.h" />
     <ClInclude Include="Actor\Projectile\KnifeProjectile.h" />
     <ClInclude Include="Actor\Weapons\Knife.h" />

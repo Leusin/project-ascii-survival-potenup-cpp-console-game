@@ -5,11 +5,8 @@
 #include "Actor/Projectile/MagicWandProjectile.h"
 
 MagicWand::MagicWand(const Vector2I& cameraPosition)
-	: Weapon(cameraPosition)
+	: Weapon("o", "Magic Wand", cameraPosition)
 {
-	icon = 'o';
-	SetImage("Magic Wand");
-
 	stats.currentLevel = 0;
 	stats.baseDamaged = 0.f;
 	stats.speed = 0.f;

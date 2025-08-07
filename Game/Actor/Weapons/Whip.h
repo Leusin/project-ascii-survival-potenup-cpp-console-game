@@ -37,6 +37,7 @@ private:
 	Timer cooldownTimer;
 	Timer fireIntervalTimer;
 
+
 	float baseLength = 8.f; // 기본값
 	// 채찍의 길이 오프셋 
 	std::vector<float> lengthOffsets = { 0.8f, 1.2f, 1.4f , 0.6f };
@@ -47,4 +48,8 @@ private:
 		{ (int)(baseLength * 1.0f), 0 },
 		{ (int)(baseLength * 1.7f), -1  }
 	};
+
+	bool fireLeftThisTime = false;      // 이번 Fire 방향
+	bool isInitialDirectionDecided = false;
+	bool initialDirectionLeft = false;  // 바라보는 방향 기준
 };

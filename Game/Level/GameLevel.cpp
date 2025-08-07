@@ -96,7 +96,7 @@ void GameLevel::Render()
 	* 
 	* 6 - WhipProjectile
 	* 5 - KnigeProjectile, MagicWandProjectile
-	* 
+	* 4 - HealOrb
 	* 3 - ExpOrb
 	* 2 - Garlic
 	* 
@@ -114,7 +114,7 @@ void GameLevel::Render()
 
 	if (gameTimer.IsTimeout())
 	{
-		// TODO: Win! RENDER
+		Game::Get().GoToGameOverLevel(player->weapons, gameTimer.GetElapsedTime(), true);
 	}
 }
 
@@ -371,7 +371,7 @@ void GameLevel::ProcessDebuge()
 		player->ToggleInvincible();
 	}
 
-	// 5번 키를 눌렀을 때 플레이어 무적 토글
+	// 5번 키를 눌렀을 때 게임 오버 레벨로 이동
 	if (Input::Get().GetKeyDown('5'))
 	{
 		Game::Get().GoToGameOverLevel(player->weapons, gameTimer.GetElapsedTime());

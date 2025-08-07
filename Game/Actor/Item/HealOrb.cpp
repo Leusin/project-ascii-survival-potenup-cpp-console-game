@@ -6,7 +6,7 @@ HealOrb::HealOrb(Vector2I spawnPosition, const Vector2I& cameraPostion, float am
 	: Item("+", Color::LightGreen, spawnPosition, cameraPostion)
 	, amount(amount)
 {
-	SetSortingOrder(30);
+	SetSortingOrder(4);
 }
 
 void HealOrb::OnCollected(Player* player)

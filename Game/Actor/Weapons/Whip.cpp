@@ -50,6 +50,13 @@ void Whip::Tick(float deltaTime)
 		projectilesToFire = stats.amount;
 		cooldownTimer.Reset();
 		cooldownTimer.SetTargetTime(stats.cooldown);
+
+		// 최초 방향 판단
+		Vector2I Up = { 0, 1 };
+		int crossProductZ = Up.x * direction.y - Up.y * direction.x;
+
+		initialDirectionLeft = (crossProductZ > 0);
+		fireLeftThisTime = initialDirectionLeft; // 첫 방향
 	}
 
 	// 발사 중일 때
@@ -117,41 +124,18 @@ void Whip::LevelUp()
 
 void Whip::Fire()
 {
-	// 'Whip'이 처음 발사될 때만 방향을 결정
-	static bool isInitialFire = true;
-	static bool fireLeft = false; // 기본은 오른쪽으로 시작
-
-	if (isInitialFire)
+	if (fireLeftThisTime)
 	{
-		Vector2I Up = { 0, 1 };
-		int crossProductZ = Up.x * direction.y - Up.y * direction.x;
-
-		if (crossProductZ > 0)
-		{
-			FireLeft();
-			fireLeft = true;
-		}
-		else
-		{
-			FireRight();
-			fireLeft = false;
-		}
-		isInitialFire = false;
+		FireLeft();
 	}
-	else // 첫 발사 이후에는 번갈아가며 발사
+	else
 	{
-		if (fireLeft)
-		{
-			FireRight();
-		}
-		else
-		{
-			FireLeft();
-		}
-		fireLeft = !fireLeft; // 발사 방향 전환
+		FireRight();
 	}
+
+	// 방향 반전 (번갈아가며 발사)
+	fireLeftThisTime = !fireLeftThisTime;
 }
-
 void Whip::FireRight()
 {
 	float finalLength = baseLength * (float)stats.area / 100.f;
@@ -165,18 +149,6 @@ void Whip::FireRight()
 
 		GetOwner()->AddActor(new WhipProjectile(stats.baseDamaged, (int)length, spawnPos));
 	}
-
-	// 위쪽 하나 더 생성
-	//if (stats.currentLevel >= 4)
-	//{
-	//	for (size_t i = 0; i < lengthOffsets.size(); ++i)
-	//	{
-	//		Vector2I spawnPos = screenCenter + spawnOffsets[i] + Vector2I{ 0, -1 };
-	//		float length = finalLength * lengthOffsets[i];
-	//
-	//		GetOwner()->AddActor(new WhipProjectile(stats.baseDamaged, (int)length, spawnPos));
-	//	}
-	//}
 }
 
 void Whip::FireLeft()
@@ -187,32 +159,21 @@ void Whip::FireLeft()
 	// 왼쪽 기준 오프셋 데이터으로 변환
 	//
 
-	for (size_t i = 0; i < lengthOffsets.size(); ++i)
+	std::vector<Vector2I> modifiedOffsets = spawnOffsets; // 복사
+
+	for (size_t i = 0; i < modifiedOffsets.size(); ++i)
 	{
 		int length = (int)(finalLength * lengthOffsets[i]);
-		spawnOffsets[i].x += length;
-		spawnOffsets[i].x *= -1;
+		modifiedOffsets[i].x += length;
+		modifiedOffsets[i].x *= -1;
 	}
 
-	// 루프를 돌며 각 채찍을 생성
 	Vector2I screenCenter = Engine::Get().ScreenCenter();
-	for (size_t i = 0; i < lengthOffsets.size(); ++i)
+	for (size_t i = 0; i < modifiedOffsets.size(); ++i)
 	{
-		Vector2I spawnPos = screenCenter + spawnOffsets[i];
+		Vector2I spawnPos = screenCenter + modifiedOffsets[i];
 		float length = finalLength * lengthOffsets[i];
 
 		GetOwner()->AddActor(new WhipProjectile(stats.baseDamaged, (int)length, spawnPos));
-	}
-
-	// 위쪽 하나 더 생성
-	if (stats.currentLevel >= 4)
-	{
-		for (size_t i = 0; i < lengthOffsets.size(); ++i)
-		{
-			Vector2I spawnPos = screenCenter + spawnOffsets[i] + Vector2I{ 0, -1 };
-			float length = finalLength * lengthOffsets[i];
-
-			GetOwner()->AddActor(new WhipProjectile(stats.baseDamaged, (int)length, spawnPos));
-		}
 	}
 }

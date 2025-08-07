@@ -13,7 +13,7 @@ public:
 	static Game& Get();
 
 	void GoToUpgradeLevel(const std::vector<class Weapon*>& weapons); // Upgrade 화면으로 전환
-	void GoToGameOverLevel(const std::vector<class Weapon*>& weapons, float playTime = 0, bool win = false);
+	void GoToGameOverLevel(int playerLevel, const std::vector<class Weapon*>& weapons, float playTime = 0, bool win = false);
 	void ReturnToGameLevel();
 	void RestartGame();
 

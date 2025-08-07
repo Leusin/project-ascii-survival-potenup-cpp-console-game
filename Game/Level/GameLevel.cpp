@@ -114,7 +114,7 @@ void GameLevel::Render()
 
 	if (gameTimer.IsTimeout())
 	{
-		Game::Get().GoToGameOverLevel(player->weapons, gameTimer.GetElapsedTime(), true);
+		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, gameTimer.GetElapsedTime(), true);
 	}
 }
 
@@ -374,7 +374,7 @@ void GameLevel::ProcessDebuge()
 	// 5번 키를 눌렀을 때 게임 오버 레벨로 이동
 	if (Input::Get().GetKeyDown('5'))
 	{
-		Game::Get().GoToGameOverLevel(player->weapons, gameTimer.GetElapsedTime());
+		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, gameTimer.GetElapsedTime());
 	}
 }
 

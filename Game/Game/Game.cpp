@@ -41,7 +41,7 @@ void Game::GoToUpgradeLevel(const std::vector<class Weapon*>& weapons)
 	mainLevel = upgradeLevel; // 업그레이드가 보이게 함.
 }
 
-void Game::GoToGameOverLevel(const std::vector<class Weapon*>& weapons, float playTime, bool win)
+void Game::GoToGameOverLevel(int playerLevel, const std::vector<class Weapon*>& weapons, float playTime, bool win)
 {
 	if (GameInBackground)
 	{
@@ -51,7 +51,7 @@ void Game::GoToGameOverLevel(const std::vector<class Weapon*>& weapons, float pl
 	GameInBackground = true;
 
 	backgroundLevel = mainLevel;
-	mainLevel = new GameOverLevel(weapons, playTime, win);
+	mainLevel = new GameOverLevel(playerLevel, weapons, playTime, win);
 }
 
 void Game::ReturnToGameLevel()

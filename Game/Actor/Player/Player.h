@@ -51,6 +51,7 @@ public: // GetterSetter
 
 	inline void ToggleInvincible() { isInvincible = !isInvincible; }
 	inline bool IsInvincible() { return isInvincible;  };
+	inline int GetLevel() const { return (int)level; }
 
 private:
 	void ProcessDamaged(float deltaTime);

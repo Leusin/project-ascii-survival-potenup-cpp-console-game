@@ -6,8 +6,9 @@
 #include "Actor/Enemy/Enemy.h"
 #include "Actor/Weapons/Weapon.h"
 
-GameOverLevel::GameOverLevel(const std::vector<class Weapon*>& weapons, float playTime, bool win)
-	: weapons(weapons)
+GameOverLevel::GameOverLevel(int playerLevel, const std::vector<class Weapon*>& weapons, float playTime, bool win)
+	: playerLevel(playerLevel)
+	, weapons(weapons)
 	, playTime(playTime)
 	, isWin(win)
 {
@@ -156,6 +157,11 @@ void GameOverLevel::DrawRIPData(int enemiesKilled, float playTime)
 	int startX = center.x - frameWidth / 2;
 	int startY = center.y - frameHeight / 2;
 
+	// 플레이어 레벨
+	char levelBuffer[50];
+	sprintf_s(levelBuffer, "Player Level: %d", playerLevel);
+	Engine::Get().WriteToBuffer({ startX + 5, startY + 4 }, levelBuffer, renderColor, sortingOrder);
+
 	// 처치한 적 수
 	char killedBuffer[50];
 	sprintf_s(killedBuffer, "Killed enemies: %d", enemiesKilled);
@@ -174,6 +180,7 @@ void GameOverLevel::DrawRIPData(int enemiesKilled, float playTime)
 	sprintf_s(weaponBuffer, "[Final Weapon] ");
 	Engine::Get().WriteToBuffer({ startX + 5, startY + 8 }, weaponBuffer, renderColor, sortingOrder);
 
+	int offsetCount = 0;
 	for (int i = 0; i < weapons.size(); i++)
 	{
 		Weapon* w = weapons[i];
@@ -184,7 +191,7 @@ void GameOverLevel::DrawRIPData(int enemiesKilled, float playTime)
 		char weaponDetail[50];
 		sprintf_s(weaponDetail, sizeof(weaponDetail), "Lv. %d %s", w->GetLevel(), w->name);
 
-		Engine::Get().WriteToBuffer({ startX + 5, startY + 9 + i }, weaponDetail, renderColor, sortingOrder);
+		Engine::Get().WriteToBuffer({ startX + 5, startY + 9 + offsetCount++ }, weaponDetail, renderColor, sortingOrder);
 	}
 
 }

@@ -13,7 +13,7 @@ GameLevel::GameLevel()
 	AddActor(player); // 플레이어 추가
 
 	// 타일맵 로드 후 배경에 출력
-	ReadTileMapFile("TileMap.txt");
+	ReadTileMapFile("TileMap2.txt");
 
 	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
 	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST

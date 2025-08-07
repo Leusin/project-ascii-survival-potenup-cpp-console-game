@@ -4,6 +4,7 @@
 #include "Engine.h"
 #include "Input.h"
 #include "Game/Game.h"
+#include "Utils/Utils.h"
 #include "Level/Level.h"
 #include "Actor/Item/Item.h"
 #include "Actor/Enemy/Enemy.h"
@@ -217,8 +218,14 @@ void Player::AddExp(float exp)
 	currentExp -= toNextLevel;
 	++level;
 
-	// 레벨업 이벤트
-	Game::Get().GoToUpgradeLevel(weapons);
+
+	// 50%  확률로 레벨업 이벤트 발생
+	int random = Utils::Random(0, 1);
+	if (random == 0)
+	{
+		// 레벨업 이벤트
+		Game::Get().GoToUpgradeLevel(weapons);
+	}
 }
 
 void Player::AddHp(float amount)

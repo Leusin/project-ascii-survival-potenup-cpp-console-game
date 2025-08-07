@@ -10,6 +10,7 @@
 #include "Actor/Weapons/Knife.h"
 #include "Actor/Weapons/MagicWand.h"
 #include "Actor/Weapons/Whip.h"
+#include "Actor/Weapons/Garlic.h"
 
 Player::Player()
 	: Actor("@", Color::White)
@@ -53,6 +54,10 @@ void Player::BeginPlay()
 
 	// 채찍
 	weapons.emplace_back(new Whip(cameraPosition, direction));
+	GetOwner()->AddActor(weapons.back());
+
+	// 마늘
+	weapons.emplace_back(new Garlic());
 	GetOwner()->AddActor(weapons.back());
 	weapons.back()->LevelUp(); // TEST
 }

@@ -15,7 +15,6 @@ GameLevel::GameLevel()
 	// 타일맵 로드 후 배경에 출력
 	ReadTileMapFile("TileMap.txt");
 
-
 	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
 	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
 	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
@@ -67,8 +66,9 @@ void GameLevel::Render()
 	* 
 	* 6 - WhipProjectile
 	* 5 - KnigeProjectile, MagicWandProjectile
-	*
+	* 
 	* 3 - ExpOrb
+	* 2 - Garlic
 	* 
 	* 0 - 배경
 	*

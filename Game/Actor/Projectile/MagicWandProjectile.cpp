@@ -58,7 +58,7 @@ void WagicWandProjectile::Tick(float deltaTime)
 			continue;
 		}
 
-		// TODO: 데미지 처리
+		// 데미지 처리
 		IDamageable* enemyDamageable = dynamic_cast<IDamageable*> (actor);
 		if (enemyDamageable)
 		{

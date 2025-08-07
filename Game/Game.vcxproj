@@ -176,6 +176,7 @@
     <ClCompile Include="Actor\Projectile\KnifeProjectile.cpp" />
     <ClCompile Include="Actor\Projectile\WhipProjectile.cpp" />
     <ClCompile Include="Actor\Projectile\WhipProjectile.h" />
+    <ClCompile Include="Actor\Weapons\Garlic.cpp" />
     <ClCompile Include="Actor\Weapons\Knife.cpp" />
     <ClCompile Include="Actor\Weapons\MagicWand.cpp" />
     <ClCompile Include="Actor\Weapons\Weapon.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Actor\Item\ExpOrb.h" />
     <ClInclude Include="Actor\Item\Item.h" />
     <ClInclude Include="Actor\Projectile\MagicWandProjectile.h" />
+    <ClInclude Include="Actor\Weapons\Garlic.h" />
     <ClInclude Include="Actor\Weapons\MagicWand.h" />
     <ClInclude Include="Actor\Weapons\Whip.h" />
     <ClInclude Include="Interface\ICollecteable.h" />

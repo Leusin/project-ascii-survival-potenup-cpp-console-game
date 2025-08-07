@@ -60,6 +60,7 @@ void Player::BeginPlay()
 	// 마늘
 	weapons.emplace_back(new Garlic());
 	GetOwner()->AddActor(weapons.back());
+
 }
 
 void Player::Tick(float deltaTime)

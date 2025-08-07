@@ -16,9 +16,6 @@ GameLevel::GameLevel()
 	ReadTileMapFile("TileMap2.txt");
 	//ReadTileMapFile("Tile5.txt");
 
-	// TODO: 개발 완료 시 아래 함수 지우기
-	DebugManager::Get().ToggleDebugMode();
-
 	gameTimer.SetTargetTime((float)targetTime);
 
 	Enemy::ResetCount();

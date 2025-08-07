@@ -37,8 +37,8 @@ public:
     {
         // 모든 적 타입의 stats를 미리 정의합니다.
         enemyStatsMap[EnemyType::Basic] = EnemyStats{ };
-        enemyStatsMap[EnemyType::Fast] = { "F", Color::Cyan, 3.0f, 3.0f, 0.5f, 5.0f };
-        enemyStatsMap[EnemyType::Mumak] = { "M", Color::Yellow, 15.0f, 0.8f, 2.0f, 10.f};
+        enemyStatsMap[EnemyType::Fast] = { "F", Color::Cyan, 10.0f, 3.0f, 0.5f, 5.0f };
+        enemyStatsMap[EnemyType::Mumak] = { "M", Color::Yellow, 35.0f, 0.8f, 2.0f, 10.f};
     }
 private:
     std::map<EnemyType, EnemyStats> enemyStatsMap;

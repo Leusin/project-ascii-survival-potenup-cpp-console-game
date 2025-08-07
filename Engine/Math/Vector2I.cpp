@@ -4,7 +4,7 @@
 
 Vector2I Vector2I::Zero = Vector2I(0, 0);
 Vector2I Vector2I::One = Vector2I(1, 1);
-Vector2I Vector2I::Right = Vector2I(0, 1);
+Vector2I Vector2I::Right = Vector2I(1, 0);
 
 Vector2I::Vector2I(int x, int y)
 	: x(x)

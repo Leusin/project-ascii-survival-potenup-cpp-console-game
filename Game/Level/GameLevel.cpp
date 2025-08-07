@@ -63,8 +63,11 @@ void GameLevel::Render()
 	*
 	* 10 - Player
 	*
-	* 5 - Enemy, KnigeProjectile
+	* 8 - Enemy
 	* 
+	* 6 - WhipProjectile
+	* 5 - KnigeProjectile, MagicWandProjectile
+	*
 	* 3 - ExpOrb
 	* 
 	* 0 - 배경

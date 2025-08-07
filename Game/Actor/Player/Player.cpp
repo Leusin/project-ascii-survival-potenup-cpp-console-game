@@ -9,6 +9,7 @@
 #include "Actor/Enemy/Enemy.h"
 #include "Actor/Weapons/Knife.h"
 #include "Actor/Weapons/MagicWand.h"
+#include "Actor/Weapons/Whip.h"
 
 Player::Player()
 	: Actor("@", Color::White)
@@ -37,11 +38,23 @@ void Player::BeginPlay()
 {
 	super::BeginPlay();
 
+	//
 	// 무기 등록
+	//
+
+	// 칼
 	weapons.emplace_back(new Knife(cameraPosition, direction));
 	GetOwner()->AddActor(weapons.back());
+	weapons.back()->LevelUp(); // 기본 무기
+
+	// 마법 지팡이
 	weapons.emplace_back(new MagicWand(cameraPosition));
 	GetOwner()->AddActor(weapons.back());
+
+	// 채찍
+	weapons.emplace_back(new Whip(cameraPosition, direction));
+	GetOwner()->AddActor(weapons.back());
+	weapons.back()->LevelUp(); // TEST
 }
 
 void Player::Tick(float deltaTime)

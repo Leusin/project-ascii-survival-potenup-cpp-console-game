@@ -13,7 +13,7 @@ KnifeProjectile::KnifeProjectile(float damage, float speed, const Vector2I& came
 	, cameraPosition(cameraPosition)
 	, projectilePosition(cameraPosition + direiction + offset)
 {
-	SetSortingOrder(5);
+	SetSortingOrder(6);
 
 	// 방향에 따라 다른 아스키 표시
 	SetImafeByDirection();
@@ -62,7 +62,7 @@ void KnifeProjectile::Tick(float deltaTime)
 			continue;
 		}
 
-		// TODO: 데미지 처리
+		// 데미지 처리
 		IDamageable* enemyDamageable = dynamic_cast<IDamageable*> (actor);
 		if (enemyDamageable)
 		{

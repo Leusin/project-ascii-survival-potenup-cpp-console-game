@@ -15,9 +15,9 @@ Enemy::Enemy(const Vector2I& cameraPostion, const EnemyStats& stats)
 	, stats(stats)
 	, cameraPosition(cameraPostion)
 {
-	SetSortingOrder(5);
+	SetSortingOrder(8);
 	SetRendomSpawnPosition();
-	onDamagedTimer.SetTargetTime(onDamagedTargetTime);
+	onDamagedTimer.SetTargetTime(invulnerableTime);
 
 	aliveCount++;
 }
@@ -50,7 +50,7 @@ void Enemy::Render()
 {
 	super::Render();
 
-	color = isOnDamaged ? Color::White : stats.color;
+	color = isOnDamaged ? onDamagedColor : stats.color;
 
 	HandleScreenWrap();
 }

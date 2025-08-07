@@ -1,14 +1,13 @@
 #include "Knife.h"
 
-#include "Engine.h"
 #include "Level/GameLevel.h"
 #include "Actor/Projectile/KnifeProjectile.h"
 
 Knife::Knife(const Vector2I& cameraPosition, Vector2I& direiction)
-	: Weapon("-", "Knife", cameraPosition)
+	: Weapon("/", "Knife", cameraPosition)
 	, direction(direiction)
 {
-	stats.currentLevel = 1;
+	stats.currentLevel = 0;
 	stats.baseDamaged = 6.5f;
 	stats.speed = 18.0f;
 	stats.cooldown = 1.f;

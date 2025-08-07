@@ -55,7 +55,8 @@ private:
 
 	bool isOnDamaged = false;
 	Timer onDamagedTimer;
-	const float onDamagedTargetTime = 0.25f;
+	const float invulnerableTime = 0.125f;
+	Color onDamagedColor = Color::Intensity;
 
 	static unsigned int aliveCount;
 };

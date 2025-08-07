@@ -11,7 +11,7 @@ class WhipProjectile :public Actor
 	RTTI_DECLARATIONS(WhipProjectile, Actor)
 
 public:
-	WhipProjectile(float damage, float area, const Vector2I Position);
+	WhipProjectile(float damage, unsigned int area, const Vector2I position);
 	//virtual ~WhipProjectile();
 
 	virtual void BeginPlay() override;
@@ -20,5 +20,5 @@ public:
 
 private:
 	float damage;
-	float area;
+	unsigned int length;
 };

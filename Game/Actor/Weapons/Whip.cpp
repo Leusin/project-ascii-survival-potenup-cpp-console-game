@@ -8,6 +8,8 @@ Whip::Whip(const Vector2I& cameraPosition, Vector2I& direiction)
 	: Weapon("~", "Whip", cameraPosition)
 	, direction(direiction)
 {
+	color = Color::LightMagenta;
+
 	stats.currentLevel = 0;
 	stats.baseDamaged = 1.f;
 	stats.area = 100;

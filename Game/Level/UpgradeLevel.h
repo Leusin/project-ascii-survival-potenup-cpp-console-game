@@ -12,10 +12,10 @@ using OnSelected = std::function<void()>;
 
 struct upgradeItem
 {
-	upgradeItem(const char* icon, const char* name, const char* description, OnSelected onSelected);
+	upgradeItem(Color color, const char* name, const char* description, OnSelected onSelected);
 	~upgradeItem();
 
-	char* icon = nullptr; // 아이템 아이콘
+	Color color = Color::LightWhite; // 아이템 색상
 	char* name = nullptr; // 아이템 이름
 	char* description = nullptr; // 아이템 설명
 	OnSelected onSelected = nullptr; // 메뉴 선택 시 실행할 동작

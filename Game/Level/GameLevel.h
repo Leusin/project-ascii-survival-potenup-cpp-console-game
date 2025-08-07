@@ -47,4 +47,7 @@ private:
 	char* tileMap = nullptr;
 	int tileHeight = 0; // 너비
 	int tileWidth = 0; // 높이
+
+	// 게임 레벨 관련
+	unsigned int levelWave = 0;
 };

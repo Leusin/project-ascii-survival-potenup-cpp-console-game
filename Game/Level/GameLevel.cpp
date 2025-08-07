@@ -16,12 +16,6 @@ GameLevel::GameLevel()
 	ReadTileMapFile("TileMap2.txt");
 	//ReadTileMapFile("Tile5.txt");
 
-	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
-	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
-	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
-	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
-	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
-
 	// TODO: 개발 완료 시 아래 함수 지우기
 	DebugManager::Get().ToggleDebugMode();
 
@@ -65,7 +59,7 @@ void GameLevel::Tick(float deltaTime)
 	//
 	// 플레이어가 모든 체력을 잃었을 경우
 	// 
-	if(player->HasDead())
+	if (player->HasDead())
 	{
 		return;
 	}
@@ -89,17 +83,17 @@ void GameLevel::Render()
 	* INT_MAX - 디버그 정보
 	*
 	* 20 - 타이머, RenderUI
-	* 
+	*
 	* 10 - Player
 	*
 	* 8 - Enemy
-	* 
+	*
 	* 6 - WhipProjectile
 	* 5 - KnigeProjectile, MagicWandProjectile
 	* 4 - Garlic
 	* 3 - HealOrb
 	* 2 - ExpOrb
-	* 
+	*
 	* 0 - 배경
 	*
 	*/
@@ -224,34 +218,48 @@ void GameLevel::SpawnEnemyMainWave()
 		return;
 	}
 
-	static unsigned int wave = 0;
-
 	// 5분 게임이라면 총 5개의 웨이브를 준비할 수 있음
-	if (wave == 4 && gameTimer.GetElapsedTime() >= 240.0f) // 4분 이후
+	if (levelWave == 4 && gameTimer.GetElapsedTime() >= 240.0f) // 4분 이후
 	{
 		// 5분 웨이브 (보스)
-		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
-		wave++;
+		for (int i = 0; i < 5; ++i)
+		{
+			AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::EpicKnight));
+		}
+		levelWave++;
 	}
-	else if (wave == 3 && gameTimer.GetElapsedTime() >= 180.0f) // 3분 이후 30
+	else if (levelWave == 3 && gameTimer.GetElapsedTime() >= 180.0f) // 3분 이후 30
 	{
-		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
-		wave++;
+		for (int i = 0; i < 15; ++i)
+		{
+			AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Goblin));
+			AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Mumak));
+		}
+		levelWave++;
 	}
-	else if (wave == 2 && gameTimer.GetElapsedTime() >= 120.0f) // 2분 이후 20
+	else if (levelWave == 2 && gameTimer.GetElapsedTime() >= 120.0f) // 2분 이후 20
 	{
-		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
-		wave++;
+		for (int i = 0; i < 20; ++i)
+		{
+			AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Goblin));
+		}
+		levelWave++;
 	}
-	else if (wave == 1 && gameTimer.GetElapsedTime() >= 60.0f) // 1분 이후 15
+	else if (levelWave == 1 && gameTimer.GetElapsedTime() >= 60.0f) // 1분 이후 15
 	{
-		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
-		wave++;
+		for (int i = 0; i < 20; ++i)
+		{
+			AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Slime));
+		}
+		levelWave++;
 	}
-	else if(wave == 0)// 1분 이전 10
+	else if (levelWave == 0)// 1분 이전 10
 	{
-		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
-		wave++;
+		for (int i = 0; i < 20; ++i)
+		{
+			AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition()));
+		}
+		levelWave++;
 	}
 
 }
@@ -260,11 +268,11 @@ void GameLevel::SpawnFillerEnemys()
 {
 	int aliveCount = Enemy::GetAliveCount();
 
-	const int spawnThreshold = 20; // 몬스터가 20마리 아래일 때 보충
+	const int spawnThreshold = 10; // 몬스터가 10마리 아래일 때 보충
 	const int spawnAmount = 5;      // 한 번에 5마리씩 추가
-	if (aliveCount < spawnThreshold)
+	if (aliveCount < spawnThreshold + (int)levelWave * 5)
 	{
-		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition(), 0, levelWave + 1));
 	}
 }
 
@@ -319,8 +327,8 @@ void GameLevel::RenderUI()
 		Color exColor = (xi < filledExp) ? Color::Blue : Color::White;
 		char hpbarChar[2] = { '#', '\0' };
 
-		Engine::Get().WriteToBuffer({xi, 0}, hpbarChar, exColor, sortingOrder);
-		Engine::Get().WriteToBuffer({xi, Engine::Get().Height() - 1 }, hpbarChar, hpColor, sortingOrder);
+		Engine::Get().WriteToBuffer({ xi, 0 }, hpbarChar, exColor, sortingOrder);
+		Engine::Get().WriteToBuffer({ xi, Engine::Get().Height() - 1 }, hpbarChar, hpColor, sortingOrder);
 	}
 
 }
@@ -353,16 +361,16 @@ void GameLevel::ProcessDebuge()
 	// 3번 키를 눌렀을 때 랜덤 적 10개 스폰
 	if (Input::Get().GetKeyDown('3'))
 	{
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
-		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
+		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition()));
 	};
 
 	// 4번 키를 눌렀을 때 플레이어 무적 토글
@@ -423,5 +431,5 @@ void GameLevel::RenderDebugeData()
 	// 5. 플레이어 무적
 	char buffer6[60] = {};
 	sprintf_s(buffer6, 60, "[KEY'5']GameOver");
-	Engine::Get().WriteToBuffer(Vector2I(0, 10), buffer6, Color::Green , renderOrder);
+	Engine::Get().WriteToBuffer(Vector2I(0, 10), buffer6, Color::Green, renderOrder);
 }

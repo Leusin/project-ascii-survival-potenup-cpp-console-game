@@ -94,6 +94,12 @@ void Garlic::Tick(float deltaTime)
 
 void Garlic::Render()
 {
+	// 0 레벨이라면 활성하지 않음
+	if (stats.currentLevel < 1)
+	{
+		return;
+	}
+
 	/*
 		타원을 그리는 방법이 여러가지 있는데
 		그 중 Midpoint Ellipse 알고리즘을 사용할 것이다.

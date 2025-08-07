@@ -7,6 +7,8 @@
 MagicWand::MagicWand(const Vector2I& cameraPosition)
 	: Weapon("o", "Magic Wand", cameraPosition)
 {
+	color = Color::LightCyan;
+
 	stats.currentLevel = 0;
 	stats.baseDamaged = 0.f;
 	stats.speed = 0.f;

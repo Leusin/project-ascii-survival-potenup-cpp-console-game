@@ -6,7 +6,7 @@
 #include "Actor/Enemy/Enemy.h"
 
 WhipProjectile::WhipProjectile(float damage, unsigned int length, const Vector2I Position)
-	: Actor("~", Color::LightWhite, Position)
+	: Actor("~", Color::LightRed, Position)
 	, damage(damage)
 	, length(length)
 {

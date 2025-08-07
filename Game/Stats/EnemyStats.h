@@ -11,7 +11,7 @@ struct EnemyStats
 	const char* icon;
 	Color color = Color::Blue;
 	float hp = 5.0f;
-	float speed = 1.f;
+	float speed = 1.3f;
 	float damage = 0.05f;
 	float exp = 1.0f;
 

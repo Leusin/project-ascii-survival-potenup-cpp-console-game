@@ -7,6 +7,8 @@ Knife::Knife(const Vector2I& cameraPosition, Vector2I& direiction)
 	: Weapon("-", "Knife", cameraPosition)
 	, direction(direiction)
 {
+	color = Color::LightWhite;
+
 	stats.currentLevel = 0;
 	stats.baseDamaged = 6.5f;
 	stats.speed = 18.0f;

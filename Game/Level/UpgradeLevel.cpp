@@ -5,14 +5,11 @@
 #include "Game/Game.h"
 #include "Actor/Weapons/Weapon.h"
 
-upgradeItem::upgradeItem(const char* icon, const char* name, const char* description, OnSelected onSelected)
+upgradeItem::upgradeItem(Color color, const char* name, const char* description, OnSelected onSelected)
 	: onSelected(onSelected)
+	, color(color)
 {
-	size_t len = (int)strlen(icon) + 1;
-	this->icon = new char[len];
-	strcpy_s(this->icon, len, icon);
-
-	len = (int)strlen(name) + 1;
+	int len = (int)strlen(name) + 1;
 	this->name = new char[len];
 	strcpy_s(this->name, len, name);
 
@@ -23,7 +20,6 @@ upgradeItem::upgradeItem(const char* icon, const char* name, const char* descrip
 
 upgradeItem::~upgradeItem()
 {
-	SafeDeleteArray(icon);
 	SafeDeleteArray(name);
 	SafeDeleteArray(description);
 }
@@ -101,7 +97,7 @@ void UpgradeLevel::Initialize(const std::vector<class Weapon*>& weapons)
 		}
 
 		auto upgrade = [candidate]() {candidate->LevelUp(); };
-		items.emplace_back(new upgradeItem(candidate->GetImage(), nameLv, descbuffer, upgrade));
+		items.emplace_back(new upgradeItem(candidate->GetColor(), nameLv, descbuffer, upgrade));
 	}
 }
 
@@ -244,7 +240,7 @@ void UpgradeLevel::Render()
 		int nameLength = static_cast<int>(strlen(namebuffer));
 		int nameX = centerPointX - (nameLength / 2);
 
-		Engine::Get().WriteToBuffer(Vector2I(nameX, currentYOffset + 2), namebuffer, textColor, sortingOrder);
+		Engine::Get().WriteToBuffer(Vector2I(nameX, currentYOffset + 2), namebuffer, items[ix]->color, sortingOrder);
 
 		// 설명 (네 번째 줄)
 		char descriptionbuffer[100] = {};
@@ -253,7 +249,7 @@ void UpgradeLevel::Render()
 		int descLength = static_cast<int>(strlen(descriptionbuffer));
 		int descX = centerPointX - (descLength / 2);
 
-		Engine::Get().WriteToBuffer(Vector2I(descX, currentYOffset + 3), descriptionbuffer, Color::White, sortingOrder);
+		Engine::Get().WriteToBuffer(Vector2I(descX, currentYOffset + 3), descriptionbuffer, Color::Intensity, sortingOrder);
 	}
 
 }

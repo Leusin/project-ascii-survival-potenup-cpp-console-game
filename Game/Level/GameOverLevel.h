@@ -24,7 +24,7 @@ private:
 	int currentIndex = 0; // 현재 선택된 아이템의 인덱스
 
 	Color selectedColor = Color::Green; // 아이템 선택 색.
-	Color unselectedColor = Color::White; // 아이템 선택 안 됬을 때 색.
+	Color unselectedColor = Color::Intensity; // 아이템 선택 안 됬을 때 색.
 	std::vector<MenuItem*> items; // 아이템 배열
 
 	const std::vector<class Weapon*>& weapons;

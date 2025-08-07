@@ -14,6 +14,7 @@ GameLevel::GameLevel()
 
 	// 타일맵 로드 후 배경에 출력
 	ReadTileMapFile("TileMap2.txt");
+	//ReadTileMapFile("Tile5.txt");
 
 	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
 	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
@@ -57,6 +58,14 @@ void GameLevel::Tick(float deltaTime)
 	if (DebugManager::Get().IsDebugMode() && DebugManager::Get().IsGamePaused())
 	{
 		return; // 아래의 모든 로직을 건너뜀
+	}
+
+	//
+	// 플레이어가 모든 체력을 잃었을 경우
+	// 
+	if(player->HasDead())
+	{
+		return;
 	}
 
 	super::Tick(deltaTime);
@@ -339,7 +348,7 @@ void GameLevel::ProcessDebuge()
 		Game::Get().GoToUpgradeLevel(player->weapons);
 	};
 
-	// 3번 키를 눌렀을 때 10개 스폰
+	// 3번 키를 눌렀을 때 랜덤 적 10개 스폰
 	if (Input::Get().GetKeyDown('3'))
 	{
 		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
@@ -354,6 +363,11 @@ void GameLevel::ProcessDebuge()
 		AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); 
 	};
 
+	// 4번 키를 눌렀을 때 플레이어 무적 토글
+	if (Input::Get().GetKeyDown('4'))
+	{
+		player->ToggleInvincible();
+	}
 }
 
 void GameLevel::RenderDebugeData()
@@ -391,4 +405,10 @@ void GameLevel::RenderDebugeData()
 	char buffer4[60] = {};
 	sprintf_s(buffer4, 60, "[KEY'3']EnemySpwned:(%d)", Enemy::GetAliveCount());
 	Engine::Get().WriteToBuffer(Vector2I(0, 8), buffer4, Color::Green, renderOrder);
+
+	// 5. 플레이어 무적
+	char buffer5[60] = {};
+	sprintf_s(buffer5, 60, "[KEY'4']Invincible");
+	Color isInbincivleColor = player->IsInvincible() ? Color::LightYellow : Color::Green;
+	Engine::Get().WriteToBuffer(Vector2I(0, 9), buffer5, isInbincivleColor, renderOrder);
 }

@@ -157,11 +157,12 @@ void Player::Render()
 	super::Render();
 
 	color = isOnDamaged ? Color::Red : Color::White;
+	color = isInvincible ? Color::LightYellow : Color::White;
 }
 
 void Player::TakeDamage(float damage)
 {
-	if (isOnDamaged)
+	if (isOnDamaged || isInvincible)
 	{
 		return;
 	}
@@ -170,7 +171,15 @@ void Player::TakeDamage(float damage)
 
 	float damaged = currentHp - damage;
 
-	currentHp = (damaged < 0) ? 0 : damaged;
+	if (damaged < 0.0f)
+	{
+		hasDead = true;
+		currentHp = 0;
+	}
+	else
+	{
+		currentHp = damaged;
+	}
 }
 
 const Vector2I& Player::GetCameraPosition() const

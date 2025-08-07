@@ -44,6 +44,14 @@ public:
 	/// </summary>
 	void AddHp(float amount);
 
+public: // GetterSetter
+	const Vector2I& GetCameraPosition() const;
+	const Vector2F& GetDirection() const;
+	inline const bool& HasDead() { return hasDead; };
+
+	inline void ToggleInvincible() { isInvincible = !isInvincible; }
+	inline bool IsInvincible() { return isInvincible;  };
+
 private:
 	void ProcessDamaged(float deltaTime);
 
@@ -57,10 +65,6 @@ private:
 	/// 레벨과 성장 증가량을 바탕으로 계산
 	/// </summary>
 	float CalculateMaxExp() const;
-
-public: // GetterSetter
-	const Vector2I& GetCameraPosition() const;
-	const Vector2F& GetDirection() const;
 
 public:
 	// 플레이어 무기 목록
@@ -89,6 +93,7 @@ private:
 	bool isOnDamaged = false;
 	Timer onDamagedTimer;
 	float invulnerableTime = 0.1f;
+	bool isInvincible = false;
 
 	//
 	// 레벨
@@ -113,4 +118,5 @@ private:
 	const float baseHp = 20.f;
 	float currentHp = 0.0f;
 	float hpPerLevel = 1.1f;
+	float hasDead = false;
 };

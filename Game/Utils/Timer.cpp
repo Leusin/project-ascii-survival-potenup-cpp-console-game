@@ -24,3 +24,8 @@ void Timer::SetTargetTime(float newTargetTime)
 {
     targetTime = newTargetTime;
 }
+
+float Timer::GetElapsedTime()
+{
+    return elapsedTime;
+}

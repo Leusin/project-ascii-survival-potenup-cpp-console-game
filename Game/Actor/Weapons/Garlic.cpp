@@ -16,6 +16,14 @@ Garlic::Garlic()
 	cooldownTimer.SetTargetTime(stats.cooldown);
 
 	SetSortingOrder(2);
+
+	upgradeDescription =
+	{
+		"Attacks horizontally",
+		"Increases damage and adds one more projectile",
+		"Increases damage and range",
+		"Increases damage, range, and speed"
+	};
 }
 
 void Garlic::Tick(float deltaTime)

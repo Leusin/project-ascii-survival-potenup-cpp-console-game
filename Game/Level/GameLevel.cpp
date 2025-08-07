@@ -15,14 +15,16 @@ GameLevel::GameLevel()
 	// 타일맵 로드 후 배경에 출력
 	ReadTileMapFile("TileMap.txt");
 
-	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
-	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
-	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
-	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
-	AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
+	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
+	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
+	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
+	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
+	//AddActor(enemyFactory.CreateRandomEnemy(player->GetCameraPosition())); // 적 스폰 TEST
 
 	// TODO: 개발 완료 시 아래 함수 지우기
 	DebugManager::Get().ToggleDebugMode();
+
+	gameTimer.SetTargetTime((float)targetTime);
 }
 
 GameLevel::~GameLevel()
@@ -39,6 +41,15 @@ void GameLevel::Tick(float deltaTime)
 {
 	ProcessDebuge();
 
+	if (gameTimer.IsTimeout())
+	{
+		// TODO: Win!
+
+		return;
+	}
+
+	gameTimer.Tick(deltaTime);
+
 	//
 	// 디버그 모드이고, 일시 정지 일 때
 	//
@@ -49,6 +60,12 @@ void GameLevel::Tick(float deltaTime)
 	}
 
 	super::Tick(deltaTime);
+
+	//
+	// 적 스폰 웨이브
+	//
+	SpawnEnemyMainWave(); // 시간 기반
+	SpawnFillerEnemys(); // 수량 기반
 }
 
 void GameLevel::Render()
@@ -60,6 +77,8 @@ void GameLevel::Render()
 	*
 	* INT_MAX - 디버그 정보
 	*
+	* 20 - 타이머, RenderUI
+	* 
 	* 10 - Player
 	*
 	* 8 - Enemy
@@ -74,11 +93,18 @@ void GameLevel::Render()
 	*
 	*/
 
+	RenderTimer();
+
 	RenderBackground(); // 배경 그리기
 
 	RenderUI(); // UI 그리기
 
 	RenderDebugeData(); // 디버그 데이터 랜더
+
+	if (gameTimer.IsTimeout())
+	{
+		// TODO: Win! RENDER
+	}
 }
 
 void GameLevel::ReadTileMapFile(const char* filename)
@@ -180,6 +206,57 @@ void GameLevel::ReadTileMapFile(const char* filename)
 	fclose(file);
 }
 
+void GameLevel::SpawnEnemyMainWave()
+{
+	if (!player->HasBegonPlay())
+	{
+		return;
+	}
+
+	static unsigned int wave = 0;
+
+	// 5분 게임이라면 총 5개의 웨이브를 준비할 수 있음
+	if (wave == 4 && gameTimer.GetElapsedTime() >= 240.0f) // 4분 이후
+	{
+		// 5분 웨이브 (보스)
+		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
+		wave++;
+	}
+	else if (wave == 3 && gameTimer.GetElapsedTime() >= 180.0f) // 3분 이후 30
+	{
+		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
+		wave++;
+	}
+	else if (wave == 2 && gameTimer.GetElapsedTime() >= 120.0f) // 2분 이후 20
+	{
+		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
+		wave++;
+	}
+	else if (wave == 1 && gameTimer.GetElapsedTime() >= 60.0f) // 1분 이후 15
+	{
+		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
+		wave++;
+	}
+	else if(wave == 0)// 1분 이전 10
+	{
+		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
+		wave++;
+	}
+
+}
+
+void GameLevel::SpawnFillerEnemys()
+{
+	int aliveCount = Enemy::GetAliveCount();
+
+	const int spawnThreshold = 20; // 몬스터가 20마리 아래일 때 보충
+	const int spawnAmount = 5;      // 한 번에 5마리씩 추가
+	if (aliveCount < spawnThreshold)
+	{
+		AddActor(enemyFactory.CreateEnemy(player->GetCameraPosition(), EnemyType::Basic));
+	}
+}
+
 void GameLevel::RenderBackground()
 {
 	for (int screenY = 0; screenY < Engine::Get().Height(); ++screenY)
@@ -201,9 +278,20 @@ void GameLevel::RenderBackground()
 	}
 }
 
+void GameLevel::RenderTimer()
+{
+	int totalSeconds = targetTime - (int)gameTimer.GetElapsedTime();
+	int minutes = totalSeconds / 60;
+	int seconds = totalSeconds % 60;
+
+	char timechar[6];
+	sprintf_s(timechar, sizeof(timechar), "%02d:%02d", minutes, seconds);
+	Engine::Get().WriteToBuffer({ Engine::Get().halfWidth() - (int)(sizeof(timechar) / 2), 2 }, timechar, Color::LightWhite, 20);
+}
+
 void GameLevel::RenderUI()
 {
-	int sortingOrder = 10;
+	int sortingOrder = 20;
 	int barWidth = Engine::Get().Width();
 
 	// EXP 

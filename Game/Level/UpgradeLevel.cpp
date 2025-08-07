@@ -77,19 +77,29 @@ void UpgradeLevel::Initialize(const std::vector<class Weapon*>& weapons)
 	{
 		Weapon* candidate = upgradeCandidates[i];
 
-		char description[10];
-		if ((candidate->GetLevel() + 1) == candidate->GetMaxLevel())
+		char header[100];
+		const char* description = candidate->GetUpgradeDescription();
+
+		if (description != nullptr)
 		{
-			sprintf_s(description, sizeof(description), "Lv. MAX");
+			if ((candidate->GetLevel() + 1) == candidate->GetMaxLevel())
+			{
+				sprintf_s(header, sizeof(header), "Lv.MAX %s", description);
+			}
+			else
+			{
+				sprintf_s(header, sizeof(header), "Lv.%d %s", candidate->GetLevel() + 1, description);
+			}
 		}
 		else
 		{
-			sprintf_s(description, sizeof(description), "Lv. %d", candidate->GetLevel() + 1);
+			__debugbreak();
+			printf("Can not finde item description\n");
 		}
 
 		auto upgrade = [candidate]() {candidate->LevelUp(); };
 
-		items.emplace_back(new upgradeItem(candidate->GetImage(), candidate->name, description, upgrade));
+		items.emplace_back(new upgradeItem(candidate->GetImage(), candidate->name, header, upgrade));
 	}
 }
 
@@ -154,7 +164,7 @@ void UpgradeLevel::Render()
 	int YOffset = 4;
 
 	// 메뉴 타이틀 (LEVEL UP)
-	Engine::Get().WriteToBuffer({ xOffset, YOffset }, title, Color::Yellow, sortingOrder);
+	Engine::Get().WriteToBuffer({ xOffset, YOffset }, title, selectedColor, sortingOrder);
 
 
 	// 루프 밖에서 고정된 값들을 선언
@@ -226,7 +236,7 @@ void UpgradeLevel::Render()
 		// 설명 (네 번째 줄)
 		char descriptionbuffer[100] = {};
 		sprintf_s(descriptionbuffer, 100, "%s", items[ix]->description);
-		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset + 4, currentYOffset + 3), descriptionbuffer, textColor, sortingOrder);
+		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset, currentYOffset + 3), descriptionbuffer, textColor, sortingOrder);
 	}
 
 }

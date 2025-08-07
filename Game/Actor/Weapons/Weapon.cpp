@@ -39,3 +39,15 @@ void Weapon::LevelUp()
 
 	++stats.currentLevel;
 }
+
+const char* Weapon::GetUpgradeDescription()
+{
+	int index = stats.currentLevel;
+
+	if (index >= upgradeDescription.size())
+	{
+		return nullptr;
+	}
+
+	return upgradeDescription[index];
+}

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Actor/Actor.h"
+
+#include <vector>
 #include "Math/Vector2F.h"
 #include "Stats/WeaponStats.h"
 
@@ -21,9 +23,11 @@ public:
 public:
 	inline int GetLevel() { return stats.currentLevel; };
 	inline int GetMaxLevel() { return stats.maxLevel; };
+	const char* GetUpgradeDescription();
 	
 public:
 	const char* name;
+	std::vector<const char*> upgradeDescription;
 
 protected:
 	inline const Vector2I& GetCameraPosition() const { return cameraPosition; };

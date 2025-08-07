@@ -17,6 +17,14 @@ Whip::Whip(const Vector2I& cameraPosition, Vector2I& direiction)
 
 	cooldownTimer.SetTargetTime(stats.cooldown);
 	projectilesToFire = stats.amount;
+
+	upgradeDescription =
+	{
+		"Attacks horizontally",
+		"Increases damage and adds one more projectile",
+		"Increases damage and range",
+		"Increases damage, range, and speed"
+	};
 }
 
 void Whip::Tick(float deltaTime)
@@ -77,62 +85,71 @@ void Whip::LevelUp()
 {
 	super::LevelUp();
 
+	// 수평으로 공격합니다.
 	if (stats.currentLevel == 1)
 	{
 		stats.baseDamaged = 1.f;
-		stats.cooldown = 2.35f;
+		stats.cooldown = 3.f;
 		stats.amount = 1;
+		stats.area = 60;
 		stats.projectileInterval = 0.1f;
 	}
+	// 데미지가 늘고 투사체가 하나 더 늘어납니다.
 	else if (stats.currentLevel == 2)
 	{
-		// 투사체를 1 더, 공격력 5 증가
+		stats.baseDamaged = 3.3f;
 		stats.amount = 2;
-		stats.baseDamaged += 5.f;
 	}
+	// 데미지와 범위가 강화됩니다.
 	else if (stats.currentLevel == 3)
 	{
-		// 공격력 1 증가, 범위 10% 증가
-		stats.baseDamaged += 1.f;
-		stats.area = 110;
+		stats.baseDamaged += 6.f;
+		stats.area = 80;
 	}
+	// 데미지와 범위가 그리고 속도가 강화됩니다.
 	else if (stats.currentLevel == 4)
 	{
-		// 공격력 1 증가, 범위 10% 증가
-		stats.baseDamaged += 1.f;
-		stats.area = 120;
+		stats.baseDamaged += 8.0f;
+		stats.cooldown = 2.35f;
+		stats.area = 100;
 	}
 }
 
 void Whip::Fire()
 {
-	Vector2I Up = { 0, 1 };
-	// 2차원 외적을 이용해 왼쪽인지 오른쪽인지 검사
-	int crossProductZ = Up.x * direction.y - Up.y * direction.x;
+	// 'Whip'이 처음 발사될 때만 방향을 결정
+	static bool isInitialFire = true;
+	static bool fireLeft = false; // 기본은 오른쪽으로 시작
 
-	if (projectilesToFire % stats.amount == 0)
+	if (isInitialFire)
 	{
-		if (crossProductZ > 0) // 양수라면 왼쪽
+		Vector2I Up = { 0, 1 };
+		int crossProductZ = Up.x * direction.y - Up.y * direction.x;
+
+		if (crossProductZ > 0)
 		{
 			FireLeft();
+			fireLeft = true;
 		}
 		else
 		{
 			FireRight();
+			fireLeft = false;
 		}
+		isInitialFire = false;
 	}
-	else
+	else // 첫 발사 이후에는 번갈아가며 발사
 	{
-		if (crossProductZ < 0) // 음수라면 오른쪽
-		{
-			FireLeft();
-		}
-		else
+		if (fireLeft)
 		{
 			FireRight();
 		}
+		else
+		{
+			FireLeft();
+		}
+		fireLeft = !fireLeft; // 발사 방향 전환
 	}
-	
 }
 
 void Whip::FireRight()
@@ -150,16 +167,16 @@ void Whip::FireRight()
 	}
 
 	// 위쪽 하나 더 생성
-	if (stats.currentLevel >= 4)
-	{
-		for (size_t i = 0; i < lengthOffsets.size(); ++i)
-		{
-			Vector2I spawnPos = screenCenter + spawnOffsets[i] + Vector2I{ 0, -1 };
-			float length = finalLength * lengthOffsets[i];
-
-			GetOwner()->AddActor(new WhipProjectile(stats.baseDamaged, (int)length, spawnPos));
-		}
-	}
+	//if (stats.currentLevel >= 4)
+	//{
+	//	for (size_t i = 0; i < lengthOffsets.size(); ++i)
+	//	{
+	//		Vector2I spawnPos = screenCenter + spawnOffsets[i] + Vector2I{ 0, -1 };
+	//		float length = finalLength * lengthOffsets[i];
+	//
+	//		GetOwner()->AddActor(new WhipProjectile(stats.baseDamaged, (int)length, spawnPos));
+	//	}
+	//}
 }
 
 void Whip::FireLeft()

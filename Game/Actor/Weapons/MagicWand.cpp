@@ -16,6 +16,14 @@ MagicWand::MagicWand(const Vector2I& cameraPosition)
 
 	cooldownTimer.SetTargetTime(stats.cooldown);
 	projectilesToFire = stats.amount;
+
+	upgradeDescription =
+	{
+		"Attacks horizontally",
+		"Increases damage and adds one more projectile",
+		"Increases damage and range",
+		"Increases damage, range, and speed"
+	};
 }
 
 void MagicWand::Tick(float deltaTime)

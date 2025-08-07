@@ -16,6 +16,14 @@ Knife::Knife(const Vector2I& cameraPosition, Vector2I& direiction)
 
 	cooldownTimer.SetTargetTime(stats.cooldown);
 	projectilesToFire = stats.amount;
+
+	upgradeDescription =
+	{
+		"Attacks horizontally",
+		"Increases damage and adds one more projectile",
+		"Increases damage and range",
+		"Increases damage, range, and speed"
+	};
 }
 
 void Knife::Tick(float deltaTime)

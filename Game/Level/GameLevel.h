@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Level/Level.h"
+#include "Utils/Timer.h"
 #include "Math/Vector2F.h"
 #include "Actor/Enemy/EnemyFactory.h"
 
@@ -16,15 +17,18 @@ public:
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
-public:
-
 private:
 	void ReadTileMapFile(const char* filename);
+
+	// 게임 레벨
+	void SpawnEnemyMainWave(); // 시간 기반
+	void SpawnFillerEnemys(); // 수량 기반
 
 	//
 	// Render 관련
 	//
 	void RenderBackground(); 
+	void RenderTimer();
 	void RenderUI();
 
 	// 디버그 관련 처리
@@ -34,6 +38,10 @@ private:
 private:
 	class Player* player; 
 	EnemyFactory enemyFactory;
+	
+	// 게임 타이머
+	Timer gameTimer;
+	int targetTime = 300;
 
 	// 타일 맵 데이터
 	char* tileMap = nullptr;

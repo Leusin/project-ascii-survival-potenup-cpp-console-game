@@ -77,19 +77,12 @@ void UpgradeLevel::Initialize(const std::vector<class Weapon*>& weapons)
 	{
 		Weapon* candidate = upgradeCandidates[i];
 
-		char header[100];
+		char descbuffer[100];
 		const char* description = candidate->GetUpgradeDescription();
 
 		if (description != nullptr)
 		{
-			if ((candidate->GetLevel() + 1) == candidate->GetMaxLevel())
-			{
-				sprintf_s(header, sizeof(header), "Lv.MAX %s", description);
-			}
-			else
-			{
-				sprintf_s(header, sizeof(header), "Lv.%d %s", candidate->GetLevel() + 1, description);
-			}
+			sprintf_s(descbuffer, sizeof(descbuffer), description);
 		}
 		else
 		{
@@ -97,9 +90,18 @@ void UpgradeLevel::Initialize(const std::vector<class Weapon*>& weapons)
 			printf("Can not finde item description\n");
 		}
 
-		auto upgrade = [candidate]() {candidate->LevelUp(); };
+		char nameLv[100];
+		if ((candidate->GetLevel() + 1) == candidate->GetMaxLevel())
+		{
+			sprintf_s(nameLv, sizeof(nameLv), "`%s` %s Lv.MAX", candidate->GetImage(), candidate->name);
+		}
+		else
+		{
+			sprintf_s(nameLv, sizeof(nameLv), "`%s` %s Lv.%d", candidate->GetImage(), candidate->name, candidate->GetLevel() + 1);
+		}
 
-		items.emplace_back(new upgradeItem(candidate->GetImage(), candidate->name, header, upgrade));
+		auto upgrade = [candidate]() {candidate->LevelUp(); };
+		items.emplace_back(new upgradeItem(candidate->GetImage(), nameLv, descbuffer, upgrade));
 	}
 }
 
@@ -173,7 +175,6 @@ void UpgradeLevel::Render()
 	int screenWidth = Engine::Get().Width();
 	int lineLength = screenWidth - (2 * xOffset);
 	int frameHeight = 5; // 프레임의 총 높이 (5줄)
-	int textOffset = 4;
 
 	// 메뉴 아이템 렌더링.
 	for (int ix = 0; ix < length; ++ix)
@@ -223,20 +224,36 @@ void UpgradeLevel::Render()
 		Engine::Get().WriteToBuffer(Vector2I(xOffset + lineLength, currentYOffset + 4), slash, textColor, sortingOrder);
 
 
+		int centerPointX = xOffset + (lineLength / 2);
+
 		// 아이콘 (세 번째 줄)
+		/*
 		char itemBuffer[10] = {};
 		sprintf_s(itemBuffer, 10, "'%s'", items[ix]->icon);
-		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset, currentYOffset + 2), itemBuffer, textColor, sortingOrder);
+
+		int iconLength = static_cast<int>(strlen(itemBuffer));
+		int iconX = centerPointX - (iconLength / 2);
+
+		Engine::Get().WriteToBuffer(Vector2I(xOffset + currentYOffset + 2), itemBuffer, textColor, sortingOrder);
+		*/
 
 		// 이름 (세 번째 줄, 아이콘 옆)
 		char namebuffer[100] = {};
 		sprintf_s(namebuffer, 100, "%s", items[ix]->name);
-		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset + 4, currentYOffset + 2), namebuffer, textColor, sortingOrder);
+
+		int nameLength = static_cast<int>(strlen(namebuffer));
+		int nameX = centerPointX - (nameLength / 2);
+
+		Engine::Get().WriteToBuffer(Vector2I(nameX, currentYOffset + 2), namebuffer, textColor, sortingOrder);
 
 		// 설명 (네 번째 줄)
 		char descriptionbuffer[100] = {};
 		sprintf_s(descriptionbuffer, 100, "%s", items[ix]->description);
-		Engine::Get().WriteToBuffer(Vector2I(xOffset + textOffset, currentYOffset + 3), descriptionbuffer, textColor, sortingOrder);
+
+		int descLength = static_cast<int>(strlen(descriptionbuffer));
+		int descX = centerPointX - (descLength / 2);
+
+		Engine::Get().WriteToBuffer(Vector2I(descX, currentYOffset + 3), descriptionbuffer, Color::White, sortingOrder);
 	}
 
 }

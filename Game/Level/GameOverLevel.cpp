@@ -160,19 +160,19 @@ void GameOverLevel::DrawRIPData(int enemiesKilled, float playTime)
 	// 플레이어 레벨
 	char levelBuffer[50];
 	sprintf_s(levelBuffer, "Player Level: %d", playerLevel);
-	Engine::Get().WriteToBuffer({ startX + 5, startY + 4 }, levelBuffer, renderColor, sortingOrder);
+	Engine::Get().WriteToBuffer({ startX + 5, startY + 5 }, levelBuffer, renderColor, sortingOrder);
 
 	// 처치한 적 수
 	char killedBuffer[50];
 	sprintf_s(killedBuffer, "Killed enemies: %d", enemiesKilled);
-	Engine::Get().WriteToBuffer({ startX + 5, startY + 5 }, killedBuffer, renderColor, sortingOrder);
+	Engine::Get().WriteToBuffer({ startX + 5, startY + 6 }, killedBuffer, renderColor, sortingOrder);
 
 	// 플레이 시간
 	char timeBuffer[50];
 	int minutes = static_cast<int>(playTime) / 60;
 	int seconds = static_cast<int>(playTime) % 60;
 	sprintf_s(timeBuffer, "Play Time: %02d:%02d", minutes, seconds);
-	Engine::Get().WriteToBuffer({ startX + 5, startY + 6 }, timeBuffer, renderColor, sortingOrder);
+	Engine::Get().WriteToBuffer({ startX + 5, startY + 7 }, timeBuffer, renderColor, sortingOrder);
 
 	// 최종 무기
 	// 이 부분은 UpgradeLevel::Render() 코드와 유사하게 구현하면 됩니다.
@@ -191,7 +191,7 @@ void GameOverLevel::DrawRIPData(int enemiesKilled, float playTime)
 		char weaponDetail[50];
 		sprintf_s(weaponDetail, sizeof(weaponDetail), "Lv. %d %s", w->GetLevel(), w->name);
 
-		Engine::Get().WriteToBuffer({ startX + 5, startY + 9 + offsetCount++ }, weaponDetail, renderColor, sortingOrder);
+		Engine::Get().WriteToBuffer({ startX + 5, startY + 10 + offsetCount++ }, weaponDetail, renderColor, sortingOrder);
 	}
 
 }

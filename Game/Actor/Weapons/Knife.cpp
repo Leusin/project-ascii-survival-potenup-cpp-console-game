@@ -4,7 +4,7 @@
 #include "Actor/Projectile/KnifeProjectile.h"
 
 Knife::Knife(const Vector2I& cameraPosition, Vector2I& direiction)
-	: Weapon("/", "Knife", cameraPosition)
+	: Weapon("-", "Knife", cameraPosition)
 	, direction(direiction)
 {
 	stats.currentLevel = 0;
@@ -19,10 +19,10 @@ Knife::Knife(const Vector2I& cameraPosition, Vector2I& direiction)
 
 	upgradeDescription =
 	{
-		"Attacks horizontally",
-		"Increases damage and adds one more projectile",
-		"Increases damage and range",
-		"Increases damage, range, and speed"
+		"Fires quickly in the faced direction",
+		"damage up by 2 / speed up by 2 / amount up by 2",
+		"speed up by 2 / colldown down by 0.4 / amount 5",
+		"amount up by 6 / speed up by 2 / interval down by 0.2"
 	};
 }
 
@@ -81,36 +81,34 @@ void Knife::LevelUp()
 {
 	super::LevelUp();
 
-	if (stats.currentLevel == 1)
+	// Fires quickly in the faced direction
+	if (stats.currentLevel == 2)
 	{
-		stats.baseDamaged = 6.5f;
-		stats.speed = 18.0f;
-		stats.cooldown = 2.f;
-		stats.amount = 1;
-		stats.projectileInterval = 0.16f;
-	}
-	else if (stats.currentLevel == 2)
-	{
-		stats.baseDamaged = 6.5f;
-		stats.speed = 18.0f;
-		stats.cooldown = 1.8f;
-		stats.amount = 2;
-		stats.projectileInterval = 0.14f;
-	}
-	else if (stats.currentLevel == 3)
-	{
-		stats.baseDamaged = 6.5f;
-		stats.speed = 18.0f;
+		stats.baseDamaged = 2.5f;
+		stats.speed = 14.0f;
 		stats.cooldown = 1.4f;
-		stats.amount = 3;
+		stats.amount = 1;
 		stats.projectileInterval = 0.12f;
 	}
+	// damage up by 2 / speed up by 2 / amount up by 2
+	else if (stats.currentLevel == 2)
+	{
+		stats.baseDamaged = 4.5f;
+		stats.speed = 16.0f;
+		stats.amount = 2; // * 2 = 4
+	}
+	// speed up by 2 / colldown down by 0.4 / amount 5
+	else if (stats.currentLevel == 3)
+	{
+		stats.speed = 18.0f;
+		stats.cooldown = 1.0f;
+		stats.amount = 3; // * 3 = 9
+	}
+	// speed up by 2 / amount up by 6 / interval down by 0.2
 	else if (stats.currentLevel == 4)
 	{
-		stats.baseDamaged = 10.f;
 		stats.speed = 20.0f;
-		stats.cooldown = 1.0f;
-		stats.amount = 5;
+		stats.amount = 5; // * 3 = 15
 		stats.projectileInterval = 0.1f;
 	}
 }

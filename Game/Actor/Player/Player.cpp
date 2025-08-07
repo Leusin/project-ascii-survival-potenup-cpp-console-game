@@ -219,7 +219,7 @@ void Player::AddExp(float exp)
 	++level;
 
 
-	// 50%  확률로 레벨업 이벤트 발생
+	// 50% 확률로 레벨업 이벤트 발생
 	int random = Utils::Random(0, 1);
 	if (random == 0)
 	{

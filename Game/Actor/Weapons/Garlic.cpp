@@ -10,19 +10,18 @@ Garlic::Garlic()
 	stats.currentLevel = 0;
 	stats.baseDamaged = 6.5f;
 	stats.area = 10;
-	stats.cooldown = 1.3f;
-	stats.projectileInterval = 0.1f;
+	stats.cooldown = 0.3f;
 
 	cooldownTimer.SetTargetTime(stats.cooldown);
 
-	SetSortingOrder(2);
+	SetSortingOrder(4);
 
 	upgradeDescription =
 	{
-		"Attacks horizontally",
-		"Increases damage and adds one more projectile",
-		"Increases damage and range",
-		"Increases damage, range, and speed"
+		"Damages nearby enemies",
+		"damage up by 2 / area up by 20",
+		"damage up by 1 / area up by 20",
+		"area up by 40"
 	};
 }
 
@@ -200,23 +199,27 @@ void Garlic::LevelUp()
 {
 	super::LevelUp();
 
+	// Damages nearby enemies
 	if (stats.currentLevel == 1)
 	{
 		stats.baseDamaged = 1.f;
-		stats.area = 60;
+		stats.area = 20;
 	}
+	// damage up by 2 / area up by 20
 	else if (stats.currentLevel == 2)
 	{
-		stats.area = 60;
+		stats.baseDamaged = 3.f;
+		stats.area = 40;
 	}
+	// damage up by 1 / area up by 20
 	else if (stats.currentLevel == 3)
 	{
-		// 공격력 1 증가, 범위 10% 증가
+		stats.baseDamaged = 4.f;
 		stats.area = 60;
 	}
+	// area up by 40
 	else if (stats.currentLevel == 4)
 	{
-		// 공격력 1 증가, 범위 10% 증가
 		stats.area = 100;
 	}
 }

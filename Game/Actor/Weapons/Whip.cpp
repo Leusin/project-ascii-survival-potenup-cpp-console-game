@@ -21,9 +21,9 @@ Whip::Whip(const Vector2I& cameraPosition, Vector2I& direiction)
 	upgradeDescription =
 	{
 		"Attacks horizontally",
-		"Increases damage and adds one more projectile",
-		"Increases damage and range",
-		"Increases damage, range, and speed"
+		"cooldown down by 0.2 / amount up by 1",
+		"damage up by 1 / area up by 20",
+		"damage up by 1 / cooldown down by 0.2 / area up by 20"
 	};
 }
 
@@ -96,28 +96,29 @@ void Whip::LevelUp()
 	if (stats.currentLevel == 1)
 	{
 		stats.baseDamaged = 1.f;
-		stats.cooldown = 3.f;
+		stats.cooldown = 2.4f;
 		stats.amount = 1;
 		stats.area = 60;
 		stats.projectileInterval = 0.1f;
 	}
 	// 데미지가 늘고 투사체가 하나 더 늘어납니다.
+	// cooldown down by 0.2 / amount up by 1
 	else if (stats.currentLevel == 2)
 	{
-		stats.baseDamaged = 3.3f;
+		stats.cooldown = 2.2f;
 		stats.amount = 2;
 	}
-	// 데미지와 범위가 강화됩니다.
+	// damage up by 1 / area up by 20
 	else if (stats.currentLevel == 3)
 	{
-		stats.baseDamaged += 6.f;
+		stats.baseDamaged = 2.f;
 		stats.area = 80;
 	}
-	// 데미지와 범위가 그리고 속도가 강화됩니다.
+	// damage up by 1 / cooldown down by 0.2 / area up by 20
 	else if (stats.currentLevel == 4)
 	{
-		stats.baseDamaged += 8.0f;
-		stats.cooldown = 2.35f;
+		stats.baseDamaged = 3.0f;
+		stats.cooldown = 2.0f;
 		stats.area = 100;
 	}
 }

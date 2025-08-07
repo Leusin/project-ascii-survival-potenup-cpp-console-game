@@ -7,7 +7,7 @@ Item::Item(const char* img, Color color, Vector2I spawnPosition, const Vector2I&
 	, cameraPosition{ cameraPostion }
 	, worldPosition{ spawnPosition }
 {
-	SetSortingOrder(3);
+	SetSortingOrder(1);
 
 	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
 	SetPosition(screenPosition);

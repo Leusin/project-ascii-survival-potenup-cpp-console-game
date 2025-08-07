@@ -96,9 +96,9 @@ void GameLevel::Render()
 	* 
 	* 6 - WhipProjectile
 	* 5 - KnigeProjectile, MagicWandProjectile
-	* 4 - HealOrb
-	* 3 - ExpOrb
-	* 2 - Garlic
+	* 4 - Garlic
+	* 3 - HealOrb
+	* 2 - ExpOrb
 	* 
 	* 0 - 배경
 	*

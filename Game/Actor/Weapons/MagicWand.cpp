@@ -5,7 +5,7 @@
 #include "Actor/Projectile/MagicWandProjectile.h"
 
 MagicWand::MagicWand(const Vector2I& cameraPosition)
-	: Weapon("%", "Magic Wand", cameraPosition)
+	: Weapon("o", "Magic Wand", cameraPosition)
 {
 	stats.currentLevel = 0;
 	stats.baseDamaged = 0.f;
@@ -19,10 +19,10 @@ MagicWand::MagicWand(const Vector2I& cameraPosition)
 
 	upgradeDescription =
 	{
-		"Attacks horizontally",
-		"Increases damage and adds one more projectile",
-		"Increases damage and range",
-		"Increases damage, range, and speed"
+		"Fires at the nearest enemy",
+		"speed up by 2 / cooldown down by 0.4 / amount up by 2",
+		"damage up by 1.5 / amount up by 3 / interval down by 0.2",
+		"speed up by 4 / cooldown down by 0.4 / amount up by 10"
 	};
 }
 
@@ -81,37 +81,35 @@ void MagicWand::LevelUp()
 {
 	super::LevelUp();
 
+	// Fires at the nearest enemy
 	if (stats.currentLevel == 1)
 	{
-		stats.baseDamaged = 4.5f;
-		stats.speed = 8.0f;
+		stats.baseDamaged = 5.0f;
+		stats.speed = 10.0f;
 		stats.cooldown = 2.4f;
 		stats.amount = 1;
-		stats.projectileInterval = 0.8f;
+		stats.projectileInterval = 0.5f;
 	}
+	// speed up by 2 / cooldown down by 0.4 / amount up by 2
 	else if (stats.currentLevel == 2)
 	{
-		stats.baseDamaged = 6.5f;
-		stats.speed = 9.0f;
-		stats.cooldown = 2.2f;
+		stats.speed = 12.0f;
+		stats.cooldown = 2.0f;
 		stats.amount = 3;
-		stats.projectileInterval = 0.6f;
 	}
+	// damage up by 1.5 / amount up by 3 / interval down by 0.2
 	else if (stats.currentLevel == 3)
 	{
-		stats.baseDamaged = 8.5f;
-		stats.speed = 10.0f;
-		stats.cooldown = 2.0f;
+		stats.baseDamaged = 6.4f;
 		stats.amount = 6;
-		stats.projectileInterval = 0.4f;
+		stats.projectileInterval = 0.3f;
 	}
+	//  speed up by 4 / cooldown down by 0.4 / amount up by 10
 	else if (stats.currentLevel == 4)
 	{
-		stats.baseDamaged = 9.f;
-		stats.speed = 13.0f;
-		stats.cooldown = 1.8f;
+		stats.speed = 16.0f;
+		stats.cooldown = 1.6f;
 		stats.amount = 10;
-		stats.projectileInterval = 0.3f;
 	}
 
 	cooldownTimer.SetTargetTime(stats.cooldown);

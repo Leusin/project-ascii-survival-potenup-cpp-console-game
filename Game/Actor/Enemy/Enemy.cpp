@@ -9,6 +9,7 @@
 #include "Interface/IDamageable.h"
 
 unsigned int Enemy::aliveCount = 0;
+unsigned int Enemy::kiledCount = 0;
 
 Enemy::Enemy(const Vector2I& cameraPostion, const EnemyStats& stats)
 	: Actor(stats.icon, stats.color)
@@ -24,6 +25,7 @@ Enemy::Enemy(const Vector2I& cameraPostion, const EnemyStats& stats)
 
 Enemy::~Enemy()
 {
+	kiledCount++;
 	aliveCount--;
 }
 

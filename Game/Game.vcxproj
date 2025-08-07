@@ -184,6 +184,10 @@
     <ClCompile Include="Actor\Weapons\Whip.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Level\GameLevel.cpp" />
+    <ClCompile Include="Level\GameOverLevel.cpp" />
+    <ClCompile Include="Level\GameOverLevel.h" />
+    <ClCompile Include="Level\MenuItem.cpp" />
+    <ClCompile Include="Level\MenuItem.h" />
     <ClCompile Include="Level\UpgradeLevel.cpp" />
     <ClCompile Include="Level\UpgradeLevel.h" />
     <ClCompile Include="Actor\Projectile\MagicWandProjectile.cpp" />

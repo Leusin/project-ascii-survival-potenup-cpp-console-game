@@ -2,6 +2,7 @@
 
 #include "Level/GameLevel.h"
 #include "Level/UpgradeLevel.h"
+#include "Level/GameOverLevel.h"
 #include "Actor/Weapons/Weapon.h"
 
 Game* Game::instance = nullptr;
@@ -40,6 +41,19 @@ void Game::GoToUpgradeLevel(const std::vector<class Weapon*>& weapons)
 	mainLevel = upgradeLevel; // 업그레이드가 보이게 함.
 }
 
+void Game::GoToGameOverLevel(const std::vector<class Weapon*>& weapons, float playTime, bool win)
+{
+	if (GameInBackground)
+	{
+		return;
+	}
+
+	GameInBackground = true;
+
+	backgroundLevel = mainLevel;
+	mainLevel = new GameOverLevel(weapons, playTime, win);
+}
+
 void Game::ReturnToGameLevel()
 {
 	if (!GameInBackground)
@@ -54,6 +68,12 @@ void Game::ReturnToGameLevel()
 	backgroundLevel = nullptr;
 }
 
+void Game::RestartGame()
+{
+	SafeDelete(backgroundLevel);
+	AddLevel(new GameLevel());
+}
+
 void Game::RenderBackgrounLevel()
 {
 	if (!backgroundLevel)
@@ -66,10 +86,8 @@ void Game::RenderBackgrounLevel()
 
 void Game::CleanUp()
 {
-	if (GameInBackground)
-	{
-		SafeDelete(backgroundLevel);
-	}
+	SafeDelete(mainLevel);
+	SafeDelete(backgroundLevel);
 
 	Engine::CleanUp();
 }

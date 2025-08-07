@@ -27,6 +27,8 @@ public:
 
 public: 
 	static inline unsigned int GetAliveCount() { return aliveCount; };
+	static inline unsigned int GetKiledCount() { return kiledCount; };
+	static inline void ResetCount() { aliveCount = 0; kiledCount = 0; };
 
 private:
 	void SetRendomSpawnPosition();
@@ -59,4 +61,5 @@ private:
 	Color onDamagedColor = Color::Red;
 
 	static unsigned int aliveCount;
+	static unsigned int kiledCount;
 };

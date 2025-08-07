@@ -26,6 +26,8 @@ GameLevel::GameLevel()
 	DebugManager::Get().ToggleDebugMode();
 
 	gameTimer.SetTargetTime((float)targetTime);
+
+	Enemy::ResetCount();
 }
 
 GameLevel::~GameLevel()
@@ -368,6 +370,12 @@ void GameLevel::ProcessDebuge()
 	{
 		player->ToggleInvincible();
 	}
+
+	// 5번 키를 눌렀을 때 플레이어 무적 토글
+	if (Input::Get().GetKeyDown('5'))
+	{
+		Game::Get().GoToGameOverLevel(player->weapons, gameTimer.GetElapsedTime());
+	}
 }
 
 void GameLevel::RenderDebugeData()
@@ -411,4 +419,9 @@ void GameLevel::RenderDebugeData()
 	sprintf_s(buffer5, 60, "[KEY'4']Invincible");
 	Color isInbincivleColor = player->IsInvincible() ? Color::LightYellow : Color::Green;
 	Engine::Get().WriteToBuffer(Vector2I(0, 9), buffer5, isInbincivleColor, renderOrder);
+
+	// 5. 플레이어 무적
+	char buffer6[60] = {};
+	sprintf_s(buffer6, 60, "[KEY'5']GameOver");
+	Engine::Get().WriteToBuffer(Vector2I(0, 10), buffer6, Color::Green , renderOrder);
 }

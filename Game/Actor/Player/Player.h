@@ -70,8 +70,10 @@ private:
 public:
 	// 플레이어 무기 목록
 	std::vector<class Weapon*> weapons;
+	Timer gameTimer;
 
 private:
+
 	/// <summary>
 	/// 플레이어의 위치이자 카메라의 위치이기도 하다.
 	///   영향받는 것.

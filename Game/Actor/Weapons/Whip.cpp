@@ -97,7 +97,7 @@ void Whip::LevelUp()
 	// 수평으로 공격합니다.
 	if (stats.currentLevel == 1)
 	{
-		stats.baseDamaged = 1.f;
+		stats.baseDamaged = 3.f;
 		stats.cooldown = 2.4f;
 		stats.amount = 1;
 		stats.area = 60;
@@ -113,13 +113,13 @@ void Whip::LevelUp()
 	// damage up by 1 / area up by 20
 	else if (stats.currentLevel == 3)
 	{
-		stats.baseDamaged = 2.f;
+		stats.baseDamaged = 4.f;
 		stats.area = 80;
 	}
 	// damage up by 1 / cooldown down by 0.2 / area up by 20
 	else if (stats.currentLevel == 4)
 	{
-		stats.baseDamaged = 3.0f;
+		stats.baseDamaged = 5.0f;
 		stats.cooldown = 2.0f;
 		stats.area = 100;
 	}
@@ -139,6 +139,7 @@ void Whip::Fire()
 	// 방향 반전 (번갈아가며 발사)
 	fireLeftThisTime = !fireLeftThisTime;
 }
+
 void Whip::FireRight()
 {
 	float finalLength = baseLength * (float)stats.area / 100.f;
@@ -167,7 +168,7 @@ void Whip::FireLeft()
 	for (size_t i = 0; i < modifiedOffsets.size(); ++i)
 	{
 		int length = (int)(finalLength * lengthOffsets[i]);
-		modifiedOffsets[i].x += length;
+		modifiedOffsets[i].x += length - 1;
 		modifiedOffsets[i].x *= -1;
 	}
 

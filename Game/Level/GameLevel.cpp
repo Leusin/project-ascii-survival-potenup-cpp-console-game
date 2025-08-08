@@ -8,15 +8,15 @@
 #include "Actor/Player/Player.h"
 
 GameLevel::GameLevel()
+	: enemyFactory{ actors }
 {
 	player = new Player();
+	player->gameTimer.SetTargetTime((float)targetTime);
 	AddActor(player); // 플레이어 추가
 
 	// 타일맵 로드 후 배경에 출력
 	ReadTileMapFile("TileMap2.txt");
 	//ReadTileMapFile("Tile5.txt");
-
-	gameTimer.SetTargetTime((float)targetTime);
 
 	Enemy::ResetCount();
 }
@@ -35,33 +35,31 @@ void GameLevel::Tick(float deltaTime)
 {
 	ProcessDebuge();
 
-	if (gameTimer.IsTimeout())
-	{
-		// TODO: Win!
-
-		return;
-	}
-
-	gameTimer.Tick(deltaTime);
-
 	//
 	// 디버그 모드이고, 일시 정지 일 때
 	//
 
-	if (DebugManager::Get().IsDebugMode() && DebugManager::Get().IsGamePaused())
+	if (debugManager.IsDebugMode() && debugManager.IsGamePaused())
 	{
 		return; // 아래의 모든 로직을 건너뜀
 	}
 
-	//
-	// 플레이어가 모든 체력을 잃었을 경우
-	// 
-	if (player->HasDead())
+	if (!player->HasBegonPlay())
 	{
 		return;
 	}
 
 	super::Tick(deltaTime);
+
+	player->gameTimer.Tick(deltaTime);
+
+	//
+	// 게임 목표 시간 초과
+	//
+	if (player->gameTimer.IsTimeout())
+	{
+		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, player->gameTimer.GetElapsedTime(), true);
+	}
 
 	//
 	// 적 스폰 웨이브
@@ -102,11 +100,6 @@ void GameLevel::Render()
 	RenderUI(); // UI 그리기
 
 	RenderDebugeData(); // 디버그 데이터 랜더
-
-	if (gameTimer.IsTimeout())
-	{
-		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, gameTimer.GetElapsedTime(), true);
-	}
 }
 
 void GameLevel::ReadTileMapFile(const char* filename)
@@ -210,13 +203,13 @@ void GameLevel::ReadTileMapFile(const char* filename)
 
 void GameLevel::SpawnEnemyMainWave()
 {
-	if (!player->HasBegonPlay())
+	if (!player)
 	{
 		return;
 	}
 
 	// 5분 게임이라면 총 5개의 웨이브를 준비할 수 있음
-	if (levelWave == 4 && gameTimer.GetElapsedTime() >= 240.0f) // 4분 이후
+	if (levelWave == 4 && player->gameTimer.GetElapsedTime() >= 240.0f) // 4분 이후
 	{
 		// 5분 웨이브 (보스)
 		for (int i = 0; i < 5; ++i)
@@ -225,7 +218,7 @@ void GameLevel::SpawnEnemyMainWave()
 		}
 		levelWave++;
 	}
-	else if (levelWave == 3 && gameTimer.GetElapsedTime() >= 180.0f) // 3분 이후 30
+	else if (levelWave == 3 && player->gameTimer.GetElapsedTime() >= 180.0f) // 3분 이후 30
 	{
 		for (int i = 0; i < 15; ++i)
 		{
@@ -234,7 +227,7 @@ void GameLevel::SpawnEnemyMainWave()
 		}
 		levelWave++;
 	}
-	else if (levelWave == 2 && gameTimer.GetElapsedTime() >= 120.0f) // 2분 이후 20
+	else if (levelWave == 2 && player->gameTimer.GetElapsedTime() >= 120.0f) // 2분 이후 20
 	{
 		for (int i = 0; i < 20; ++i)
 		{
@@ -242,7 +235,7 @@ void GameLevel::SpawnEnemyMainWave()
 		}
 		levelWave++;
 	}
-	else if (levelWave == 1 && gameTimer.GetElapsedTime() >= 60.0f) // 1분 이후 15
+	else if (levelWave == 1 && player->gameTimer.GetElapsedTime() >= 60.0f) // 1분 이후 15
 	{
 		for (int i = 0; i < 20; ++i)
 		{
@@ -296,7 +289,7 @@ void GameLevel::RenderBackground()
 
 void GameLevel::RenderTimer()
 {
-	int totalSeconds = targetTime - (int)gameTimer.GetElapsedTime();
+	int totalSeconds = targetTime - (int)player->gameTimer.GetElapsedTime();
 	int minutes = totalSeconds / 60;
 	int seconds = totalSeconds % 60;
 
@@ -335,10 +328,10 @@ void GameLevel::ProcessDebuge()
 	// 틸트'~' 키를 눌렀을 때 디버그 모드를 토글
 	if (Input::Get().GetKeyDown(VK_OEM_3))
 	{
-		DebugManager::Get().ToggleDebugMode();
+		debugManager.ToggleDebugMode();
 	}
 
-	if (!DebugManager::Get().IsDebugMode())
+	if (!debugManager.IsDebugMode())
 	{
 		return;
 	}
@@ -346,7 +339,7 @@ void GameLevel::ProcessDebuge()
 	// !/1번 키를 눌렀을 때 게임 일시 정지 토글
 	if (Input::Get().GetKeyDown('1'))
 	{
-		DebugManager::Get().ToggleGamePause();
+		debugManager.ToggleGamePause();
 	}
 
 	// 2번 키를 눌렀을 업그레이드 레벨로 이동
@@ -379,7 +372,7 @@ void GameLevel::ProcessDebuge()
 	// 5번 키를 눌렀을 때 게임 오버 레벨로 이동
 	if (Input::Get().GetKeyDown('5'))
 	{
-		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, gameTimer.GetElapsedTime());
+		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, player->gameTimer.GetElapsedTime());
 	}
 }
 
@@ -389,7 +382,7 @@ void GameLevel::RenderDebugeData()
 	int renderOrder = INT_MAX;
 
 	// 1. 모드 상태
-	if (!DebugManager::Get().IsDebugMode())
+	if (!debugManager.IsDebugMode())
 	{
 		return;
 	}
@@ -406,7 +399,7 @@ void GameLevel::RenderDebugeData()
 	// 2. 일시정지 안내
 	char buffer2[60] = {};
 	sprintf_s(buffer2, 60, "[KEY'1']GamePause");
-	Color isPusecolor = DebugManager::Get().IsGamePaused() ? Color::Red : Color::Green;
+	Color isPusecolor = debugManager.IsGamePaused() ? Color::Red : Color::Green;
 	Engine::Get().WriteToBuffer(Vector2I(0, 6), buffer2, isPusecolor, renderOrder);
 
 	// 3. 업그레이드 레벨로 이동

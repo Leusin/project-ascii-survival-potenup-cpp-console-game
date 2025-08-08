@@ -142,7 +142,9 @@
       <AdditionalDependencies>Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy ..\Lib\Engine\Engine.dll $(OutDir) /y</Command>
+      <Command>xcopy ..\Lib\Engine\Engine.dll $(OutDir) /y
+xcopy $(SolutionDIr)Assets $(OutDir)..\Assets\ /y
+xcopy $(SolutionDIr)Assets $(OutDir)..\Settings\ /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -182,6 +184,7 @@
     <ClCompile Include="Actor\Weapons\Weapon.cpp" />
     <ClCompile Include="Actor\Weapons\Weapon.h" />
     <ClCompile Include="Actor\Weapons\Whip.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyFactory.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Level\GameLevel.cpp" />
     <ClCompile Include="Level\GameOverLevel.cpp" />

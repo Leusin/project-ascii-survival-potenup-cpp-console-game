@@ -11,13 +11,14 @@
 unsigned int Enemy::aliveCount = 0;
 unsigned int Enemy::kiledCount = 0;
 
-Enemy::Enemy(const Vector2I& cameraPostion, const EnemyStats& stats)
-	: Actor(stats.icon, stats.color)
+Enemy::Enemy(const Vector2I& spawnPosition, const Vector2I& cameraPostion, const EnemyStats& stats)
+	: Actor(stats.icon, stats.color, spawnPosition)
 	, stats(stats)
 	, cameraPosition(cameraPostion)
 {
+	worldPosition = Engine::Get().ScreenToOrthogonalCoords(spawnPosition, cameraPosition);
+
 	SetSortingOrder(8);
-	SetRendomSpawnPosition();
 	onDamagedTimer.SetTargetTime(invulnerableTime);
 
 	aliveCount++;
@@ -27,6 +28,12 @@ Enemy::~Enemy()
 {
 	kiledCount++;
 	aliveCount--;
+}
+
+void Enemy::BeginPlay()
+{
+	super::BeginPlay();
+
 }
 
 void Enemy::Tick(float deltaTime)
@@ -45,16 +52,16 @@ void Enemy::Tick(float deltaTime)
 		}
 	}
 
+	color = isOnDamaged ? onDamagedColor : stats.color;
+
+
+	HandleScreenWrap();
 	MoveToPlayer(deltaTime);
 }
 
 void Enemy::Render()
 {
 	super::Render();
-
-	color = isOnDamaged ? onDamagedColor : stats.color;
-
-	HandleScreenWrap();
 }
 
 void Enemy::OnDestroy()
@@ -74,56 +81,20 @@ void Enemy::TakeDamage(float damage)
 	}
 }
 
-void Enemy::SetRendomSpawnPosition()
-{
-	//
-	// 스폰 위치 가장 자리 중 랜덤으로
-	// 
-
-	int PosType = Utils::Random(0, 3);
-
-	Vector2I spawnPostion;
-	if (PosType == 0)
-	{
-		// 위 쪽이라면 (x, 1)
-		spawnPostion = { Utils::Random(0, Engine::Get().Width() - 1) , 0 };
-	}
-	else if (PosType == 1)
-	{
-		// 왼 쪽이라면 (1, y)
-		spawnPostion = { 0, Utils::Random(1, Engine::Get().Height() - 1) };
-	}
-	else if (PosType == 2)
-	{
-		// 아래 쪽이라면 (x, hight)
-		spawnPostion = { Utils::Random(0, Engine::Get().Width() - 1) , Engine::Get().Height() - 1 };
-	}
-	else if (PosType == 3)
-	{
-		// 오른 쪽이라면 (width, y)
-		spawnPostion = { Engine::Get().Width() - 1, Utils::Random(0, Engine::Get().Height() - 1) };
-	}
-
-	SetPosition(spawnPostion);
-
-	//
-	// 월드 포지션도 갖게 해야함
-	//
-
-	worldPosition = Engine::Get().ScreenToOrthogonalCoords(spawnPostion, cameraPosition);
-}
-
 void Enemy::MoveToPlayer(float deltaTime)
 {
 	// 월드 좌표계를 플레이어를 향해 이동하도록 조작한다.
 
-	Vector2F playerPos = {(float)round(cameraPosition.x), (float)round(cameraPosition.y) };
+	Vector2F playerPos = { (float)round(cameraPosition.x), (float)round(cameraPosition.y) };
 
 	Vector2F toPlayer = playerPos - worldPosition;
 
 	Vector2F movement = toPlayer.Normalize() * stats.speed * deltaTime;
 
 	Vector2F nextPosition = worldPosition + movement; // 다음 이동할 월드 위치
+
+	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
+	SetPosition(screenPosition);
 
 	//
 	// 다음 이동 위치 확인
@@ -190,7 +161,7 @@ void Enemy::HandleScreenWrap()
 		worldPosition.x += Engine::Get().Width();
 	}
 	// 화면 오른쪽을 벗어남 -> 월드 좌표를 화면 너비만큼 왼쪽으로 이동
-	else if (screenPosition.x >= Engine::Get().Width())
+	else if (screenPosition.x >= Engine::Get().Width() + 1)
 	{
 		worldPosition.x -= Engine::Get().Width();
 	}
@@ -202,13 +173,12 @@ void Enemy::HandleScreenWrap()
 		worldPosition.y -= Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 아래로 이동
 	}
 	// 화면 아래쪽을 벗어났을 때 (y가 화면 높이 이상)
-	else if (screenPosition.y >= Engine::Get().Height())
+	else if (screenPosition.y >= Engine::Get().Height() + 1)
 	{
 		worldPosition.y += Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 위로 이동
 	}
 
 	screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
-
 	SetPosition(screenPosition);
 }
 

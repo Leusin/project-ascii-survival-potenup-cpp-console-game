@@ -54,6 +54,11 @@ void Level::AddActor(Actor* newActor)
 {
 	// TODO: 중복 여부 확인 예외처리 하면 좋음
 
+	if (!newActor)
+	{
+		return;
+	}
+
 	addRequestedActors.emplace_back(newActor);
 }
 

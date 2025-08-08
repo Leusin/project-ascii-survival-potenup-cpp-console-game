@@ -12,15 +12,14 @@ class Enemy :public Actor, public IDamageable
 	RTTI_DECLARATIONS(Enemy, Actor)
 
 public:
-	Enemy(const Vector2I& cameraPostion, const EnemyStats& stats = EnemyStats{});
+	Enemy(const Vector2I& spawnPosition, const Vector2I& cameraPostion, const EnemyStats& stats = EnemyStats{});
 	virtual ~Enemy();
 
-	//virtual void BeginPlay() override;
+	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
 	virtual void Render() override;
 
 	virtual void OnDestroy() override;
-
 
 public: 
 	virtual void TakeDamage(float damage) override; // IDamageable
@@ -31,8 +30,6 @@ public:
 	static inline void ResetCount() { aliveCount = 0; kiledCount = 0; };
 
 private:
-	void SetRendomSpawnPosition();
-
 	/// <summary>
 	/// 플레이어를 향해 이동 및 이동 가능 검사, 플레이어 공격 
 	/// </summary>

@@ -21,6 +21,8 @@ WhipProjectile::WhipProjectile(float damage, unsigned int length, const Vector2I
 
 	SetImage(str);
 	SafeDeleteArray(str);
+
+	cooldownTimer.SetTargetTime(targetTime);
 }
 
 void WhipProjectile::BeginPlay()
@@ -34,6 +36,14 @@ void WhipProjectile::Tick(float deltaTime)
 {
 	super::Tick(deltaTime);
 
+	cooldownTimer.Tick(deltaTime);
+
+	if (!cooldownTimer.IsTimeout())
+	{
+		return;
+	}
+
+	cooldownTimer.Reset();
 
 	// 현재 위치에 적이 있는지 검사 
 	std::vector<Actor*> actors = GetOwner()->GetActors();

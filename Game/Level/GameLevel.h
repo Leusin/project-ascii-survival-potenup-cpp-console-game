@@ -2,6 +2,7 @@
 
 #include "Level/Level.h"
 #include "Utils/Timer.h"
+#include "Utils/DebugManager.h"
 #include "Math/Vector2F.h"
 #include "Actor/Enemy/EnemyFactory.h"
 
@@ -40,7 +41,7 @@ private:
 	EnemyFactory enemyFactory;
 	
 	// 게임 타이머
-	Timer gameTimer;
+	//Timer gameTimer;
 	int targetTime = 300;
 
 	// 타일 맵 데이터
@@ -50,4 +51,6 @@ private:
 
 	// 게임 레벨 관련
 	unsigned int levelWave = 0;
+
+	DebugManager debugManager;
 };

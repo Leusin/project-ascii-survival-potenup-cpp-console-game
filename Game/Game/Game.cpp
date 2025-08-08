@@ -70,7 +70,9 @@ void Game::ReturnToGameLevel()
 
 void Game::RestartGame()
 {
+	GameInBackground = false;
 	SafeDelete(backgroundLevel);
+	SafeDelete(mainLevel);
 	AddLevel(new GameLevel());
 }
 

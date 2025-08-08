@@ -11,9 +11,10 @@ GameOverLevel::GameOverLevel(int playerLevel, const std::vector<class Weapon*>& 
 	, weapons(weapons)
 	, playTime(playTime)
 	, isWin(win)
+	, currentIndex(0)
 {
-	items.emplace_back(new MenuItem("> Quit Game", []() { Game::Get().Quit(); }));
 	items.emplace_back(new MenuItem("> New Game", []() { Game::Get().RestartGame(); }));
+	items.emplace_back(new MenuItem("> Quit Game", []() { Game::Get().Quit(); }));
 
 	if (win)
 	{
@@ -42,22 +43,17 @@ void GameOverLevel::Tick(float deltaTime)
 
 	int length = (int)items.size();
 
-	if (Input::Get().GetKeyDown(VK_UP))
+	if (Input::Get().GetKeyUp(VK_UP))
 	{
 		currentIndex = (currentIndex - 1 + length) % length;
 	}
-	if (Input::Get().GetKeyDown(VK_DOWN))
+	if (Input::Get().GetKeyUp(VK_DOWN))
 	{
 		currentIndex = (currentIndex + 1 + length) % length;
 	}
-	if (Input::Get().GetKeyDown(VK_RETURN))
+	if (Input::Get().GetKeyUp(VK_RETURN))
 	{
 		items[currentIndex]->onSelected();
-	}
-	if (Input::Get().GetKeyDown(VK_ESCAPE))
-	{
-		//Game::Get().ToggleMeneu();
-
 		currentIndex = 0;
 	}
 }
@@ -78,14 +74,14 @@ void GameOverLevel::Render()
 	int startY = center.y - frameHeight / 2;
 
 	// Start drawing the menu below the RIP frame
-	int menuStartY = startY + frameHeight - 2;
+	int menuStartY = startY + frameHeight - 3;
 
 	for (int ix = 0; ix < (int)items.size(); ++ix)
 	{
 		Color textColor = (ix == currentIndex) ? selectedColor : unselectedColor;
 
 		// Use the Engine's buffer to draw the menu text
-		Engine::Get().WriteToBuffer({ center.x - 5, menuStartY - ix }, items[ix]->menuText, textColor, sortingOrder);
+		Engine::Get().WriteToBuffer({ center.x - 5, menuStartY + ix }, items[ix]->menuText, textColor, sortingOrder);
 	}
 }
 

@@ -2,6 +2,8 @@
 
 #include "Actor/Actor.h"
 
+#include "Utils/Timer.h"
+
 /// <summary>
 /// 물리적으로 나아가진 않지만
 /// 알아서 없어지게 만들어야 한다.
@@ -21,4 +23,7 @@ public:
 private:
 	float damage;
 	unsigned int length;
+
+	float targetTime = 0.4f;
+	Timer cooldownTimer;
 };

@@ -24,6 +24,6 @@ private:
 	float damage;
 	unsigned int length;
 
-	float targetTime = 0.4f;
+	float targetTime = 0.1f;
 	Timer cooldownTimer;
 };

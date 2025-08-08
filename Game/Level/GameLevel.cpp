@@ -11,14 +11,13 @@ GameLevel::GameLevel()
 	: enemyFactory{ actors }
 {
 	player = new Player();
-	player->gameTimer.SetTargetTime((float)targetTime);
 	AddActor(player); // 플레이어 추가
 
 	// 타일맵 로드 후 배경에 출력
 	ReadTileMapFile("TileMap2.txt");
-	//ReadTileMapFile("Tile5.txt");
 
 	Enemy::ResetCount();
+	gameTimer.SetTargetTime((float)targetTime);
 }
 
 GameLevel::~GameLevel()
@@ -44,21 +43,26 @@ void GameLevel::Tick(float deltaTime)
 		return; // 아래의 모든 로직을 건너뜀
 	}
 
-	if (!player->HasBegonPlay())
-	{
-		return;
-	}
+	//if (!player->HasBegonPlay())
+	//{
+	//	return;
+	//}
 
 	super::Tick(deltaTime);
 
-	player->gameTimer.Tick(deltaTime);
+	gameTimer.Tick(deltaTime);
 
 	//
-	// 게임 목표 시간 초과
+	// 게임 종료 조건 확인
 	//
-	if (player->gameTimer.IsTimeout())
+	if (gameTimer.IsTimeout())
 	{
-		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, player->gameTimer.GetElapsedTime(), true);
+		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, gameTimer.GetElapsedTime(), true);
+	}
+
+	if (player && player->HasDead()) // 타이머 처리한 김에 플레이어도
+	{
+		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, gameTimer.GetElapsedTime(), false);
 	}
 
 	//
@@ -209,7 +213,7 @@ void GameLevel::SpawnEnemyMainWave()
 	}
 
 	// 5분 게임이라면 총 5개의 웨이브를 준비할 수 있음
-	if (levelWave == 4 && player->gameTimer.GetElapsedTime() >= 240.0f) // 4분 이후
+	if (levelWave == 4 && gameTimer.GetElapsedTime() >= 240.0f) // 4분 이후
 	{
 		// 5분 웨이브 (보스)
 		for (int i = 0; i < 5; ++i)
@@ -218,7 +222,7 @@ void GameLevel::SpawnEnemyMainWave()
 		}
 		levelWave++;
 	}
-	else if (levelWave == 3 && player->gameTimer.GetElapsedTime() >= 180.0f) // 3분 이후 30
+	else if (levelWave == 3 && gameTimer.GetElapsedTime() >= 180.0f) // 3분 이후 30
 	{
 		for (int i = 0; i < 15; ++i)
 		{
@@ -227,7 +231,7 @@ void GameLevel::SpawnEnemyMainWave()
 		}
 		levelWave++;
 	}
-	else if (levelWave == 2 && player->gameTimer.GetElapsedTime() >= 120.0f) // 2분 이후 20
+	else if (levelWave == 2 && gameTimer.GetElapsedTime() >= 120.0f) // 2분 이후 20
 	{
 		for (int i = 0; i < 20; ++i)
 		{
@@ -235,7 +239,7 @@ void GameLevel::SpawnEnemyMainWave()
 		}
 		levelWave++;
 	}
-	else if (levelWave == 1 && player->gameTimer.GetElapsedTime() >= 60.0f) // 1분 이후 15
+	else if (levelWave == 1 && gameTimer.GetElapsedTime() >= 60.0f) // 1분 이후 15
 	{
 		for (int i = 0; i < 20; ++i)
 		{
@@ -289,7 +293,7 @@ void GameLevel::RenderBackground()
 
 void GameLevel::RenderTimer()
 {
-	int totalSeconds = targetTime - (int)player->gameTimer.GetElapsedTime();
+	int totalSeconds = targetTime - (int)gameTimer.GetElapsedTime();
 	int minutes = totalSeconds / 60;
 	int seconds = totalSeconds % 60;
 
@@ -300,8 +304,14 @@ void GameLevel::RenderTimer()
 
 void GameLevel::RenderUI()
 {
+	if (!player)
+	{
+		return;
+	}
+
 	int sortingOrder = 20;
 	int barWidth = Engine::Get().Width();
+
 
 	// EXP 
 	float expRatio = player->GetExpRatio();
@@ -316,6 +326,12 @@ void GameLevel::RenderUI()
 		Color hpColor = (xi < filledHp) ? Color::Red : Color::White;
 		Color exColor = (xi < filledExp) ? Color::Blue : Color::White;
 		char hpbarChar[2] = { '#', '\0' };
+
+		// 무적 디버깅
+		if (xi < filledHp)
+		{
+			hpColor = (player->IsInvincible()) ? Color::LightYellow : hpColor;
+		}
 
 		Engine::Get().WriteToBuffer({ xi, 0 }, hpbarChar, exColor, sortingOrder);
 		Engine::Get().WriteToBuffer({ xi, Engine::Get().Height() - 1 }, hpbarChar, hpColor, sortingOrder);
@@ -372,7 +388,13 @@ void GameLevel::ProcessDebuge()
 	// 5번 키를 눌렀을 때 게임 오버 레벨로 이동
 	if (Input::Get().GetKeyDown('5'))
 	{
-		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, player->gameTimer.GetElapsedTime());
+		Game::Get().GoToGameOverLevel(player->GetLevel(), player->weapons, gameTimer.GetElapsedTime());
+	}
+
+	// 6번 키를 눌렀을 때 플레이어 힐
+	if (Input::Get().GetKeyDown('5'))
+	{
+		player->AddHp(20);
 	}
 }
 
@@ -381,7 +403,7 @@ void GameLevel::RenderDebugeData()
 	// 디버그므로 가장 앞으로
 	int renderOrder = INT_MAX;
 
-	// 1. 모드 상태
+	// 0. 모드 상태
 	if (!debugManager.IsDebugMode())
 	{
 		return;
@@ -396,30 +418,35 @@ void GameLevel::RenderDebugeData()
 		Engine::Get().WriteToBuffer(Vector2I(0, 5), buffer1, Color::Green, renderOrder);
 	}
 
-	// 2. 일시정지 안내
+	// 1. 일시정지 안내
 	char buffer2[60] = {};
 	sprintf_s(buffer2, 60, "[KEY'1']GamePause");
 	Color isPusecolor = debugManager.IsGamePaused() ? Color::Red : Color::Green;
 	Engine::Get().WriteToBuffer(Vector2I(0, 6), buffer2, isPusecolor, renderOrder);
 
-	// 3. 업그레이드 레벨로 이동
+	// 2. 업그레이드 레벨로 이동
 	char buffer3[60] = {};
 	sprintf_s(buffer3, 60, "[KEY'2']UpgradeLevel");
 	Engine::Get().WriteToBuffer(Vector2I(0, 7), buffer3, Color::Green, renderOrder);
 
-	// 4. 적 스폰 정보
+	// 3. 적 스폰 정보
 	char buffer4[60] = {};
 	sprintf_s(buffer4, 60, "[KEY'3']EnemySpwned:(%d)", Enemy::GetAliveCount());
 	Engine::Get().WriteToBuffer(Vector2I(0, 8), buffer4, Color::Green, renderOrder);
 
-	// 5. 플레이어 무적
+	// 4. 플레이어 무적
 	char buffer5[60] = {};
 	sprintf_s(buffer5, 60, "[KEY'4']Invincible");
 	Color isInbincivleColor = player->IsInvincible() ? Color::LightYellow : Color::Green;
 	Engine::Get().WriteToBuffer(Vector2I(0, 9), buffer5, isInbincivleColor, renderOrder);
 
-	// 5. 플레이어 무적
+	// 5. 게임 오버
 	char buffer6[60] = {};
 	sprintf_s(buffer6, 60, "[KEY'5']GameOver");
 	Engine::Get().WriteToBuffer(Vector2I(0, 10), buffer6, Color::Green, renderOrder);
+
+	// 6. 플레이어 힐
+	char buffer7[60];
+	sprintf_s(buffer7, sizeof(buffer7), "[KEY'6']HP(%d/%d)", (int)player->GetCurrentHp(), (int)player->CalculateMaxHp());
+	Engine::Get().WriteToBuffer({ 0, 11 }, buffer7, Color::Green, renderOrder);
 }

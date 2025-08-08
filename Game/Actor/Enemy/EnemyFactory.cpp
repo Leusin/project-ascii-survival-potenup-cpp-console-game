@@ -9,12 +9,12 @@ EnemyFactory::EnemyFactory(std::vector<class Actor*>& actors)
 {
 	// 모든 적 타입의 stats를 미리 정의합니다.
 	enemyStatsMap[EnemyType::Basic] = EnemyStats{};
-	enemyStatsMap[EnemyType::Bat] = { "b", Color::LightBlue, 6.0f, 3.5f, 0.12f, 1.0f };
+	enemyStatsMap[EnemyType::Bat] = { "b", Color::LightBlue, 6.0f, 3.5f, 0.8f, 1.0f };
 	enemyStatsMap[EnemyType::Slime] = { "s", Color::Green, 8.0f, 2.8f, 1.0f, 3.0f };
 	enemyStatsMap[EnemyType::Goblin] = { "g", Color::Yellow, 10.0f, 4.0f, 2.0f, 6.0f };
-	enemyStatsMap[EnemyType::Golem] = { "G", Color::Blue, 20.0f, 4.0f, 4.0f, 8.0f };
-	enemyStatsMap[EnemyType::Mumak] = { "M", Color::Yellow, 35.0f, 1.5f, 6.0f, 13.f };
-	enemyStatsMap[EnemyType::EpicKnight] = { "K", Color::LightMagenta, 100.0f, 4.5f, 8.0f, 15.0f };
+	enemyStatsMap[EnemyType::Golem] = { "G", Color::Blue, 20.0f, 4.0f, 15.0f, 8.0f };
+	enemyStatsMap[EnemyType::Mumak] = { "M", Color::Yellow, 35.0f, 1.5f, 18.0f, 13.f };
+	enemyStatsMap[EnemyType::EpicKnight] = { "K", Color::LightMagenta, 100.0f, 4.5f, 20.0f, 15.0f };
 };
 
 Enemy* EnemyFactory::CreateEnemy(const Vector2I& cameraPosition, EnemyType type)

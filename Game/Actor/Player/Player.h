@@ -44,18 +44,6 @@ public:
 	/// </summary>
 	void AddHp(float amount);
 
-public: // GetterSetter
-	const Vector2I& GetCameraPosition() const;
-	const Vector2F& GetDirection() const;
-	inline const bool& HasDead() { return hasDead; };
-
-	inline void ToggleInvincible() { isInvincible = !isInvincible; }
-	inline bool IsInvincible() { return isInvincible;  };
-	inline int GetLevel() const { return (int)level; }
-
-private:
-	void ProcessDamaged(float deltaTime);
-
 	/// <summary>
 	/// 레벨에 비례하여 단순 체력이 증가
 	/// </summary>
@@ -67,10 +55,22 @@ private:
 	/// </summary>
 	float CalculateMaxExp() const;
 
+public: // GetterSetter
+	const Vector2I& GetCameraPosition() const;
+	const Vector2F& GetDirection() const;
+	inline const bool& HasDead() { return hasDead; };
+
+	inline void ToggleInvincible() { isInvincible = !isInvincible; }
+	inline bool IsInvincible() { return isInvincible;  };
+	inline int GetLevel() const { return (int)level; }
+	inline float GetCurrentHp() const { return currentHp; };
+
+private:
+	void ProcessDamaged(float deltaTime);
+
 public:
 	// 플레이어 무기 목록
 	std::vector<class Weapon*> weapons;
-	Timer gameTimer;
 
 private:
 

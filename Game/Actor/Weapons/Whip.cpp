@@ -97,7 +97,7 @@ void Whip::LevelUp()
 	// 수평으로 공격합니다.
 	if (stats.currentLevel == 1)
 	{
-		stats.baseDamaged = 3.f;
+		stats.baseDamaged = 1.f;
 		stats.cooldown = 2.4f;
 		stats.amount = 1;
 		stats.area = 60;
@@ -113,13 +113,13 @@ void Whip::LevelUp()
 	// damage up by 1 / area up by 20
 	else if (stats.currentLevel == 3)
 	{
-		stats.baseDamaged = 4.f;
+		stats.baseDamaged = 2.f;
 		stats.area = 80;
 	}
 	// damage up by 1 / cooldown down by 0.2 / area up by 20
 	else if (stats.currentLevel == 4)
 	{
-		stats.baseDamaged = 5.0f;
+		stats.baseDamaged = 3.f;
 		stats.cooldown = 2.0f;
 		stats.area = 100;
 	}

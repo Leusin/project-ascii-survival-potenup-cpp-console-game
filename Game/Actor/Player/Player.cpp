@@ -176,8 +176,6 @@ void Player::TakeDamage(float damage)
 	{
 		hasDead = true;
 		currentHp = 0;
-
-		Game::Get().GoToGameOverLevel(level, weapons, gameTimer.GetElapsedTime(), false);
 	}
 	else
 	{

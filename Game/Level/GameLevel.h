@@ -41,7 +41,7 @@ private:
 	EnemyFactory enemyFactory;
 	
 	// 게임 타이머
-	//Timer gameTimer;
+	Timer gameTimer;
 	int targetTime = 300;
 
 	// 타일 맵 데이터

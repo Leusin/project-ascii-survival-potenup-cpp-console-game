@@ -178,7 +178,7 @@ void GameOverLevel::DrawRIPData(int enemiesKilled, float playTime)
 	// 이 부분은 UpgradeLevel::Render() 코드와 유사하게 구현하면 됩니다.
 	char weaponBuffer[50];
 	sprintf_s(weaponBuffer, "[Final Weapon] ");
-	Engine::Get().WriteToBuffer({ startX + 5, startY + 8 }, weaponBuffer, renderColor, sortingOrder);
+	Engine::Get().WriteToBuffer({ startX + 5, startY + 9 }, weaponBuffer, renderColor, sortingOrder);
 
 	int offsetCount = 0;
 	for (int i = 0; i < weapons.size(); i++)

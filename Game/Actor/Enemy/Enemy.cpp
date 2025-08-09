@@ -154,31 +154,47 @@ void Enemy::HandleScreenWrap()
 	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
 
 	/// 좌우 화면 처리
+	Vector2F newWorldPosition = worldPosition;
 
 	// 화면 왼쪽을 벗어남 -> 월드 좌표를 화면 너비만큼 오른쪽으로 이동
 	if (screenPosition.x < 0)
 	{
-		worldPosition.x += Engine::Get().Width();
+		newWorldPosition.x += Engine::Get().Width();
 	}
 	// 화면 오른쪽을 벗어남 -> 월드 좌표를 화면 너비만큼 왼쪽으로 이동
 	else if (screenPosition.x >= Engine::Get().Width() + 1)
 	{
-		worldPosition.x -= Engine::Get().Width();
+		newWorldPosition.x -= Engine::Get().Width();
 	}
 
 	/// 상하 화면 처리
 
 	if (screenPosition.y < 0)
 	{
-		worldPosition.y -= Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 아래로 이동
+		newWorldPosition.y -= Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 아래로 이동
 	}
 	// 화면 아래쪽을 벗어났을 때 (y가 화면 높이 이상)
 	else if (screenPosition.y >= Engine::Get().Height() + 1)
 	{
-		worldPosition.y += Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 위로 이동
+		newWorldPosition.y += Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 위로 이동
 	}
 
-	screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
+	screenPosition = Engine::Get().OrthogonalToScreenCoords(newWorldPosition, cameraPosition);
+
+
+	std::vector<Actor*> actors = GetOwner()->GetActors();
+	for (Actor* actor : actors)
+	{
+		if (actor->As<Enemy>())
+		{
+			if (actor->Position() == screenPosition)
+			{
+				return;
+			}
+		}
+	}
+
+	worldPosition = newWorldPosition;
 	SetPosition(screenPosition);
 }
 

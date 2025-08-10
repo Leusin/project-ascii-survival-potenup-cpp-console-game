@@ -121,6 +121,7 @@ void Actor::SetPosition(const Vector2I& newPosition)
 		return;
 	}
 
+	/*
 	// 오른쪽 가장자리 혹은 맨 위로 벗어났는가
 	if (newPosition.x < 0 || newPosition.y < 0)
 	{
@@ -136,12 +137,7 @@ void Actor::SetPosition(const Vector2I& newPosition)
 	{
 		return;
 	}
-
-	/// 더블 버퍼를 사용하지 않았을 때의 방법
-	//Vector2 direction = newPosition - position; // 지울 위치 확인
-	//position.x = (direction.x >= 0) ? position.x : position.x + width - 1;
-	//Utils::SetConsolePosition(position); // 커서 이동.
-	//printf(" "); // 지우기
+	*/
 
 	position = newPosition;
 }

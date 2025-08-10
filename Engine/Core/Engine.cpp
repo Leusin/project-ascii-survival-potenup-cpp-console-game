@@ -135,10 +135,18 @@ void Engine::WriteToBuffer(const Vector2I& position, const char* image, Color co
 	// 문자열 기록.
 	for (int ix = 0; ix < length; ++ix)
 	{
-		// @Todo: 화면 버퍼 크기 안 넘어가게 예외처리 필요함.
+		// 글자의 현재 x, y 좌표를 계산
+		int currentX = position.x + ix;
+		int currentY = position.y;
 
-		// 기록할 문자 위치.
-		int index = ((int)position.y * (settings.width)) + (int)position.x + ix;
+		// 현재 글자의 위치가 화면 범위 안에 있는지 확인
+		if (currentX < 0 || currentX >= settings.width || currentY < 0 || currentY >= settings.height)
+		{
+			continue;
+		}
+		
+		// 화면 범위 안에 있다면, 버퍼 인덱스를 계산
+		int index = (currentY * settings.width) + currentX;
 
 		if (imageBuffer->sortingOrderArray[index] > sortingOrder)
 		{
@@ -240,8 +248,8 @@ Vector2F Engine::ScreenToOrthogonalCoords(const Vector2I& screenPos, const Vecto
 	Vector2F worldPos;
 
 	// 1. 화면 중앙을 기준으로 상대적 위치를 계산합니다.
-	worldPos.x = screenPos.x - (float)halfWidth();
-	worldPos.y = screenPos.y - (float)halfHeight();
+	worldPos.x = screenPos.x - halfWidth();
+	worldPos.y = screenPos.y - halfHeight();
 
 	// 2. Y축을 뒤집습니다. (y-down -> y-up)
 	worldPos.y *= -1;

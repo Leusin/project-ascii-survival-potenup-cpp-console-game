@@ -40,7 +40,7 @@ void Enemy::Tick(float deltaTime)
 {
 	super::Tick(deltaTime);
 
-	// 데미지를 입는 중인지 검사
+	// 데미지 타이머 처리
 	if (isOnDamaged)
 	{
 		onDamagedTimer.Tick(deltaTime);
@@ -54,9 +54,10 @@ void Enemy::Tick(float deltaTime)
 
 	color = isOnDamaged ? onDamagedColor : stats.color;
 
-
-	HandleScreenWrap();
+	// 이동 
 	MoveToPlayer(deltaTime);
+	// 화면 래핑
+	HandleScreenWrap();
 }
 
 void Enemy::Render()
@@ -66,8 +67,7 @@ void Enemy::Render()
 
 void Enemy::OnDestroy()
 {
-	TryToDropExpOrb();
-	TryToDropHealOrb();
+	TryToDropOrb();
 }
 
 void Enemy::TakeDamage(float damage)
@@ -83,143 +83,137 @@ void Enemy::TakeDamage(float damage)
 
 void Enemy::MoveToPlayer(float deltaTime)
 {
-	// 월드 좌표계를 플레이어를 향해 이동하도록 조작한다.
-
+	// 플레이어를 향해 이동(월드 좌표계)
 	Vector2F playerPos = { (float)round(cameraPosition.x), (float)round(cameraPosition.y) };
-
 	Vector2F toPlayer = playerPos - worldPosition;
 
 	Vector2F movement = toPlayer.Normalize() * stats.speed * deltaTime;
+	Vector2F nextWorldPosition = worldPosition + movement; // 다음 이동할 월드 위치
 
-	Vector2F nextPosition = worldPosition + movement; // 다음 이동할 월드 위치
-
-	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
-	SetPosition(screenPosition);
-
-	//
 	// 다음 이동 위치 확인
-	//
+	Vector2I nextScreenPos = Engine::Get().OrthogonalToScreenCoords(nextWorldPosition, cameraPosition); // 다음에 이동할 화면 위치
 
-	Vector2I nextScreenPos = Engine::Get().OrthogonalToScreenCoords(nextPosition, cameraPosition); // 다음에 이동할 화면 위치
-
-	std::vector<Actor*> actors = GetOwner()->GetActors();
-
-	for (Actor* actor : actors)
+	for (Actor* actor : GetOwner()->GetActors())
 	{
 		// 플레이어가 있는 경우, 플레이어에게 데미지를 가함
 		if (actor->As<Player>())
 		{
-			if (actor->Position() == nextScreenPos)
+			if (actor->Position() != nextScreenPos)
 			{
-				IDamageable* playerDamageable = dynamic_cast<IDamageable*>(actor);
-
-				if (playerDamageable)
-				{
-					playerDamageable->TakeDamage(stats.damage);
-				}
-
-				break;
+				continue;
 			}
+
+			if (IDamageable* damageable = dynamic_cast<IDamageable*>(actor))
+			{
+				damageable->TakeDamage(stats.damage);
+			}
+
+			break;
 		}
 
-		//
 		// 적이 있는 경우, 이동하지 않음
-		//
+		if (actor->As<Enemy>())
+		{
+			if (actor != this && actor->Position() == nextScreenPos)
+			{
+				return;
+
+			}
+		}
+	}
+
+	if (nextScreenPos != Engine::Get().ScreenCenter())
+	{
+		SetPosition(nextScreenPos);
+		worldPosition = nextWorldPosition; // 새 월드 위치 적용
+	}
+}
+
+void Enemy::HandleScreenWrap()
+{
+	Vector2I screenPosition = Position();
+
+	int w = Engine::Get().Width();
+	int h = Engine::Get().Height();
+
+	Vector2I newScreenPos = Position();
+
+	//
+	// 좌우 화면 처리
+	//
+	if (screenPosition.x < 0) // 화면 왼쪽을 벗어남
+	{
+		newScreenPos.x = w;
+	}
+	else if (screenPosition.x >= w) // 화면 오른쪽을 벗어남
+	{
+		newScreenPos.x = 0;
+	}
+
+	//
+	// 상하 화면 처리
+	//
+	else if (screenPosition.y < 0) // 화면 위쪽을 벗어났을 때 (y가 0보다 낮음)
+	{
+		newScreenPos.y = h;
+	}
+	else if (screenPosition.y > h) // 화면 아래쪽을 벗어났을 때 (y가 화면 높이 이상)
+	{
+		newScreenPos.y = 0;
+	}
+
+	//
+	// 그려지는 화면 안에 있기 때문에 예외처리가 필요 없는 경우
+	//
+	else
+	{
+		return;
+	}
+
+
+	// 겹치는 적이 있는지 검사
+	for (Actor* actor : GetOwner()->GetActors())
+	{
+		if (actor == this)
+		{
+			continue;
+		}
 
 		if (!actor->As<Enemy>())
 		{
 			continue;
 		}
 
-		if (actor == this)
-		{
-			continue;
-		}
-
-		if (actor->Position() == nextScreenPos)
+		if (actor->Position() == newScreenPos)
 		{
 			return;
 		}
 	}
 
-	if (nextScreenPos != Engine::Get().ScreenCenter())
-	{
-		worldPosition = nextPosition; // 새 월드 위치 적용
-		SetPosition(nextScreenPos); // 새 화면 위치 적용
-	}
+	// 겹치는 적이 없을 때만 위치를 갱신
+	worldPosition = Engine::Get().ScreenToOrthogonalCoords(newScreenPos, cameraPosition);
+	SetPosition(newScreenPos);
 }
 
-void Enemy::HandleScreenWrap()
-{
-	Vector2I screenPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
-
-	/// 좌우 화면 처리
-	Vector2F newWorldPosition = worldPosition;
-
-	// 화면 왼쪽을 벗어남 -> 월드 좌표를 화면 너비만큼 오른쪽으로 이동
-	if (screenPosition.x < 0)
-	{
-		newWorldPosition.x += Engine::Get().Width();
-	}
-	// 화면 오른쪽을 벗어남 -> 월드 좌표를 화면 너비만큼 왼쪽으로 이동
-	else if (screenPosition.x >= Engine::Get().Width() + 1)
-	{
-		newWorldPosition.x -= Engine::Get().Width();
-	}
-
-	/// 상하 화면 처리
-
-	if (screenPosition.y < 0)
-	{
-		newWorldPosition.y -= Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 아래로 이동
-	}
-	// 화면 아래쪽을 벗어났을 때 (y가 화면 높이 이상)
-	else if (screenPosition.y >= Engine::Get().Height() + 1)
-	{
-		newWorldPosition.y += Engine::Get().Height(); // 월드 좌표를 화면 높이만큼 위로 이동
-	}
-
-	screenPosition = Engine::Get().OrthogonalToScreenCoords(newWorldPosition, cameraPosition);
-
-
-	std::vector<Actor*> actors = GetOwner()->GetActors();
-	for (Actor* actor : actors)
-	{
-		if (actor->As<Enemy>())
-		{
-			if (actor->Position() == screenPosition)
-			{
-				return;
-			}
-		}
-	}
-
-	worldPosition = newWorldPosition;
-	SetPosition(screenPosition);
-}
-
-void Enemy::TryToDropExpOrb()
+void Enemy::TryToDropOrb()
 {
 	// 3분의 1 확률로 경험치 아이템 스폰하기
-	int dropChance = Utils::Random(0, 2);
-	if (dropChance != 0)
+	int dropExpChance = Utils::Random(0, 2);
+	if (dropExpChance == 0)
 	{
+		Vector2I spawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
+		GetOwner()->AddActor(new ExpOrb(spawnPos, cameraPosition, stats.exp));
 		return;
 	}
 
-	Vector2I spawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
-	GetOwner()->AddActor(new ExpOrb(spawnPos, cameraPosition, stats.exp));
-}
-
-void Enemy::TryToDropHealOrb()
-{
-	// 30분의 1 확률로 경험치 아이템 스폰하기
-	int dropChance = Utils::Random(0, 29);
-	if (dropChance != 0)
+	// 10분의 1 확률로 경험치 아이템 스폰하기
+	int dropHealChance = Utils::Random(0, 10);
+	if (dropHealChance == 0)
 	{
+		Vector2I spawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
+		GetOwner()->AddActor(new HealOrb(spawnPos, cameraPosition, stats.exp));
 		return;
 	}
 
-	Vector2I spawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
-	GetOwner()->AddActor(new HealOrb(spawnPos, cameraPosition, stats.exp));
+
 }

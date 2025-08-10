@@ -44,8 +44,7 @@ private:
 	/// <summary>
 	/// 아이템 드롭
 	/// </summary>
-	void TryToDropExpOrb();
-	void TryToDropHealOrb();
+	void TryToDropOrb();
 private:
 	EnemyStats stats;
 

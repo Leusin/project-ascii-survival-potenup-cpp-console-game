@@ -68,7 +68,8 @@ Vector2F Vector2F::Normalize() const
 	}
 
 	__debugbreak();
-	return { 0.f, 0.f };
+
+	return Vector2F::Zero;
 }
 
 float Vector2F::Magnitude() const

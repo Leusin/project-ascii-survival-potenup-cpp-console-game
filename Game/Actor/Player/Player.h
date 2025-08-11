@@ -112,7 +112,7 @@ private:
 	// 경험치 관련
 	//
 	const float baseExp = 5.f;
-	float growthRate = 1.1f; // 레벨업에 필요한 경험치 증가율
+	float growthRate; // 레벨에 따른 경험치 증가율
 	float currentExp = 0.f;
 
 	//
@@ -120,6 +120,6 @@ private:
 	//
 	const float baseHp = 20.f;
 	float currentHp = 0.0f;
-	float hpPerLevel = 1.1f;
+	float hpPerLevel;  // 레벨에 따른 체력 증가율
 	float hasDead = false;
 };

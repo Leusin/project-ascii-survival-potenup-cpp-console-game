@@ -15,7 +15,7 @@ struct EnemyStats
 	float damage = 0.05f;
 	float exp = 1.0f;
 
-	EnemyStats(const char* icon = "E", Color color = Color::Blue, float hp = 5.0f, float speed = 1.f, float damage = 0.1f, float exp = 1.0f)
+	EnemyStats(const char* icon = "E", Color color = Color::Blue, float hp = 1.0f, float speed = 1.f, float damage = 0.1f, float exp = 0.1f)
 		: icon(icon)
 		, color(color)
 		, hp(hp)

@@ -20,12 +20,12 @@ Player::Player()
 	, speed(5.0f)
 	// 경험치 관련
 	, baseExp(5.0f)
-	, growthRate(1.1f)
+	, growthRate(1.3f)
 	, currentExp(0.0f)
 	// 체력 관련
 	, baseHp(20.0f)
 	, currentHp(0.0f)
-	, hpPerLevel(1.1f)
+	, hpPerLevel(1.2f)
 {
 	currentHp = CalculateMaxHp();
 
@@ -96,10 +96,10 @@ void Player::Tick(float deltaTime)
 		//
 		// 이동 위치 검사. 적이 있다면 이동해서는 안됨
 		//
-		
+
 		// 충돌 검사
 		bool canMove = true;
-		
+
 		Vector2I ScreenMove = moveInput;
 		ScreenMove.y *= -1;
 		Vector2I nextTilePos = Engine::Get().ScreenCenter() + ScreenMove;
@@ -217,15 +217,9 @@ void Player::AddExp(float exp)
 	// 레벨업 처리
 	currentExp -= toNextLevel;
 	++level;
-
-
-	// 50% 확률로 레벨업 이벤트 발생
-	int random = Utils::Random(0, 1);
-	if (random == 0)
-	{
-		// 레벨업 이벤트
-		Game::Get().GoToUpgradeLevel(weapons);
-	}
+	
+	// 레벨업 이벤트
+	Game::Get().GoToUpgradeLevel(weapons);
 }
 
 void Player::AddHp(float amount)

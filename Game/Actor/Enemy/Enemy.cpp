@@ -54,10 +54,15 @@ void Enemy::Tick(float deltaTime)
 
 	color = isOnDamaged ? onDamagedColor : stats.color;
 
-	// 이동 
-	MoveToPlayer(deltaTime);
 	// 화면 래핑
 	HandleScreenWrap();
+
+	// 이동 
+	MoveToPlayer(deltaTime);
+
+	// 위치 업데이트
+	auto updatedPosition = Engine::Get().OrthogonalToScreenCoords(worldPosition, cameraPosition);
+	SetPosition(updatedPosition);
 }
 
 void Enemy::Render()
@@ -124,7 +129,7 @@ void Enemy::MoveToPlayer(float deltaTime)
 
 	if (nextScreenPos != Engine::Get().ScreenCenter())
 	{
-		SetPosition(nextScreenPos);
+		//SetPosition(nextScreenPos);
 		worldPosition = nextWorldPosition; // 새 월드 위치 적용
 	}
 }
@@ -192,7 +197,7 @@ void Enemy::HandleScreenWrap()
 
 	// 겹치는 적이 없을 때만 위치를 갱신
 	worldPosition = Engine::Get().ScreenToOrthogonalCoords(newScreenPos, cameraPosition);
-	SetPosition(newScreenPos);
+	//SetPosition(newScreenPos);
 }
 
 void Enemy::TryToDropOrb()
@@ -211,7 +216,7 @@ void Enemy::TryToDropOrb()
 	if (dropHealChance == 0)
 	{
 		Vector2I spawnPos = { (int)round(worldPosition.x), (int)round(worldPosition.y) };
-		GetOwner()->AddActor(new HealOrb(spawnPos, cameraPosition, stats.exp));
+		GetOwner()->AddActor(new HealOrb(spawnPos, cameraPosition, 10));
 		return;
 	}
 

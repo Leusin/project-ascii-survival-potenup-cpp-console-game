@@ -8,11 +8,11 @@ ExpOrb::ExpOrb(Vector2I spawnPosition, const Vector2I& cameraPostion, float exp)
 	: Item("*", Color::LightCyan, spawnPosition, cameraPostion)
 	, exp(exp)
 {
-	if (exp > 13.f)
+	if (exp > 7.777f)
 	{
 		color = Color::Red;
 	}
-	else if (exp > 6.f)
+	else if (exp > 4.444f)
 	{
 		color = Color::Cyan;
 	}

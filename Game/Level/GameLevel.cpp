@@ -297,7 +297,7 @@ void GameLevel::RenderTimer()
 	int minutes = totalSeconds / 60;
 	int seconds = totalSeconds % 60;
 
-	char timechar[6];
+	char timechar[10];
 	sprintf_s(timechar, sizeof(timechar), "%02d:%02d", minutes, seconds);
 	Engine::Get().WriteToBuffer({ Engine::Get().halfWidth() - (int)(sizeof(timechar) / 2), 2 }, timechar, Color::LightWhite, 20);
 }

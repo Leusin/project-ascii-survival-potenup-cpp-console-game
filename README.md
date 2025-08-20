@@ -1,5 +1,5 @@
 # 1. 소개
-[![유튜브 영상](https://img.youtube.com/vi/ZQP66l3t39E/0.jpg)](https://youtu.be/ZQP66l3t39E)
+[![유튜브 영상](https://img.youtube.com/vi/dY9DbHNztGw/0.jpg)](https://youtu.be/dY9DbHNztGw)
 - 프로젝트: ASCII Survival
 - 장르: 탑 다운 슈팅 액션, 뱀파이어 서바이벌 라이크 (Vampire Survivors-like)
 - 플랫폼: Windows
